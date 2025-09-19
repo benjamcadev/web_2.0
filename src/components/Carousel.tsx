@@ -33,6 +33,7 @@ export default function Carousel() {
           src={img}
           alt={`Banner ${index + 1}`}
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className={`object-cover rounded-2xl absolute inset-0 transition-opacity duration-700 ease-in-out ${index === current ? "opacity-100" : "opacity-0"
             }`}
         />

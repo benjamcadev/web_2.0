@@ -3,11 +3,18 @@
 import { useState, useRef, useEffect } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import TypingIndicator from "./TypingIndicator";
-
+import ProductCard from './ProductCard'
 
 interface Message {
   sender: "user" | "bot";
   text: string;
+  products?: Product[];
+}
+
+interface Product {
+  name: string;
+  url: string;
+  image: string;
 }
 
 export default function Chat() {
@@ -15,10 +22,25 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+useEffect(() => {
+  const el = chatContainerRef.current;
+  if (!el) return;
+
+  if (messages.length === 0) return;
+  console.log(messages)
+
+  const lastMessage = messages[messages.length - 1];
+
+  if (lastMessage.sender === "user") {
+    // Usuario envio un mensaje scroll hasta abajo
+    el.scrollTop = el.scrollHeight;
+  } else if (lastMessage.sender === "bot") {
+    // IA respondio scroll parcial
+    el.scrollBy({ top: 100, behavior: "smooth" });
+  }
+}, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -36,7 +58,7 @@ export default function Chat() {
       });
       const data = await response.json();
 
-      const botMessage: Message = { sender: "bot", text: data.answer || "No tengo respuesta" };
+      const botMessage: Message = { sender: "bot", text: data.response.answer, products: (data.response.products ? data.response.products : []) || "Lamentablemente no tengo respuesta, hubo un problema con la IA, favor intentar mas tarde." };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       setMessages((prev) => [
@@ -55,7 +77,7 @@ export default function Chat() {
   return (
     <div className="flex flex-col h-96">
       {/* Área de mensajes */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 border border-gray-400 rounded-lg bg-gray-50">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-3 border border-gray-400 rounded-lg bg-gray-50">
         {messages.length == 0 ? <div className="flex justify-center h-72 items-center"> <p className=" text-2xl text-center">¡Hola! ¿En qué te puedo ayudar hoy?</p> </div> : ''}
         {messages.map((msg, idx) => (
           <div
@@ -63,13 +85,15 @@ export default function Chat() {
             className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-xs px-4 py-2 rounded-2xl text-sm whitespace-pre-line ${
-                msg.sender === "user"
+              className={`max-w-xs px-4 py-2 rounded-2xl text-sm whitespace-pre-line ${msg.sender === "user"
                   ? "bg-blue-500 text-white rounded-br-none"
                   : "bg-gray-200 text-black rounded-bl-none"
-              }`}
+                }`}
             >
               {msg.text}
+              {msg.products?.map((product, idp) => (
+                <ProductCard key={idp} name={product.name} url={product.url} image={product.image} />
+              ))}
             </div>
           </div>
         ))}
@@ -80,7 +104,7 @@ export default function Chat() {
           </div>
         )}
 
-        <div ref={chatEndRef} />
+        
       </div>
 
       {/* Input + botón */}
@@ -97,9 +121,11 @@ export default function Chat() {
           onClick={sendMessage}
           className="bg-blue-500 p-3 rounded-full hover:bg-blue-600 transition flex items-center justify-center"
         >
-          <PaperAirplaneIcon className="h-5 w-5 text-white" /> 
+          <PaperAirplaneIcon className="h-5 w-5 text-white" />
         </button>
+
       </div>
+      <small className=" text-center text-gray-500">Nuestra IA puede cometer errores, favor de comprobar información</small>
     </div>
   );
 }
