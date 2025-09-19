@@ -52,8 +52,6 @@ export default function Chat() {
     if (e.key === "Enter") sendMessage();
   };
 
-  console.log(messages)
-
   return (
     <div className="flex flex-col h-96">
       {/* Área de mensajes */}
