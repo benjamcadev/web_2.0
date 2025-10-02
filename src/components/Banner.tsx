@@ -2,7 +2,7 @@
 
 import React from "react";
 import Carousel from "../components/Carousel"; // Componente para carrusel
-import Chat from "../components/Chat";         // Componente para chat IA
+import Chat from "./Chat/Chat";         // Componente para chat IA
 
 export default function Banner() {
   return (

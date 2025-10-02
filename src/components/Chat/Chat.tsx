@@ -2,45 +2,32 @@
 
 import { useState, useRef, useEffect } from "react";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import TypingIndicator from "./TypingIndicator";
-import ProductCard from './ProductCard'
+import TypingIndicator from "../TypingIndicator";
+import BotMessage from './BotMessage'
 
-interface Message {
-  sender: "user" | "bot";
-  text: string;
-  products?: Product[];
-}
+import { Message } from "../../types/chat";
 
-interface Product {
-  name: string;
-  url: string;
-  image: string;
-}
+
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-useEffect(() => {
-  const el = chatContainerRef.current;
-  if (!el) return;
+  useEffect(() => {
+    const el = chatContainerRef.current;
+    if (!el) return;
+    if (messages.length === 0) return;
 
-  if (messages.length === 0) return;
-  console.log(messages)
-
-  const lastMessage = messages[messages.length - 1];
-
-  if (lastMessage.sender === "user") {
-    // Usuario envio un mensaje scroll hasta abajo
-    el.scrollTop = el.scrollHeight;
-  } else if (lastMessage.sender === "bot") {
-    // IA respondio scroll parcial
-    el.scrollBy({ top: 100, behavior: "smooth" });
-  }
-}, [messages]);
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.sender === "user") {
+      el.scrollTop = el.scrollHeight;
+    } else if (lastMessage.sender === "bot") {
+      el.scrollBy({ top: 100, behavior: "smooth" });
+    }
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -58,7 +45,14 @@ useEffect(() => {
       });
       const data = await response.json();
 
-      const botMessage: Message = { sender: "bot", text: data.response.answer, products: (data.response.products ? data.response.products : []) || "Lamentablemente no tengo respuesta, hubo un problema con la IA, favor intentar mas tarde." };
+      const botMessage: Message = {
+        sender: "bot",
+        text:
+          data.response.answer ||
+          "Lamentablemente no tengo respuesta, hubo un problema con la IA, favor intentar más tarde.",
+        products: data.response.products || [],
+        text_closing: data.response.closing || "",
+      };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       setMessages((prev) => [
@@ -77,23 +71,37 @@ useEffect(() => {
   return (
     <div className="flex flex-col h-96">
       {/* Área de mensajes */}
-      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-3 border border-gray-400 rounded-lg bg-gray-50">
-        {messages.length == 0 ? <div className="flex justify-center h-72 items-center"> <p className=" text-2xl text-center">¡Hola! ¿En qué te puedo ayudar hoy?</p> </div> : ''}
+      <div
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto p-4 space-y-3 border border-gray-400 rounded-lg bg-gray-50"
+      >
+        {messages.length === 0 && (
+          <div className="flex justify-center h-72 items-center">
+            <p className="text-2xl text-center">
+              ¡Hola! ¿En qué te puedo ayudar hoy?
+            </p>
+          </div>
+        )}
+
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+            className={`flex ${
+              msg.sender === "user" ? "justify-end" : "justify-start"
+            }`}
           >
             <div
-              className={`max-w-xs px-4 py-2 rounded-2xl text-sm whitespace-pre-line ${msg.sender === "user"
+              className={`max-w-xs px-4 py-2 rounded-2xl text-sm whitespace-pre-line ${
+                msg.sender === "user"
                   ? "bg-blue-500 text-white rounded-br-none"
                   : "bg-gray-200 text-black rounded-bl-none"
-                }`}
+              }`}
             >
-              {msg.text}
-              {msg.products?.map((product, idp) => (
-                <ProductCard key={idp} name={product.name} url={product.url} image={product.image} />
-              ))}
+              {msg.sender === "bot" ? (
+                <BotMessage msg={msg} />
+              ) : (
+                <span>{msg.text}</span>
+              )}
             </div>
           </div>
         ))}
@@ -103,8 +111,6 @@ useEffect(() => {
             <TypingIndicator />
           </div>
         )}
-
-        
       </div>
 
       {/* Input + botón */}
@@ -123,9 +129,10 @@ useEffect(() => {
         >
           <PaperAirplaneIcon className="h-5 w-5 text-white" />
         </button>
-
       </div>
-      <small className=" text-center text-gray-500">Nuestra IA puede cometer errores, favor de comprobar información</small>
+      <small className="text-center text-gray-500">
+        Nuestra IA puede cometer errores, favor de comprobar información
+      </small>
     </div>
   );
 }
