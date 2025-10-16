@@ -1,6 +1,7 @@
 import { useState, useEffect} from 'react'
-import ProductCard from "../ProductCard";
 
+import ReactMarkdown from "react-markdown";
+import ProductCard from "../ProductCard";
 import { Message } from "../../types/chat";
 
 
@@ -28,7 +29,7 @@ export default function BotMessage({ msg }: { msg: Message }) {
 
   return (
     <div>
-      <p>{displayedText}</p>
+      <ReactMarkdown>{displayedText}</ReactMarkdown>
       {showExtras && (
         <>
           {msg.products?.map((product, idx) => (
@@ -36,7 +37,7 @@ export default function BotMessage({ msg }: { msg: Message }) {
               key={idx}
               name={product.name}
               url={product.url}
-              image={product.image}
+              image={product.images[0].url}
             />
           ))}
           {msg.text_closing}

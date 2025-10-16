@@ -9,5 +9,11 @@ export interface Message {
 export interface Product {
   name: string;
   url: string;
-  image: string;
+  images: Images[];
 }
+
+interface Images {
+  url: string;
+}
+
+

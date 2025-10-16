@@ -40,9 +40,9 @@ export default function Chat() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:4000/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
-        body: JSON.stringify({ query: input }),
+        body: JSON.stringify({ input }),
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
