@@ -10,6 +10,7 @@ export interface Product {
   name: string;
   url: string;
   images: Images[];
+  price: number;
 }
 
 interface Images {

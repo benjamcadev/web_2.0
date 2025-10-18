@@ -4,11 +4,12 @@ import Image from "next/image";
   name: string;
   url: string;
   image: string;
+  price: number;
 };
 
 
 
-export default function ProductCard({ name, url, image }: ProductCardsProps) {
+export default function ProductCard({ name, url, image, price }: ProductCardsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
       
@@ -31,6 +32,8 @@ export default function ProductCard({ name, url, image }: ProductCardsProps) {
           <h3 className="mt-2 text-sm text-shadow-2xs font-semibold text-gray-800 text-center">
             {name}
           </h3>
+
+          <p>{price ? '$' + price : 'Sin precio'}</p>
 
           {/* Link */}
           <a

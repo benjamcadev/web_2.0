@@ -9,6 +9,8 @@ export default function BotMessage({ msg }: { msg: Message }) {
   const [showExtras, setShowExtras] = useState(false);
   const messageRef = useRef<HTMLDivElement>(null);
 
+  console.log(msg)
+
   useEffect(() => {
     let i = 0;
     setDisplayedText("");
@@ -47,6 +49,7 @@ export default function BotMessage({ msg }: { msg: Message }) {
               key={idx}
               name={product.name}
               url={product.url}
+              price={product.price}
               image={product.images[0].url}
             />
           ))}
