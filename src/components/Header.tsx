@@ -8,6 +8,8 @@ import { HomeIcon, Bars3Icon, XMarkIcon, ShoppingCartIcon } from "@heroicons/rea
 export default function Header() {
   const [active, setActive] = useState("Inicio");
   const [open, setOpen] = useState(false);
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cartCount, setCartCount] = useState(3); // ejemplo de cantidad de artículos
   const links = ["Inicio", "Nosotros", "Tienda", "Contacto"];
 

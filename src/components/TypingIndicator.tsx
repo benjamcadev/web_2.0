@@ -24,7 +24,7 @@ export default function TypingIndicator() {
     }, 4000); 
 
     return () => clearInterval(interval); 
-  }, []);
+  }, [frases.length]);
 
   return (
     <div className="bg-gray-300 text-gray-700 px-3 py-1 rounded-2xl text-sm animate-pulse">

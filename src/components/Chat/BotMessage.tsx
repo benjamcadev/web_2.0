@@ -1,14 +1,13 @@
-import { useState, useEffect} from 'react'
-
+import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from "react-markdown";
 import ProductCard from "../ProductCard";
 import { Message } from "../../types/chat";
-
 
 // Componente para renderizar cada mensaje del bot con efecto typewriter
 export default function BotMessage({ msg }: { msg: Message }) {
   const [displayedText, setDisplayedText] = useState("");
   const [showExtras, setShowExtras] = useState(false);
+  const messageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let i = 0;
@@ -18,9 +17,20 @@ export default function BotMessage({ msg }: { msg: Message }) {
     const interval = setInterval(() => {
       setDisplayedText(msg.text.slice(0, i + 1));
       i++;
+
+      // Scroll automático al final mientras se escribe
+      if (messageRef.current) {
+        messageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+
       if (i >= msg.text.length) {
         clearInterval(interval);
         setShowExtras(true); // mostrar productos y cierre
+
+        // Scroll final para asegurarse que se vea todo
+        if (messageRef.current) {
+          messageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
       }
     }, 35); // velocidad por letra en ms
 
@@ -28,7 +38,7 @@ export default function BotMessage({ msg }: { msg: Message }) {
   }, [msg.text]);
 
   return (
-    <div>
+    <div ref={messageRef}>
       <ReactMarkdown>{displayedText}</ReactMarkdown>
       {showExtras && (
         <>

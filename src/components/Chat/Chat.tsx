@@ -5,16 +5,18 @@ import { ArrowsPointingOutIcon, ArrowsPointingInIcon } from "@heroicons/react/24
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import TypingIndicator from "../TypingIndicator";
 import BotMessage from './BotMessage'
+import { useChatContext } from "@/context/ChatContext";
 
 import { Message } from "../../types/chat";
-
-
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  
+  // 🔹 Usar el contexto global
+  const { pendingRut, clientData, pendingAttempts, setPendingRut, setClientData, incrementAttempts, resetPending } = useChatContext();
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +33,54 @@ export default function Chat() {
     }
   }, [messages]);
 
+  // 🔹 Función para normalizar correos y teléfonos
+  const normalizeEmail = (email: string): string => email.toLowerCase().trim();
+  const normalizePhone = (phone: string): string => phone.replace(/\s+/g, '');
+
+  // 🔹 Función para validar si es un correo
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // 🔹 Función para validar si es un teléfono
+  const isValidPhone = (phone: string): boolean => {
+    const phoneRegex = /^\+?[\d\s\-\(\)]{8,}$/;
+    return phoneRegex.test(phone);
+  };
+
+  // 🔹 Función para validar localmente en el frontend
+  const validateConfirmation = (input: string): { isValid: boolean; message: string } => {
+    if (!clientData) {
+      return { isValid: false, message: "Error: datos del cliente no disponibles" };
+    }
+
+    const inputTrimmed = input.trim();
+
+    // Validar si es correo o teléfono
+    if (!isValidEmail(inputTrimmed) && !isValidPhone(inputTrimmed)) {
+      return { 
+        isValid: false, 
+        message: "Por favor ingresa un **correo válido** (ej: usuario@email.com) o un **teléfono válido** (ej: +56912345678). ❌" 
+      };
+    }
+
+    // Comparar con datos guardados
+    const isEmailMatch = isValidEmail(inputTrimmed) && 
+                        normalizeEmail(inputTrimmed) === normalizeEmail(clientData.email);
+    const isPhoneMatch = isValidPhone(inputTrimmed) && 
+                        normalizePhone(inputTrimmed) === normalizePhone(clientData.telefono);
+
+    if (isEmailMatch || isPhoneMatch) {
+      return { isValid: true, message: "" };
+    }
+
+    return { 
+      isValid: false, 
+      message: `El correo o teléfono proporcionado no coincide con el RUT. ❌\n\nPor favor intenta de nuevo.` 
+    };
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -40,12 +90,77 @@ export default function Chat() {
     setLoading(true);
 
     try {
+      // si hay un RUT pendiente, validar localmente en el frontend
+      if (pendingRut && clientData) {
+        const validation = validateConfirmation(input);
+
+        if (!validation.isValid) {
+          // Validación falló
+          incrementAttempts();
+          const remainingAttempts = 3 - (pendingAttempts + 1);
+
+          const botMessage: Message = {
+            sender: "bot",
+            text: `${validation.message}\n\n📝 Intentos restantes: ${remainingAttempts}`,
+          };
+          setMessages((prev) => [...prev, botMessage]);
+          setLoading(false);
+
+          // Si se acabaron los intentos
+          if (pendingAttempts + 1 >= 3) {
+            setTimeout(() => {
+              resetPending();
+              setMessages((prev) => [...prev, {
+                sender: "bot",
+                text: "Se ha excedido el número de intentos. Por favor, inicia nuevamente indicando tu RUT o número de pedido. ❌"
+              }]);
+            }, 500);
+          }
+          return;
+        }
+
+        // ✓ Validación exitosa → Cargar los pedidos desde el backend
+        const loadingMsg: Message = {
+          sender: "bot",
+          text: "¡Perfecto! Cargando tus pedidos... 📦",
+        };
+        setMessages((prev) => [...prev, loadingMsg]);
+
+        try {
+          // 🔹 Hacer petición al backend con showOrders=true para obtener los pedidos
+          const ordersResponse = await fetch(`/api/orders?rut=${encodeURIComponent(pendingRut)}&showOrders=true`);
+          const ordersData = await ordersResponse.json();
+
+          const botMessage: Message = {
+            sender: "bot",
+            text: ordersData.message || "Aquí están tus pedidos.",
+          };
+          setMessages((prev) => [...prev, botMessage]);
+          resetPending();
+        } catch (error) {
+          console.error("Error al cargar pedidos:", error);
+          setMessages((prev) => [
+            ...prev,
+            { sender: "bot", text: "Error al cargar tus pedidos. Por favor intenta de nuevo." },
+          ]);
+        }
+        setLoading(false);
+        return;
+      }
+
+      // 🔹 Si no hay validación pendiente, enviar al backend normalmente
       const response = await fetch("/api/chat", {
         method: "POST",
         body: JSON.stringify({ input }),
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
+
+      // 🔹 Si la respuesta requiere confirmación, guardar los datos
+      if (data.response.requireConfirmation && data.response.clientData) {
+        setPendingRut(data.response.rut);
+        setClientData(data.response.clientData);
+      }
 
       const botMessage: Message = {
         sender: "bot",
@@ -57,6 +172,7 @@ export default function Chat() {
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
+      console.error("Error al enviar mensaje:", error);
       setMessages((prev) => [
         ...prev,
         { sender: "bot", text: "Error al conectar con la IA" },
@@ -82,7 +198,7 @@ export default function Chat() {
       {/* Botón de expandir/reducir */}
       <button
         onClick={() => setIsFullScreen((v) => !v)}
-        className={`absolute right-3 top-3 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-50 shadow ${isFullScreen ? '' : ''}`}
+        className={`absolute right-3 top-3 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-50 shadow`}
         aria-label={isFullScreen ? "Salir de pantalla completa" : "Pantalla completa"}
         type="button"
       >
@@ -92,6 +208,7 @@ export default function Chat() {
           <ArrowsPointingOutIcon className="h-5 w-5 text-gray-700" />
         )}
       </button>
+
       {/* Área de mensajes */}
       <div
         ref={chatContainerRef}
@@ -106,18 +223,13 @@ export default function Chat() {
             <p className="text-lg text-center">
               Pregunta sobre un producto o el estado de tu pedido...
             </p>
-
-
-
           </div>
-
         )}
 
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
+            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`max-w-xs px-4 py-2 rounded-2xl text-sm whitespace-pre-line ${msg.sender === "user"
@@ -141,8 +253,8 @@ export default function Chat() {
         )}
       </div>
 
-  {/* Input + botón */}
-  <div className="mt-3 flex gap-2 items-center">
+      {/* Input + botón */}
+      <div className="mt-3 flex gap-2 items-center">
         <input
           type="text"
           value={input}
@@ -153,14 +265,15 @@ export default function Chat() {
         />
         <button
           onClick={sendMessage}
-          className="bg-blue-500 p-3 rounded-full hover:bg-blue-600 transition flex items-center justify-center"
+          className="bg-blue-500 p-3 rounded-full hover:bg-blue-600 transition flex items-center justify-center disabled:opacity-50"
         >
           <PaperAirplaneIcon className="h-5 w-5 text-white" />
         </button>
       </div>
+
       <small className="text-center text-gray-500">
         Nuestra IA puede cometer errores, favor de comprobar información
       </small>
-  </div>
+    </div>
   );
 }

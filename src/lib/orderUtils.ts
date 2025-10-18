@@ -7,52 +7,50 @@ export function extractOrderNumber(text: string): string | null {
 
 
 export function looksLikeOrderQuery(text: string): boolean {
-    const lower = text.toLowerCase().trim();
+  const lower = text.toLowerCase().trim();
 
-    // 🔹 Frases claras de seguimiento
-    const trackingPhrases = [
-        "estado de mi pedido",
-        "dónde está mi pedido",
-        "donde esta mi pedido",
-        "seguimiento de mi pedido",
-        "ver mi pedido",
-        "rastreo de mi pedido",
-        "número de pedido",
-        "numero de pedido",
-        "estado de mi compra",
-        "dónde está mi compra",
-        "donde esta mi compra",
-        "seguimiento de mi compra",
-        "ver mi compra",
-        "rastreo de mi compra",
-        "quiero saber sobre mi pedido",
-        "quiero saber cuando llegara mi compra"
-    ];
+  // Palabras relacionadas con pedidos
+  const orderWords = ["pedido", "orden", "compra", "envío", "envio", "paquete", "entrega"];
 
-    // Si coincide con alguna frase típica de seguimiento
-    if (trackingPhrases.some((phrase) => lower.includes(phrase))) {
-        return true;
-    }
+  // Palabras de seguimiento o estado
+  const trackingWords = [
+    "estado",
+    "rastreo",
+    "seguimiento",
+    "entregado",
+    "llegará",
+    "llegara",
+    "recibido",
+    "despachado",
+  ];
 
-    // 🔹 Casos donde se mencionan palabras como “pedido”, “orden” o “compra”
-    // pero con verbos de acción como “hacer”, “crear”, “realizar”, “quiero”, etc.
-    const actionVerbs = /\b(hacer|realizar|crear|nuevo|quiero|deseo|necesito|me gustaría)\b/;
+  // Verbos o frases de consulta/pregunta
+  const queryWords = [
+    "quiero",
+    "saber",
+    "ver",
+    "cuando",
+    "sobre",
+    "dónde",
+    "donde",
+    "me gustaría",
+    "necesito",
+    "consulta",
+    "información",
+    "info",
+  ];
 
-    // Si menciona “pedido” u “orden” pero no está creando uno → seguimiento
-    if (/\b(pedido|orden)\b/.test(lower) && !actionVerbs.test(lower)) {
-        return true;
-    }
+  // Detecta si hay al menos una palabra de pedido
+  const hasOrderWord = orderWords.some(word => lower.includes(word));
 
-    // Si menciona “compra” en contexto de estado o seguimiento
-    if (
-        /\bcompra\b/.test(lower) &&
-        /\b(estado|seguimiento|dónde|donde|ver|rastreo)\b/.test(lower)
-    ) {
-        return true;
-    }
+  // Detecta si hay alguna palabra de seguimiento o verbo de consulta
+  const hasTrackingOrQuery = trackingWords.some(word => lower.includes(word)) ||
+                             queryWords.some(word => lower.includes(word));
 
-    return false;
+  return hasOrderWord && hasTrackingOrQuery;
 }
+
+
 
 /**
  * Detecta si el texto del usuario contiene un número de pedido o un RUT chileno.

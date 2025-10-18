@@ -16,4 +16,11 @@ interface Images {
   url: string;
 }
 
+export interface Order {
+  numero: number;
+  estado: string;
+  fecha_envio: string;
+  fecha_entrega: string;
+}
+
 
