@@ -11,6 +11,10 @@ export interface Product {
   url: string;
   images: Images[];
   price: number;
+  stock: number;
+  additional_information: string;
+  category: string;
+  description: string;
 }
 
 interface Images {
