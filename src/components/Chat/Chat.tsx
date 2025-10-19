@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowsPointingOutIcon, ArrowsPointingInIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import TypingIndicator from "../TypingIndicator";
+import TypingIndicator from "./TypingIndicator";
 import BotMessage from './BotMessage'
 import { useChatContext } from "@/context/ChatContext";
 
