@@ -9,6 +9,8 @@ export default function Carousel() {
   const [current, setCurrent] = useState(0);
   const [banners, setBanners] = useState<any[]>([]);
 
+  let STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+
   const nextSlide = () =>
     setCurrent((prev) => (banners.length > 0 ? (prev + 1) % banners.length : 0));
   const prevSlide = () =>
@@ -20,13 +22,14 @@ export default function Carousel() {
       try {
         const res = await fetch("/api/banner");
         const data = await res.json();
+    
         setBanners(data); // asegúrate de acceder al array correcto
       } catch (error) {
         console.error("Error al traer banners:", error);
       }
     };
     fetchBanners();
-  }, []); // ✅ sin dependencias (solo al montar el componente)
+  }, []); // sin dependencias (solo al montar el componente)
 
   // ⏳ Cambio automático (solo si hay banners cargados)
   useEffect(() => {
@@ -37,7 +40,7 @@ export default function Carousel() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [banners]); // ✅ se activa solo cuando los banners están listos
+  }, [banners]); // se activa solo cuando los banners están listos
 
   if (banners.length === 0)
     return <div className="w-full h-64 bg-gray-100 rounded-2xl animate-pulse" />;
@@ -48,7 +51,7 @@ export default function Carousel() {
         <Link key={index} href={banner.url} className="block">
           <Image
             key={banner.id}
-            src={`http://localhost:1337${banner.imagen.url}`}
+            src={`${STRAPI_URL + banner.imagen.url}`}
             alt={banner.titulo}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"

@@ -1,19 +1,21 @@
-import Banner from '@/components/banner/Banner';
-import Header from '../components/Header'
+import Banner from '@/components/client/banner/Banner';
+import Header from '../components/client/Header'
+import Horarios from '../components/client/Horarios'
 
 
-export default function Home() {
+export default async function Home() {
 
-  
+  const res = await fetch(`${process.env.STRAPI_URL_API}/sucursals?sort=posicion:asc`, {
+  });
+  const { data } = await res.json();
+
+ 
+
   return (
     <main className="">
-      <div className=" flex flex-row bg-blue-800 rounded-b-2xl text-amber-50 font-sans font-light text-xs h-6 w-full text-center p-1">
-        <p className=" mx-auto">Horario Continuado: Lunes a Viernes · 9:00 - 17:00 hrs. · Sábado · 9:00 - 14:00 hrs.</p>
-      </div>
-
-    <Header /> 
-    <Banner />  
-
+      <Horarios sucursales={data} />
+      <Header />
+      <Banner />
     </main>
   );
 }

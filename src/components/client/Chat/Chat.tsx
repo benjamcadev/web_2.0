@@ -7,7 +7,7 @@ import TypingIndicator from "./TypingIndicator";
 import BotMessage from './BotMessage'
 import { useChatContext } from "@/context/ChatContext";
 
-import { Message } from "../../types/chat";
+import { Message } from "../../../types/chat";
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);

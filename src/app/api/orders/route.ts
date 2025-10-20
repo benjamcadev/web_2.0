@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { Order } from "../../../types/chat";
 
-const STRAPI_URL = process.env.STRAPI_URL!;
+const STRAPI_URL_API = process.env.STRAPI_URL_API!;
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN!;
 
 export async function GET(request: Request) {
@@ -19,10 +19,10 @@ export async function GET(request: Request) {
 
     let fetchUrl;
     if (rut) {
-      fetchUrl = `${STRAPI_URL}/pedidos?filters[cliente][rut][$eq]=${encodeURIComponent(rut)}&populate=cliente`;
+      fetchUrl = `${STRAPI_URL_API}/pedidos?filters[cliente][rut][$eq]=${encodeURIComponent(rut)}&populate=cliente`;
     }
     if (orderNumber) {
-      fetchUrl = `${STRAPI_URL}/pedidos?filters[numero][$eq]=${encodeURIComponent(orderNumber)}&populate=cliente`;
+      fetchUrl = `${STRAPI_URL_API}/pedidos?filters[numero][$eq]=${encodeURIComponent(orderNumber)}&populate=cliente`;
     }
 
     const res = await fetch(fetchUrl!, { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } });

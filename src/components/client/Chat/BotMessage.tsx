@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import ProductCard from './ProductCard';
-import { Message } from '../../types/chat';
+import { Message } from '../../../types/chat';
 
 export default function BotMessage({ msg }: { msg: Message }) {
   const [displayedText, setDisplayedText] = useState('');
