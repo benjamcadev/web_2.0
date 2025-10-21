@@ -173,7 +173,7 @@ export default function Temporada({ setColor }: ColorProps) {
                             {/* Overlay con información */}
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 z-10">
                                 <div className="text-white">
-                                   {producto.price ? <h3 className=" inline-block bg-orange-500 text-white font-extrabold text-lg md:text-2xl p-1 rounded-lg  shadow-2xl ">${producto.price}</h3> : ''}
+                                   {producto.price ? <h3 className=" inline-block bg-orange-500 text-white font-extrabold text-lg md:text-3xl p-1 md:p-2 rounded-lg  shadow-2xl ">${producto.price}</h3> : ''}
                                     <h3 className="text-md md:text-3xl font-bold mb-2">{producto.name}</h3>
                                     {producto.additional_information && (
                                         <p className="text-sm md:text-base text-white/90 mb-2">{producto.additional_information}</p>
