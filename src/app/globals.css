@@ -52,6 +52,23 @@
   }
 }
 
+.ribbon {
+  /* Mueve el elemento de forma absoluta sobre el producto */
+  @apply absolute top-5 -right-2 transform rotate-45 text-center text-white font-bold p-1 pr-4 pl-4 shadow-lg;
+  width: 150px;
+}
+
+.ribbon::before {
+  /* Simula la "cola" de la cinta en la parte superior/izquierda */
+  content: "";
+  @apply absolute top-0 left-0 h-0 w-0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 0 1rem 1rem 0;
+  border-left-color: #a00; /* Color oscuro */
+  border-top-color: #a00;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

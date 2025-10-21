@@ -1,6 +1,7 @@
 import Banner from '@/components/client/banner/Banner';
 import Header from '../components/client/Header'
 import Horarios from '../components/client/Horarios'
+import IndexSeccionProductos from '../components/client/SeccionProductos/IndexSeccionProductos'
 
 
 export default async function Home() {
@@ -16,6 +17,7 @@ export default async function Home() {
       <Horarios sucursales={data} />
       <Header />
       <Banner />
+      <IndexSeccionProductos />
     </main>
   );
 }
