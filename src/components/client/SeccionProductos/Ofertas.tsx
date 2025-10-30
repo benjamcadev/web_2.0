@@ -171,7 +171,7 @@ export default function Ofertas() {
 
               {/* Overlay con información */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-6 z-10">
-                <div className="inline-flex flex-col md:flex-row md:items-center gap-1 md:gap-3 bg-gradient-to-r from-orange-600 to-red-500/90 rounded-xl px-2 md:px-4 py-1 md:py-3 shadow-xl border border-white/20">
+                <div className="inline-flex flex-col md:flex-row md:items-center gap-1 md:gap-3 bg-gradient-to-r from-orange-600 to-red-500/90 rounded-xl px-2 md:px-4 py-1 md:py-2 shadow-xl border border-white/20">
                   {producto.price_oferta && (
                     <div className="flex flex-col text-white">
                       <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wide opacity-90">

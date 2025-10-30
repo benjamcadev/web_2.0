@@ -2,6 +2,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
+import { formatCLP } from '@/lib/formatCLP';
 
 interface CategoriaEspecial {
     id: number;
@@ -173,7 +174,7 @@ export default function Temporada({ setColor }: ColorProps) {
                             {/* Overlay con información */}
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 z-10">
                                 <div className="text-white">
-                                   {producto.price ? <h3 className=" inline-block bg-orange-500 text-white font-extrabold text-lg md:text-3xl p-1 md:p-2 rounded-lg  shadow-2xl ">${producto.price}</h3> : ''}
+                                   {producto.price ? <span className=" gap-1 md:gap-3 bg-gradient-to-r from-orange-600 to-red-500/90 rounded-xl px-2 md:px-4 py-1 md:py-1 shadow-xl border border-white/20 text-lg md:text-2xl font-extrabold drop-shadow-md ">{formatCLP(producto.price)}</span> : ''}
                                     <h3 className="text-md md:text-3xl font-bold mb-2">{producto.name}</h3>
                                     {producto.additional_information && (
                                         <p className="text-sm md:text-base text-white/90 mb-2">{producto.additional_information}</p>
