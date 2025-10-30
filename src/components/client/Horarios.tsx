@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Minus } from "lucide-react"; // usa íconos de lucide-react (ya viene con shadcn)
+import { Plus, Minus } from "lucide-react"; 
 
 interface Sucursal {
   id: number;

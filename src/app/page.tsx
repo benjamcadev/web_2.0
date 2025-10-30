@@ -1,7 +1,9 @@
-import Banner from '@/components/client/banner/Banner';
+import Banner from '@/components/client/Banner/Banner';
 import Header from '../components/client/Header'
 import Horarios from '../components/client/Horarios'
 import IndexSeccionProductos from '../components/client/SeccionProductos/IndexSeccionProductos'
+import BannerInicial from '@/components/client/BannerInicial';
+
 
 export const metadata = {
   title: "Web 2.0",
@@ -16,17 +18,23 @@ export const viewport = {
 export default async function Home() {
 
 
-  const res = await fetch(`${process.env.STRAPI_URL_API}/sucursals?sort=posicion:asc`, {
+  const resSucursales = await fetch(`${process.env.STRAPI_URL_API}/sucursals?sort=posicion:asc`, {
   });
-  const { data } = await res.json();
+  const { data: sucursales } = await resSucursales.json();
 
-  console.log(data)
+  const resBannerInicial = await fetch(`${process.env.STRAPI_URL_API}/banners?filters[estado][$eq]=true&filters[aviso_inicial][$eq]=true&sort=posicion:asc&populate=*`, {
+  });
+  const { data: bannerInicial } = await resBannerInicial.json();
+
+
+
 
 
 
   return (
     <main className="">
-      <Horarios sucursales={data} />
+      {bannerInicial.length >= 1 ? <BannerInicial banner={bannerInicial[0]}/> : ''}
+      <Horarios sucursales={sucursales} />
       <Header />
       <Banner />
       <IndexSeccionProductos />
