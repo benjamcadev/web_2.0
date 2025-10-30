@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Temporada from './Temporada'
 import Ofertas from './Ofertas';
+import Biodegradables from './Biodegradables';
 
 export default function IndexSeccionProductos() {
 
@@ -22,7 +23,7 @@ export default function IndexSeccionProductos() {
 
            {/* Prodcutos biodegradables  */}
           <div className="w-full mb-4 md:w-3/12 bg-green-600 rounded-2xl md:mt-6 md:mb-6 shadow-md p-4">
-            
+            <Biodegradables />
           </div>
     </div>
   )
