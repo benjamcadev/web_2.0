@@ -27,7 +27,7 @@ export default function BannerInicial({ banner }: BannerInicialProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-80 flex items-center justify-center bg-black/50 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-80 flex items-center justify-center bg-black/50 backdrop-blur-md transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -39,7 +39,7 @@ export default function BannerInicial({ banner }: BannerInicialProps) {
         {/* Botón cerrar */}
         <button
           onClick={handleClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 font-bold text-xl"
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 font-bold text-5xl"
         >
           &times;
         </button>
