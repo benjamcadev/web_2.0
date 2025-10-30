@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Temporada from './Temporada'
+import Ofertas from './Ofertas';
 
 export default function IndexSeccionProductos() {
 
@@ -16,7 +17,7 @@ export default function IndexSeccionProductos() {
     
           {/* Prodcutos en oferta  */}
           <div className="w-full mb-4 md:w-4/12  bg-blue-800 rounded-2xl md:mt-6 md:mb-6 shadow-md p-4">
-            
+            <Ofertas />
           </div>
 
            {/* Prodcutos biodegradables  */}

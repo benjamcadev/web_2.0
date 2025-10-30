@@ -99,7 +99,7 @@ export default function Temporada({ setColor }: ColorProps) {
 
     if (productos.length === 0) {
         return (
-            <div className="relative w-full h-64 md:h-96 overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-purple-600 flex items-center justify-center">
+            <div className="relative w-full h-64 md:h-96 overflow-hidden rounded-2xl  flex items-center justify-center">
                 <div className="text-white text-xl">Cargando productos...</div>
             </div>
         );
