@@ -34,7 +34,7 @@ export default function Categorias({ categorias }: { categorias: Categoria[] }) 
    
     <div className="relative mt-6 px-6 rounded-2xl ml-3 mr-3 overflow-hidden shadow-lg">
 
-       {isModalOpen ? <ModalCatalogo setIsModalOpen={setIsModalOpen} slugCategoria={slugCategoria} /> : ''}
+       {isModalOpen ? <ModalCatalogo setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} slugCategoria={slugCategoria} /> : ''}
 
       {/* Fondo animado con degradado */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/40 via-purple-500/40 via-pink-500/40 to-yellow-400/40  animate-gradient-move bg-[length:400%_400%] rounded-2xl"></div>
