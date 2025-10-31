@@ -23,7 +23,6 @@ interface Producto {
   name: string;
   description: string;
   additional_information: string;
-  category: string;
   tag: string;
   stock: number;
   slug: string;

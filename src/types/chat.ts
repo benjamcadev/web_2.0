@@ -13,7 +13,6 @@ export interface Product {
   price: number;
   stock: number;
   additional_information: string;
-  category: string;
   description: string;
 }
 

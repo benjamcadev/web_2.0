@@ -1,8 +1,9 @@
 import Banner from '@/components/client/Banner/Banner';
 import Header from '../components/client/Header'
 import Horarios from '../components/client/Horarios'
-import IndexSeccionProductos from '../components/client/SeccionProductos/IndexSeccionProductos'
+import SeccionProductos from '../components/client/SeccionProductos/SeccionProductos'
 import BannerInicial from '@/components/client/BannerInicial';
+import Categorias from '@/components/client/Categorias/Categorias';
 
 
 export const metadata = {
@@ -37,7 +38,8 @@ export default async function Home() {
       <Horarios sucursales={sucursales} />
       <Header />
       <Banner />
-      <IndexSeccionProductos />
+      <SeccionProductos />
+      <Categorias />
     </main>
   );
 }

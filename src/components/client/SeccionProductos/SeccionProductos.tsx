@@ -4,7 +4,7 @@ import Temporada from './Temporada'
 import Ofertas from './Ofertas';
 import Biodegradables from './Biodegradables';
 
-export default function IndexSeccionProductos() {
+export default function SeccionProductos() {
 
   const [color, setColor] = useState<string>('');
 
