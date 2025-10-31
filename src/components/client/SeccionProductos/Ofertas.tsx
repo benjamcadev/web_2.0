@@ -52,7 +52,7 @@ export default function Ofertas() {
       try {
         const res = await fetch("/api/productos-oferta");
         const data = await res.json();
-        console.log(data)
+       
         setProductos(data);
       } catch (error) {
         console.error("Error al traer productos:", error);

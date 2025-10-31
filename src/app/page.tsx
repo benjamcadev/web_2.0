@@ -27,6 +27,9 @@ export default async function Home() {
   });
   const { data: bannerInicial } = await resBannerInicial.json();
 
+  const resCategorias = await fetch(`${process.env.STRAPI_URL_API}/categorias`, {
+  });
+  const { data: categorias } = await resCategorias.json();
 
 
 
@@ -39,7 +42,7 @@ export default async function Home() {
       <Header />
       <Banner />
       <SeccionProductos />
-      <Categorias />
+      <Categorias categorias={categorias}/>
     </main>
   );
 }
