@@ -27,7 +27,7 @@ export default function Categorias({ categorias }: { categorias: Categoria[] }) 
         </h2>
 
         {/* Grid de categorías con padding interior mayor */}
-        <div className="grid grid-cols-2 md:grid-cols-3  lg:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-4 px-4 md:px-12 lg:px-18 xl:px-30">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-8 xl:gap-12 px-4 md:px-12 xl:px-15 2xl:px-30">
           {categorias.map((categoria) => (
             <div
               key={categoria.id}
