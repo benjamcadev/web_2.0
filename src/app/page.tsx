@@ -27,7 +27,7 @@ export default async function Home() {
   });
   const { data: bannerInicial } = await resBannerInicial.json();
 
-  const resCategorias = await fetch(`${process.env.STRAPI_URL_API}/categorias?&populate=*`, {
+  const resCategorias = await fetch(`${process.env.STRAPI_URL_API}/categorias?sort=nombre:asc&populate=*`, {
   });
   const { data: categorias } = await resCategorias.json();
 
