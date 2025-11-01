@@ -1,18 +1,27 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "agroplastic.cl",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-      },
+      { protocol: "https", hostname: "agroplastic.cl" },
+      { protocol: "http", hostname: "localhost" },
     ],
+  },
+
+  webpack: (config, { isServer }) => {
+    // ✅ Alias al worker local
+    config.resolve.alias["pdfjs-dist/build/pdf.worker.min.js"] = path.resolve(
+      __dirname,
+      "node_modules/pdfjs-dist/build/pdf.worker.min.js"
+    );
+
+    // ✅ Evitar requerir 'canvas' en el servidor
+    if (isServer) {
+      config.externals.push({ canvas: "canvas" });
+    }
+
+    return config;
   },
 };
 

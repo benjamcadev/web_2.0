@@ -1,7 +1,6 @@
 'use client'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { clearLine } from 'readline';
-
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 
 interface setIsModalOpenProps {
@@ -10,36 +9,16 @@ interface setIsModalOpenProps {
     slugCategoria: string
 }
 
-interface Producto {
-    id: number;
-    name: string;
-    description: string;
-    additional_information: string;
-    tag: string;
-    stock: number;
-    slug: string;
-    categoria: Categoria[];
-    images: ImageData[];
-    price: number;
-}
-interface Categoria {
-    nombre: string;
-    slug: string;
-
-}
-interface ImageData {
-    id: number;
-    name: string;
-    url: string;
-}
 
 
 export default function ModalCatalogo({ setIsModalOpen, slugCategoria, isModalOpen }: setIsModalOpenProps) {
     const [isOpen, setIsOpen] = useState(true); // control del modal
     const [isVisible, setIsVisible] = useState(false); // control de animación
-    const [productosCatalogo, setProductosCatalogo] = useState<Producto[]>([]);
     const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
 
+    const PDFViewerClient = dynamic(() => import('@/components/client/pdf/PDFViewerClient'), {
+        ssr: false,
+    });
 
     const handleClose = () => {
         setIsVisible(false); // inicia la animación de salida
@@ -59,8 +38,7 @@ export default function ModalCatalogo({ setIsModalOpen, slugCategoria, isModalOp
             try {
                 const res = await fetch(`/api/productos-catalogo?slugCategoria=${slugCategoria}`);
                 const data = await res.json();
-                console.log(data)
-                setProductosCatalogo(data);
+
                 handleGenerarPDF(data);
             } catch (error) {
                 console.error("Error al traer productos catalogo:", error);
@@ -74,43 +52,68 @@ export default function ModalCatalogo({ setIsModalOpen, slugCategoria, isModalOp
 
 
     const handleGenerarPDF = async (data: []) => {
-        const res = await fetch('/api/generar-catalogo', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data), // tus datos desde Strapi
-        });
+        try {
+            const res = await fetch('/api/generar-catalogo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
 
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        setPdfUrl(url);
+            if (!res.ok) throw new Error("Error al generar el PDF");
+
+            const blob = await res.blob();
+            const pdfUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+            setPdfUrl(pdfUrl);
+        } catch (error) {
+            console.error("Error generando PDF:", error);
+        }
     };
+
 
     return (
         <div
             className={`fixed inset-0 z-80 flex items-center justify-center bg-black/50 backdrop-blur-md transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"
                 }`}
         >
-             <iframe
-                src={pdfUrl}
-                className="w-full h-[80vh] rounded-lg border"
-            ></iframe>
-
-
             <div
-                className={`bg-white rounded-lg shadow-lg max-w-lg w-full h-fit p-4 relative transform transition-transform duration-300 ${isVisible ? "scale-100" : "scale-95"
+                className={`bg-white rounded-lg shadow-lg max-w-5xl w-full h-[85vh] flex flex-col transform transition-transform duration-300 ${isVisible ? "scale-100" : "scale-95"
                     }`}
             >
-                {/* Botón cerrar */}
-                <button
-                    onClick={handleClose}
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 font-bold text-5xl"
-                >
-                    &times;
-                </button>
+                {/* Header con botón cerrar */}
+                <div className="flex justify-between items-center bg-gray-100 border-b border-gray-300 px-5 py-3 rounded-t-lg">
+                    <h2 className="text-lg font-semibold text-gray-700">
+                        Catálogo de Productos
+                    </h2>
+                    <button
+                        onClick={handleClose}
+                        className="text-gray-500 hover:text-gray-800 font-bold text-4xl leading-none"
+                        aria-label="Cerrar"
+                    >
+                        &times;
+                    </button>
+                </div>
 
+                {/* Contenido principal: visor PDF */}
+                <div className="flex-1 p-4 overflow-hidden bg-white rounded-b-lg">
+                    {pdfUrl ? (
+                        <PDFViewerClient fileUrl={pdfUrl} />
+                    ) : (
+                        <div className="flex flex-col items-center mt-20 text-gray-600 animate-fade-in">
+                            <div className="flex space-x-2 mb-3">
+                                <span className="w-3 h-3 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                <span className="w-3 h-3 bg-orange-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                <span className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce"></span>
+                            </div>
+                            <p className="text-lg font-medium">Generando catálogo...</p>
+                        </div>
+
+
+
+                    )}
+                </div>
             </div>
-
-           
         </div>
-    )
+    );
+
+
 }
