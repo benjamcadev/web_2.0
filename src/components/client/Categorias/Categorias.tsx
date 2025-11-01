@@ -42,10 +42,10 @@ export default function Categorias({ categorias }: { categorias: Categoria[] }) 
       {/* Contenido */}
       <div className="relative z-10 py-18">
         {/* Título */}
-        <h2 className={`${yellowtail.className} text-3xl md:text-6xl font-extrabold text-cyan-950 text-center mb-8`} style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.4)' }}>
+        <h2 className={`${yellowtail.className} text-4xl md:text-6xl font-extrabold text-cyan-950 text-center mb-8`} style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.4)' }}>
           Soluciones para todo 
         </h2>
-        <p className=' px-64 text-center pb-20' >Descubre todas nuestras categorías de productos pensadas para tu negocio.
+        <p className=' sm:px-10 md:px-20 xl:px-64 text-center pb-20' >Descubre todas nuestras categorías de productos pensadas para tu negocio.
 Desde envases de aluminio, plástico o ecológicos, hasta bolsas, cotillón, librería y equipamiento gastronómico, contamos con soluciones versátiles y de calidad para cada necesidad.
 Encuentra el formato ideal para tu emprendimiento o empresa y lleva tu presentación al siguiente nivel.</p>
 
