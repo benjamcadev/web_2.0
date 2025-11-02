@@ -18,12 +18,22 @@ export default function Header() {
 
   return (
     <>
-      <header className="m-3 bg-white shadow-sm rounded-2xl px-6 py-4">
+      <header className="sticky top-0 z-50 m-3 bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl shadow-lg px-6 py-4">
+
+
+
         <div className="flex items-center justify-between">
           {/* Logo a la izquierda */}
           <div className="flex items-center space-x-2">
-            <Image src="/logo.webp" alt="Logo" width={180} height={100} />
+            <Image
+              src="/logo.webp"
+              alt="Logo Agroplastic"
+              width={200}
+              height={100}
+              className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] transition-all duration-300"
+            />
           </div>
+
 
           {/* Botón hamburguesa en móvil */}
           <button
@@ -59,7 +69,7 @@ export default function Header() {
             <div className="h-6 w-px bg-black"></div>
 
             {/* Ticket */}
-            <div 
+            <div
               className="relative cursor-pointer group"
               onClick={() => setIsQueueOpen(true)}
             >
@@ -115,7 +125,7 @@ export default function Header() {
             ))}
 
             {/* Personas en fila */}
-            <div 
+            <div
               className="relative mt-4 cursor-pointer"
               onClick={() => setIsQueueOpen(true)}
             >

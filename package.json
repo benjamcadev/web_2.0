@@ -12,9 +12,11 @@
     "@heroicons/react": "^2.2.0",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
+    "@react-pdf-viewer/locales": "^1.0.0",
+    "@react-pdf-viewer/toolbar": "^3.12.0",
     "lucide-react": "^0.546.0",
     "next": "15.5.3",
-    "pdfjs-dist": "^3.4.120",
+    "pdfjs-dist": "^3.11.174",
     "puppeteer": "^24.27.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -31,10 +33,5 @@
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "overrides": {
-  "pdfjs-dist": "3.4.120"
-}
-
-  
+  }
 }

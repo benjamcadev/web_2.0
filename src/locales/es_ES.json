@@ -1,0 +1,18 @@
+{
+  "toolbar.previousPage": "Página anterior",
+  "toolbar.nextPage": "Página siguiente",
+  "toolbar.zoomOut": "Alejar",
+  "toolbar.zoomIn": "Acercar",
+  "toolbar.resetZoom": "Restablecer zoom",
+  "toolbar.download": "Descargar",
+  "toolbar.print": "Imprimir",
+  "toolbar.pageNumber": "Página",
+  "toolbar.of": "de",
+  "toolbar.rotateClockwise": "Rotar horario",
+  "toolbar.rotateCounterClockwise": "Rotar antihorario",
+  "search.highlightAll": "Resaltar todo",
+  "search.matchCase": "Coincidir mayúsculas/minúsculas",
+  "search.findNext": "Buscar siguiente",
+  "search.findPrevious": "Buscar anterior",
+  "search.search": "Buscar"
+}

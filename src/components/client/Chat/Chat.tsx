@@ -198,7 +198,7 @@ export default function Chat() {
       {/* Botón de expandir/reducir */}
       <button
         onClick={() => setIsFullScreen((v) => !v)}
-        className={`absolute right-3 top-3 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-50 shadow`}
+        className={`absolute right-3 top-3 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-49 shadow`}
         aria-label={isFullScreen ? "Salir de pantalla completa" : "Pantalla completa"}
         type="button"
       >
