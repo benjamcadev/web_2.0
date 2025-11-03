@@ -7,10 +7,12 @@ import SeccionProductos from "@/components/client/SeccionProductos/SeccionProduc
 import BannerInicial from "@/components/client/BannerInicial";
 import Categorias from "@/components/client/Categorias/Categorias";
 
+
 // Import dinámico SIN SSR, válido porque este archivo es "use client"
 const Horarios = dynamic(() => import("@/components/client/Horarios"), {
   ssr: false,
 });
+
 
 export default function HomeClient({ sucursales, bannerInicial, categorias }: any) {
   return (
@@ -21,6 +23,8 @@ export default function HomeClient({ sucursales, bannerInicial, categorias }: an
       <Banner />
       <SeccionProductos />
       <Categorias categorias={categorias} />
+
+     
     </main>
   );
 }

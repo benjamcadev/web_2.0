@@ -6,6 +6,7 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import TypingIndicator from "./TypingIndicator";
 import BotMessage from './BotMessage'
 import { useChatContext } from "@/context/ChatContext";
+import { FaWhatsapp } from "react-icons/fa";
 
 import { Message } from "../../../types/chat";
 
@@ -14,7 +15,7 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  
+
   // 🔹 Usar el contexto global
   const { pendingRut, clientData, pendingAttempts, setPendingRut, setClientData, incrementAttempts, resetPending } = useChatContext();
 
@@ -59,25 +60,25 @@ export default function Chat() {
 
     // Validar si es correo o teléfono
     if (!isValidEmail(inputTrimmed) && !isValidPhone(inputTrimmed)) {
-      return { 
-        isValid: false, 
-        message: "Por favor ingresa un **correo válido** (ej: usuario@email.com) o un **teléfono válido** (ej: +56912345678). ❌" 
+      return {
+        isValid: false,
+        message: "Por favor ingresa un **correo válido** (ej: usuario@email.com) o un **teléfono válido** (ej: +56912345678). ❌"
       };
     }
 
     // Comparar con datos guardados
-    const isEmailMatch = isValidEmail(inputTrimmed) && 
-                        normalizeEmail(inputTrimmed) === normalizeEmail(clientData.email);
-    const isPhoneMatch = isValidPhone(inputTrimmed) && 
-                        normalizePhone(inputTrimmed) === normalizePhone(clientData.telefono);
+    const isEmailMatch = isValidEmail(inputTrimmed) &&
+      normalizeEmail(inputTrimmed) === normalizeEmail(clientData.email);
+    const isPhoneMatch = isValidPhone(inputTrimmed) &&
+      normalizePhone(inputTrimmed) === normalizePhone(clientData.telefono);
 
     if (isEmailMatch || isPhoneMatch) {
       return { isValid: true, message: "" };
     }
 
-    return { 
-      isValid: false, 
-      message: `El correo o teléfono proporcionado no coincide con el RUT. ❌\n\nPor favor intenta de nuevo.` 
+    return {
+      isValid: false,
+      message: `El correo o teléfono proporcionado no coincide con el RUT. ❌\n\nPor favor intenta de nuevo.`
     };
   };
 
@@ -188,12 +189,11 @@ export default function Chat() {
 
   return (
     <div
-      className={`flex flex-col h-96 bg-white ${
-        isFullScreen
-          ? "fixed top-0 left-0 w-screen h-screen z-50 max-w-none max-h-none rounded-none shadow-2xl border-none"
-          : "relative"
-      } transition-all duration-300`}
-      style={isFullScreen ? {height: '100vh'} : {}}
+      className={`flex flex-col h-96 bg-white ${isFullScreen
+        ? "fixed top-0 left-0 w-screen h-screen z-50 max-w-none max-h-none rounded-none shadow-2xl border-none"
+        : "relative"
+        } transition-all duration-300`}
+      style={isFullScreen ? { height: '100vh' } : {}}
     >
       {/* Botón de expandir/reducir */}
       <button
@@ -213,16 +213,23 @@ export default function Chat() {
       <div
         ref={chatContainerRef}
         className={`flex-1 overflow-y-auto p-4 space-y-3 border border-gray-400 rounded-lg bg-gray-50 ${isFullScreen ? 'h-[calc(100vh-180px)]' : ''}`}
-        style={isFullScreen ? {minHeight: '400px'} : {}}
+        style={isFullScreen ? { minHeight: '400px' } : {}}
       >
         {messages.length === 0 && (
           <div className="flex flex-col justify-center h-72 items-center">
             <p className="text-2xl text-center">
               ¡Hola! ¿En qué te puedo ayudar hoy?
             </p>
-            <p className="text-lg text-center">
+            <p className="text-lg text-center mb-2">
               Pregunta sobre un producto o el estado de tu pedido...
             </p>
+            <button
+              onClick={() => (console.log("hola"))}
+              className="inline-flex  items-center gap-2 bg-[#25D366] text-white text-xs font-medium px-3 py-2 rounded-lg hover:bg-[#1EBE5D] transition-colors duration-300 shadow-sm active:scale-95"
+            >
+              <span>Contactar Callcenter</span>
+              <FaWhatsapp className="text-lg" />
+            </button>
           </div>
         )}
 
