@@ -6,6 +6,8 @@ import Header from "@/components/client/Header";
 import SeccionProductos from "@/components/client/SeccionProductos/SeccionProductos";
 import BannerInicial from "@/components/client/BannerInicial";
 import Categorias from "@/components/client/Categorias/Categorias";
+import InstagramFeed from "./InstagramFeed";
+import InstagramFeedStrapi from "./InstagramFeedStrapi";
 
 
 // Import dinámico SIN SSR, válido porque este archivo es "use client"
@@ -23,8 +25,8 @@ export default function HomeClient({ sucursales, bannerInicial, categorias }: an
       <Banner />
       <SeccionProductos />
       <Categorias categorias={categorias} />
+      <InstagramFeedStrapi />
 
-     
     </main>
   );
 }

@@ -24,7 +24,7 @@ export default function Header() {
             <Image
               src="/logo.webp"
               alt="Logo Agroplastic"
-              width={160}
+              width={200}
               height={80}
               className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] transition-all duration-300"
             />

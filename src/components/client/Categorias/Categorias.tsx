@@ -24,7 +24,7 @@ export default function Categorias({ categorias }: { categorias: Categoria[] }) 
   const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL
 
   return (
-    <div className="relative mt-10 px-6 md:px-12 rounded-3xl overflow-hidden shadow-xl">
+    <div className="relative mt-10 px-6 ml-3 mr-3 md:px-12 rounded-3xl overflow-hidden shadow-xl">
       {/* Modal */}
       {isModalOpen && (
         <ModalCatalogo
@@ -35,19 +35,19 @@ export default function Categorias({ categorias }: { categorias: Categoria[] }) 
       )}
 
       {/* Fondo Glass */}
-      <div className="absolute inset-0 bg-white/20 backdrop-blur-xl border border-white/30 rounded-3xl" />
+      <div className="absolute inset-0 bg-white/50 backdrop-blur-xl border border-white/30 rounded-3xl" />
 
       {/* Contenido principal */}
       <div className="relative z-10 py-16 text-center">
         {/* Título */}
         <h2
-          className={`${yellowtail.className} text-5xl md:text-7xl font-bold text-white drop-shadow-lg mb-6`}
+          className={`${yellowtail.className} text-5xl md:text-7xl font-bold text-blue-950 drop-shadow-lg mb-6`}
         >
           Soluciones para todo
         </h2>
 
         {/* Descripción */}
-        <p className="max-w-3xl mx-auto text-white/90 mb-16 leading-relaxed text-base md:text-lg">
+        <p className="max-w-3xl mx-auto text-blue-950 mb-16 leading-relaxed text-base md:text-lg">
           Descubre nuestras categorías diseñadas para tu negocio. Envases, bolsas, cotillón, librería
           y más — todo con calidad, versatilidad y estilo.
         </p>
