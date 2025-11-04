@@ -17,7 +17,7 @@ const yellowtail = Yellowtail({
     subsets: ['latin'],
 })
 
-export default function InstagramFeedStrapi() {
+export default function RrssFeed() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [activeIndex, setActiveIndex] = useState(0);
 
