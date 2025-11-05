@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "agroplastic.cl" },
       { protocol: "http", hostname: "localhost" },
+      { protocol: "http", hostname: "172.20.10.5" },
     ],
   },
 

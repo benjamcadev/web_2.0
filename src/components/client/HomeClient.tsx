@@ -8,6 +8,7 @@ import BannerInicial from "@/components/client/BannerInicial";
 import Categorias from "@/components/client/Categorias/Categorias";
 import InstagramFeed from "./InstagramFeed";
 import RrssFeed from "./RrssFeed";
+import Nosotros from './Nosotros'
 
 
 // Import dinámico SIN SSR, válido porque este archivo es "use client"
@@ -16,7 +17,7 @@ const Horarios = dynamic(() => import("@/components/client/Horarios"), {
 });
 
 
-export default function HomeClient({ sucursales, bannerInicial, categorias }: any) {
+export default function HomeClient({ sucursales, bannerInicial, categorias, nosotros }: any) {
   return (
     <main>
       {bannerInicial.length >= 1 ? <BannerInicial banner={bannerInicial[0]} /> : ""}
@@ -26,6 +27,8 @@ export default function HomeClient({ sucursales, bannerInicial, categorias }: an
       <SeccionProductos />
       <Categorias categorias={categorias} />
       <RrssFeed />
+      <Nosotros sucursales={sucursales} nosotros={nosotros}/>
+      
 
     </main>
   );

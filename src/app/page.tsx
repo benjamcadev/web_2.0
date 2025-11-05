@@ -10,7 +10,7 @@ export const viewport = {
 };
 
 export default async function Home() {
-  const resSucursales = await fetch(`${process.env.STRAPI_URL_API}/sucursals?sort=posicion:asc`);
+  const resSucursales = await fetch(`${process.env.STRAPI_URL_API}/sucursals?sort=posicion:asc&populate=*`);
   const { data: sucursales } = await resSucursales.json();
 
   const resBannerInicial = await fetch(
@@ -23,11 +23,15 @@ export default async function Home() {
   );
   const { data: categorias } = await resCategorias.json();
 
+  const resNosotros = await fetch(`${process.env.STRAPI_URL_API}/nosotros?populate=*`);
+  const { data: nosotros } = await resNosotros.json();
+
   return (
     <HomeClient
       sucursales={sucursales}
       bannerInicial={bannerInicial}
       categorias={categorias}
+      nosotros={nosotros}
     />
   );
 }
