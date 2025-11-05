@@ -13,7 +13,7 @@ export default function Header() {
   const [isQueueOpen, setIsQueueOpen] = useState(false);
   const [cartCount] = useState(3);
   const [peopleQueuing] = useState(5);
-  const links = ["Inicio", "Nosotros", "Tienda"];
+  const links = ["Inicio","Tienda", "Empresas"];
 
   return (
     <>

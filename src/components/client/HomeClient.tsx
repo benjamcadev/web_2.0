@@ -9,6 +9,7 @@ import Categorias from "@/components/client/Categorias/Categorias";
 import InstagramFeed from "./InstagramFeed";
 import RrssFeed from "./RrssFeed";
 import Nosotros from './Nosotros'
+import InfoEmpresa from "./InfoEmpresa";
 
 
 // Import dinámico SIN SSR, válido porque este archivo es "use client"
@@ -28,7 +29,7 @@ export default function HomeClient({ sucursales, bannerInicial, categorias, noso
       <Categorias categorias={categorias} />
       <RrssFeed />
       <Nosotros sucursales={sucursales} nosotros={nosotros}/>
-      
+      <InfoEmpresa />
 
     </main>
   );
