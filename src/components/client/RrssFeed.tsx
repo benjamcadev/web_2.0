@@ -55,7 +55,7 @@ export default function RrssFeed() {
             {/* ==================== VERSIÓN DESKTOP ==================== */}
             <div className="hidden md:flex flex-row w-full z-10">
                 {/* Columna izquierda */}
-                <div className="relative md:w-1/3 flex flex-col justify-center items-start p-8 space-y-8">
+                <div className="relative md:w-1/3 flex flex-col justify-center items-start p-8 pl-2 space-y-8">
                     <h2 className={`${yellowtail.className} text-5xl md:text-6xl font-bold text-blue-950 drop-shadow-lg mb-6`}>
                         Síguenos en redes sociales
                     </h2>
@@ -65,13 +65,13 @@ export default function RrssFeed() {
                     </p>
 
                     {/* Tarjetas de redes sociales */}
-                    <div className="flex flex-row items-center justify-start gap-6 w-full mt-4">
+                    <div className="flex flex-row items-center justify-center lg:gap-4 2xl:gap-6 w-full mt-4">
                         {/* Instagram */}
                         <a
                             href="https://www.instagram.com/agroplasticls/"
                             target="_blank"
                             rel="noreferrer"
-                            className="flex flex-col items-center justify-center w-40 h-48 rounded-2xl shadow-md bg-gradient-to-tr from-pink-500/70 via-purple-500/70 to-yellow-400/70 text-white hover:scale-105 hover:shadow-lg transition-transform duration-300"
+                            className="flex flex-col items-center justify-center w-40 h-48 rounded-2xl shadow-md bg-gradient-to-tr from-pink-500/90 via-purple-500/90 to-yellow-400/90 text-white hover:scale-105 hover:shadow-lg transition-transform duration-300"
                         >
                             <FaInstagram className="text-5xl mb-3 drop-shadow-lg" />
                             <h3 className="text-lg font-semibold">Instagram</h3>
@@ -83,7 +83,7 @@ export default function RrssFeed() {
                             href="https://www.facebook.com/"
                             target="_blank"
                             rel="noreferrer"
-                            className="flex flex-col items-center justify-center w-40 h-48 rounded-2xl shadow-md bg-blue-600/70 text-white hover:scale-105 hover:shadow-lg transition-transform duration-300"
+                            className="flex flex-col items-center justify-center w-40 h-48 rounded-2xl shadow-md bg-blue-600/90 text-white hover:scale-105 hover:shadow-lg transition-transform duration-300"
                         >
                             <FaFacebook className="text-5xl mb-3 drop-shadow-lg" />
                             <h3 className="text-lg font-semibold">Facebook</h3>
