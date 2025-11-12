@@ -78,7 +78,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div ref={searchRef} className="relative w-full">
+    <div ref={searchRef} className="relative md:pl-20 md:w-xl">
       {/* Input de búsqueda */}
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

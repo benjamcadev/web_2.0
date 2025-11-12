@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Banner from "@/components/client/Banner/Banner";
-import Header from "@/components/client/Header";
+import Header from "@/components/client/Header/Header";
 import SeccionProductos from "@/components/client/SeccionProductos/SeccionProductos";
 import BannerInicial from "@/components/client/BannerInicial";
 import Categorias from "@/components/client/Categorias/Categorias";
