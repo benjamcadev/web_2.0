@@ -102,7 +102,7 @@
 }
   */
 html, body {
-  @apply min-h-screen bg-gradient-to-r from-blue-500/60 via-indigo-500/60 via-pink-500/60 to-yellow-400/60;
+  @apply min-h-screen bg-gradient-to-r from-blue-500/20 via-indigo-500/20 via-pink-500/20 to-yellow-400/20;
   background-size: 400% 400%;
   animation: gradient-move 30s ease-in-out infinite;
 }

@@ -10,6 +10,8 @@ import InstagramFeed from "./InstagramFeed";
 import RrssFeed from "./RrssFeed";
 import Nosotros from './Nosotros'
 import InfoEmpresa from "./InfoEmpresa";
+import Footer from "./Footer";
+import ClientesInicio from "../server/ClientesInicio";
 
 
 // Import dinámico SIN SSR, válido porque este archivo es "use client"
@@ -26,11 +28,12 @@ export default function HomeClient({ sucursales, bannerInicial, categorias, noso
       <Header />
       <Banner />
       <SeccionProductos />
+      <ClientesInicio />
       <Categorias categorias={categorias} />
       <RrssFeed />
-      <Nosotros sucursales={sucursales} nosotros={nosotros}/>
+      <Nosotros sucursales={sucursales} nosotros={nosotros} />
       <InfoEmpresa />
-
+      <Footer />
     </main>
   );
 }
