@@ -1,9 +1,5 @@
 import HomeClient from "@/components/client/HomeClient";
 
-export const metadata = {
-  title: "Web 2.0",
-  description: "Productos biodegradables y de temporada",
-};
 
 export const viewport = {
   themeColor: "#0f172a",

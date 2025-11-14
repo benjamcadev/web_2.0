@@ -12,12 +12,14 @@ import Nosotros from './Nosotros'
 import InfoEmpresa from "./InfoEmpresa";
 import Footer from "./Footer";
 import ClientesInicio from "../server/ClientesInicio";
+import Horarios from '@/components/client/Horarios'
 
 
 // Import dinámico SIN SSR, válido porque este archivo es "use client"
-const Horarios = dynamic(() => import("@/components/client/Horarios"), {
+/*const Horarios = dynamic(() => import("@/components/client/Horarios"), {
   ssr: false,
 });
+*/
 
 
 export default function HomeClient({ sucursales, bannerInicial, categorias, nosotros }: any) {

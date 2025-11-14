@@ -1,22 +1,39 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { HomeIcon, Bars3Icon, XMarkIcon, ShoppingCartIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import Queue from "./Queue";
 import SearchBar from "./SearchBar";
+import { useCart } from "@/hooks/useCart";
+import { useHydration } from "@/hooks/useHydration";
 
 export default function Header() {
   const [active, setActive] = useState("Inicio");
   const [open, setOpen] = useState(false);
   const [isQueueOpen, setIsQueueOpen] = useState(false);
-  const [cartCount] = useState(3);
   const [peopleQueuing] = useState(5);
-  const links = ["Inicio","Tienda", "Empresas"];
+  const links = ["Inicio", "Tienda", "Empresas"];
+  const [animar, setAnimar] = useState(false);
 
+  // 🛒 Obtener el total de items del carrito
+  const { getTotalItems } = useCart();
+
+  // Evitar error de hidratación
+  const isHydrated = useHydration();
+
+  //  Solo ejecutar getTotalItems() después de hidratar
+  const totalItems = isHydrated ? getTotalItems() : 0;
+
+  useEffect(() => {
+    setAnimar(true);
+    setTimeout(() => setAnimar(false), 5000);
+  }, [totalItems])
   return (
     <>
+    
       <header className="sticky top-0 z-50 m-3 bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl shadow-lg px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           {/* Logo a la izquierda */}
@@ -51,11 +68,10 @@ export default function Header() {
                 <button
                   key={link}
                   onClick={() => setActive(link)}
-                  className={`text-black text-lg pb-1 transition-all ${
-                    active === link
-                      ? "font-bold border-b-2 border-black"
-                      : "font-normal hover:font-semibold hover:border-b hover:border-gray-400"
-                  }`}
+                  className={`text-black text-lg pb-1 transition-all ${active === link
+                    ? "font-bold border-b-2 border-black"
+                    : "font-normal hover:font-semibold hover:border-b hover:border-gray-400"
+                    }`}
                 >
                   {link === "Inicio" ? (
                     <HomeIcon className="h-6 w-6 text-black" />
@@ -88,15 +104,16 @@ export default function Header() {
             {/* Separador */}
             <div className="h-6 w-px bg-black"></div>
 
-            {/* Carrito */}
-            <div className="relative cursor-pointer">
-              <ShoppingCartIcon className="h-7 w-7 text-black" />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                  {cartCount}
+            {/* Carrito - ACTUALIZADO */}
+            <Link href="/carrito" className="relative cursor-pointer group">
+              <ShoppingCartIcon className="h-7 w-7 text-black transition-transform group-hover:scale-110" />
+
+              {isHydrated && totalItems > 0 && (
+                <span className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold ${animar ? 'animate-pulse' : ''}`}>
+                  {totalItems}
                 </span>
               )}
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -117,11 +134,10 @@ export default function Header() {
                     setActive(link);
                     setOpen(false);
                   }}
-                  className={`text-black text-lg pb-1 transition-all ${
-                    active === link
-                      ? "font-bold border-b-2 border-black"
-                      : "font-normal hover:font-semibold hover:border-b hover:border-gray-400"
-                  }`}
+                  className={`text-black text-lg pb-1 transition-all ${active === link
+                    ? "font-bold border-b-2 border-black"
+                    : "font-normal hover:font-semibold hover:border-b hover:border-gray-400"
+                    }`}
                 >
                   {link === "Inicio" ? (
                     <HomeIcon className="h-6 w-6 text-black" />
@@ -144,15 +160,15 @@ export default function Header() {
                 )}
               </div>
 
-              {/* Carrito móvil */}
-              <div className="relative mt-4">
+              {/* Carrito móvil - ACTUALIZADO */}
+              <Link href="/carrito" className="relative mt-4">
                 <ShoppingCartIcon className="h-7 w-7 text-black" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    {cartCount}
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold">
+                    {totalItems}
                   </span>
                 )}
-              </div>
+              </Link>
             </nav>
           </div>
         )}
