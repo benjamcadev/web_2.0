@@ -4,7 +4,9 @@ export interface Producto {
     price: number;
     slug: string;
     images: Images[];
-    oferta: boolean
+    oferta: boolean;
+    description: string;
+    additional_information: string;
 }
 
 interface Images {

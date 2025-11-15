@@ -23,6 +23,7 @@ export async function GET(req: Request) {
       id: item.id,
       name: item.nombre,
       slug: item.slug,
+      imagen: item.imagen.formats?.small?.url || item.imagen.url
     }));
 
     return NextResponse.json({

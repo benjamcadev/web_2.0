@@ -4,8 +4,15 @@ import React, { useState, useEffect } from "react";
 import ProductCard from "@/components/client/tienda/ProductCard";
 import NavegacionTienda from "@/components/client/tienda/NavegacionTienda";
 import { useSearchParams } from "next/navigation";
+import { Manrope } from "next/font/google";
 
 export const revalidate = 60; // ISR
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 
 export default function Productos({ page }: { page: number }) {
     const searchParams = useSearchParams();
@@ -55,11 +62,11 @@ export default function Productos({ page }: { page: number }) {
     };
 
     return (
-        <div className="flex flex-col w-3/4 mt-6 px-6 gap-6 rounded-2xl bg-white/50 backdrop-blur-lg border border-white/30 ml-3 mr-3">
+        <div className={`${manrope.className} flex flex-col w-3/4 mt-6 px-6 gap-6 rounded-2xl bg-white/50 backdrop-blur-lg border border-white/30 ml-3 mr-3`}>
             {/* Encabezado */}
-            <div className="flex flex-col md:flex-row justify-between items-center w-full mt-4 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-center text-sm w-full mt-4 gap-4">
                 {/* Ordenar */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 ">
                     <label htmlFor="sort" className="font-medium text-gray-800">
                         Ordenar por:
                     </label>
@@ -67,7 +74,7 @@ export default function Productos({ page }: { page: number }) {
                         id="sort"
                         value={sort}
                         onChange={handleSortChange}
-                        className="w-32 px-3 py-2 text-gray-800 border border-white/60 bg-gray-200/80 backdrop-blur-xl rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-300"
+                        className="w-32 px-3 py-2 text-gray-800 border  border-white/60 bg-gray-50/60  rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-300"
                     >
                         <option value="default">Por defecto</option>
                         <option value="price:asc">Precio más bajo al más alto</option>
@@ -80,15 +87,15 @@ export default function Productos({ page }: { page: number }) {
                 <NavegacionTienda meta={meta} />
 
                 {/* Productos por página */}
-                <div className="flex items-center gap-2">
-                    <label htmlFor="pageSize" className="font-medium text-gray-800">
+                <div className="flex items-center gap-2 ">
+                    <label htmlFor="pageSize" className="font-medium  text-gray-800">
                         Productos por página:
                     </label>
                     <select
                         id="pageSize"
                         value={pageSize}
                         onChange={handlePageSizeChange}
-                        className="px-3 py-2 text-gray-800 border border-white/60 bg-gray-200/80 backdrop-blur-xl rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-300"
+                        className="px-3 py-2 text-gray-800 border border-white/60 bg-gray-50/60  rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-300"
                     >
                         {[9, 12, 24, 36, 48].map((num) => (
                             <option key={num} value={num}>
@@ -101,7 +108,7 @@ export default function Productos({ page }: { page: number }) {
 
             {/* Rango de productos */}
             {meta && meta.total && (
-                <div className="flex flex-col md:flex-row w-52 text-start text-gray-700 text-sm font-medium px-3 py-1.5 border border-white/60 bg-gray-200/80 backdrop-blur-xl rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-300">
+                <div className="flex flex-col md:flex-row w-44 text-start text-gray-700 text-xs font-medium px-3 py-1.5 border border-white/60 bg-gray-50/60 rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-300">
                     {(() => {
                         const start = (meta.page - 1) * meta.pageSize + 1;
                         const end = Math.min(start + meta.pageSize - 1, meta.total);

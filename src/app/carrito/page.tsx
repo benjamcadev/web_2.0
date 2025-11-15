@@ -7,6 +7,12 @@ import Link from "next/link";
 import { TrashIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import Header from "@/components/client/Header/Header";
 import { useEffect } from "react";
+import { Manrope } from "next/font/google";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 
 export default function CarritoPage() {
@@ -26,7 +32,7 @@ export default function CarritoPage() {
       <>
       
         <Header />
-        <div className="min-h-screen flex flex-col items-center justify-center px-4">
+        <div className={`${manrope.className} min-h-screen flex flex-col items-center justify-center px-4`}>
           <ShoppingBagIcon className="h-24 w-24 text-gray-300 mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
           <p className="text-gray-600 mb-6">¡Agrega productos para comenzar tu compra!</p>
@@ -46,7 +52,7 @@ export default function CarritoPage() {
     
       <Header />
   
-      <main className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-8 px-4">
+      <main className={`${manrope.className} min-h-screen rounded-2xl bg-white/50 backdrop-blur-lg border border-white/30 ml-3 mr-3 py-8 px-4`}>
       
         <div className="max-w-6xl mx-auto">
           {/* Header del carrito */}
@@ -115,7 +121,11 @@ export default function CarritoPage() {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, item.cantidad + 1)}
-                            className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors"
+                            className="relative w-9 h-9 rounded-full flex items-center justify-center font-extrabold text-white text-lg
+             backdrop-blur-xl bg-gradient-to-br from-blue-800/80 via-blue-700/70 to-cyan-300/50
+             border border-white/40 shadow-[inset_1px_1px_4px_rgba(255,255,255,0.3),0_2px_10px_rgba(0,0,0,0.15)]
+             before:absolute before:inset-0 before:rounded-full before:bg-white/30 before:opacity-0 hover:before:opacity-20
+             transition-all duration-300 hover:scale-105"
                           >
                             <PlusIcon className="h-4 w-4" />
                           </button>
