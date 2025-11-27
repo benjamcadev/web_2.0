@@ -20,28 +20,29 @@ export async function GET(req: Request) {
 
     // Construir filtros
     let filtrosQuery = "";
-    
+
     // Filtro por categoría
     if (categoria) {
       filtrosQuery += `&filters[categoria][slug][$eq]=${categoria}`;
     }
-    
+
     // Filtro por subcategorías (múltiples)
     if (subcategorias) {
       const subcatsArray = subcategorias.split(",");
-      subcatsArray.forEach((subcat, index) => {
-        filtrosQuery += `&filters[sub_categoria][slug][$in][${index}]=${subcat}`;
+      subcatsArray.forEach((subcat) => {
+        filtrosQuery += `&filters[sub_categoria][slug][$in]=${subcat}`;
       });
     }
-    
+
+
+
     // Filtro por ofertas
     if (oferta === "true") {
       filtrosQuery += `&filters[oferta][$eq]=true`;
     }
 
     let url = `${process.env.STRAPI_URL_API}/productos?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}${sortQuery}${filtrosQuery}`
-
-    console.log(url)
+    
     const res = await fetch(url,
       {
         headers: {
@@ -51,23 +52,34 @@ export async function GET(req: Request) {
       }
     );
 
+    
+
     if (!res.ok) throw new Error(`Error en Strapi: ${res.status}`);
 
     const data = await res.json();
 
     const productos = data.data.map((item: any) => ({
       id: item.id,
+      documentId: item.documentId,
       name: item.name,
       price: item.price,
       slug: item.slug,
       images:
         item.images?.map((img: any) => ({
-          url: img.formats.small?.url || img.url ,
+          url: img.formats?.small?.url || img.url,
         })) || [],
       oferta: item.oferta,
+      description: item.description,
+      additional_information: item.additional_information,
+      internal_code: item.internal_code,
+      categoria: item.categoria?.nombre,
+      sku: item.sku,
+      unidad_venta: item.unidad_venta,
+      venta_minima: item.venta_minima,
+      factor_conversion: item.factor_conversion
     }));
 
-    
+
 
     return NextResponse.json({
       productos,

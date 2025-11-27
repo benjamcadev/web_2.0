@@ -8,7 +8,9 @@ import { Producto } from "@/types/producto";
 import { formatCLP } from "@/lib/formatCLP";
 import toast from "react-hot-toast";
 import SuccessToast from "@/components/UI/SuccessToast";
+import ErrorToast from '@/components/UI/ErrorToast'
 import ProductModal from "@/components/client/tienda/ProductModal";
+import { pluralizeUnit } from '@/lib/pluralizeUnit'
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -21,27 +23,47 @@ export default function ProductCard({ producto }: { producto: Producto }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAdd = () => {
-    addItem({
-      id: producto.id,
-      name: producto.name,
-      price: producto.price,
-      images: producto.images,
-      slug: producto.slug,
-      cantidad,
-      oferta: producto.oferta
-    });
-    setCantidad(1);
+  const ventaMin = producto.venta_minima || 1;
+  const unidad = pluralizeUnit(producto.unidad_venta, ventaMin);
 
-    toast.custom(
-      <SuccessToast name={producto.name} />,
-      {
-        duration: 2400,
-        position: "bottom-center",
-        icon: null,
-        style: { background: "transparent", boxShadow: "none", padding: 0 },
-      }
-    );
-  };
+  if (cantidad < ventaMin) {
+      toast.custom(
+    <ErrorToast subtitle={`La venta mínima es de ${ventaMin} ${unidad}`} title={'Error con cantidades'} />,
+    {
+      duration: 5000,
+      position: "bottom-center",
+      icon: null,
+      style: { background: "transparent", boxShadow: "none", padding: 0 },
+    }
+  );
+   
+    return;
+  }
+
+  addItem({
+    id: producto.id,
+    documentId: producto.documentId,
+    name: producto.name,
+    price: producto.price,
+    images: producto.images,
+    slug: producto.slug,
+    cantidad,
+    oferta: producto.oferta
+  });
+
+  setCantidad(ventaMin);
+
+  toast.custom(
+    <SuccessToast subtitle={producto.name} title={'Producto Agregado'} />,
+    {
+      duration: 2400,
+      position: "bottom-center",
+      icon: null,
+      style: { background: "transparent", boxShadow: "none", padding: 0 },
+    }
+  );
+};
+
 
   const incrementar = (e: React.MouseEvent) => {
     e.stopPropagation();

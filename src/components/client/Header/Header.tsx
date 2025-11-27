@@ -1,6 +1,4 @@
-
 "use client";
-
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,14 +7,7 @@ import Queue from "./Queue";
 import SearchBar from "./SearchBar";
 import { useCart } from "@/hooks/useCart";
 import { useHydration } from "@/hooks/useHydration";
-import { Manrope } from "next/font/google";
-import { formatCLP } from "@/lib/formatCLP";
-
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import CarritoModal from "./CarritoModal";
 
 export default function Header() {
   const [active, setActive] = useState("Inicio");
@@ -25,7 +16,7 @@ export default function Header() {
   const [peopleQueuing] = useState(5);
   const links2 = [{ nombre: "Inicio", href: "/" }, { nombre: "Tienda", href: "/tienda" }, { nombre: "Empresas", href: "/empresas" }]
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { items, getTotalItems, getTotalPrice } = useCart();
+  const { getTotalItems } = useCart();
   const [animar, setAnimar] = useState(false);
 
   // Evitar error de hidratación
@@ -33,7 +24,6 @@ export default function Header() {
 
   //  Solo ejecutar getTotalItems() después de hidratar
   const totalItems = isHydrated ? getTotalItems() : 0;
-  const totalPrice = isHydrated ? getTotalPrice() : 0;
 
   useEffect(() => {
     setAnimar(true);
@@ -191,76 +181,9 @@ export default function Header() {
       {/* Modal de Fila */}
       <Queue isOpen={isQueueOpen} onClose={() => setIsQueueOpen(false)} />
 
-      {/* Modal del Carrito */}
-      {isCartOpen && (
-        <div
-          className={`${manrope.className} fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-end z-[100]`}
-          onClick={() => setIsCartOpen(false)}
-        >
-          <div
-            className="w-full max-w-sm h-full rounded-2xl bg-white/80 backdrop-blur-lg border border-white/30 shadow-xl p-6 flex flex-col animate-slide-left"
-            onClick={(e) => e.stopPropagation()} // Evita cerrar al hacer click adentro
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Tu carrito</h2>
-
-              <button
-                className="p-1 rounded hover:bg-gray-200 transition"
-                onClick={() => setIsCartOpen(false)}
-              >
-                <XMarkIcon className="h-6 w-6 text-gray-700" />
-              </button>
-            </div>
-
-           
-
-            {/* Items del carrito */}
-            <div className="flex-1 overflow-y-auto space-y-4">
-              {items.length === 0 ? (
-                <p className="text-gray-500 text-center">Tu carrito está vacío.</p>
-              ) : (
-                items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-3 border-b pb-3">
-                    <img
-                      src={process.env.NEXT_PUBLIC_STRAPI_URL + item.images[0].url}
-                      alt={item.name}
-                      className="w-12 h-12 object-cover rounded"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{item.name}</h3>
-                      <p className="text-sm text-gray-600">x{item.cantidad}</p>
-                    </div>
-                    <span className="font-bold">{formatCLP(item.price * item.cantidad)}</span>
-                  </div>
-                ))
-              )}
-            </div>
-
-            {/* Total del carrito */}
-            {items.length > 0 && (
-              <div className="mt-4 flex justify-between items-center text-lg font-bold border-t pt-4">
-                <span>Total:</span>
-                <span>{formatCLP(totalPrice)}</span>
-              </div>
-            )}
-
-            {/* Botón Ir al Carrito */}
-            <Link
-              href="/carrito"
-              className="w-full text-white font-bold py-2 rounded-xl transition-colors bg-gradient-to-br from-blue-800/80 via-blue-700/70 to-cyan-400/50
-             border border-white/40 
-             hover:shadow-lg hover:scale-105
-             transition-all duration-300 text-center"
-              onClick={() => setIsCartOpen(false)}
-            >
-              Ir al carrito
-            </Link>
-          </div>
-        </div>
-      )}
+      {/* Modal de Carrito */}
+      <CarritoModal isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
 
     </>
-
-
   );
 }

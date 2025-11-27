@@ -26,6 +26,8 @@ export default function Productos({ page }: { page: number }) {
     // Obtener filtros de la URL
     const categoria = searchParams.get("categoria") || "";
     const oferta = searchParams.get("oferta") === "true";
+    const subcategorias = searchParams.get("subcategorias") || "";
+
 
    
 
@@ -40,6 +42,8 @@ export default function Productos({ page }: { page: number }) {
 
             if (categoria) params.set("categoria", categoria);
             if (oferta) params.set("oferta", "true");
+            if (subcategorias) params.set("subcategorias", subcategorias);
+
 
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_BASE_URL}/api/productos?${params.toString()}`,
@@ -50,7 +54,7 @@ export default function Productos({ page }: { page: number }) {
             setMeta(data.meta);
         };
         fetchProductos();
-    }, [page, sort, pageSize, categoria, oferta]);
+    }, [page, sort, pageSize, categoria, oferta, subcategorias]);
 
     // Funciones auxiliares
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

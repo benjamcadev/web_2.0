@@ -10,6 +10,11 @@ import { Producto } from "@/types/producto";
 import { formatCLP } from "@/lib/formatCLP";
 import toast from "react-hot-toast";
 import SuccessToast from "@/components/UI/SuccessToast";
+import ErrorToast from '@/components/UI/ErrorToast'
+import { pluralizeUnit } from "@/lib/pluralizeUnit";
+
+
+
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -54,29 +59,51 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
   }, [isOpen]);
 
   const handleAdd = () => {
-    addItem({
-      id: producto.id,
-      name: producto.name,
-      price: producto.price,
-      images: producto.images,
-      slug: producto.slug,
-      cantidad,
-      oferta: producto.oferta,
-    });
-    setCantidad(1);
+  const ventaMin = producto.venta_minima || 1;
+  const unidad = pluralizeUnit(producto.unidad_venta, ventaMin);
+  
 
-    toast.custom(
-      <SuccessToast name={producto.name} />,
-      {
-        duration: 2400,
-        position: "bottom-center",
-        icon: null,
-        style: { background: "transparent", boxShadow: "none", padding: 0 },
-      }
-    );
+  if (cantidad < ventaMin) {
 
-    onClose();
-  };
+  toast.custom(
+    <ErrorToast subtitle={`La venta mínima es de ${ventaMin} ${unidad}`} title={'Error con cantidades'} />,
+    {
+      duration: 5000,
+      position: "bottom-center",
+      icon: null,
+      style: { background: "transparent", boxShadow: "none", padding: 0 },
+    }
+  );
+    
+    return;
+  }
+
+  addItem({
+    id: producto.id,
+    documentId: producto.documentId,
+    name: producto.name,
+    price: producto.price,
+    images: producto.images,
+    slug: producto.slug,
+    cantidad,
+    oferta: producto.oferta,
+  });
+
+  setCantidad(ventaMin);
+
+  toast.custom(
+    <SuccessToast subtitle={producto.name} title={'Producto Agregado'} />,
+    {
+      duration: 2400,
+      position: "bottom-center",
+      icon: null,
+      style: { background: "transparent", boxShadow: "none", padding: 0 },
+    }
+  );
+
+  onClose();
+};
+
 
   const incrementar = () => setCantidad((c) => c + 1);
   const decrementar = () => setCantidad((c) => (c > 1 ? c - 1 : 1));
@@ -86,7 +113,7 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
 
   const modalContent = (
     <div
-      className={`${manrope.className} fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200`}
+      className={`${manrope.className} fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200`}
       onClick={onClose}
     >
       {/* Modal */}
@@ -129,11 +156,10 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
                   <button
                     key={index}
                     onClick={() => setImagenActual(index)}
-                    className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden transition-all duration-300 ${
-                      imagenActual === index
-                        ? "ring-4 ring-blue-500 scale-105"
-                        : "ring-2 ring-gray-300 hover:ring-blue-300"
-                    }`}
+                    className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden transition-all duration-300 ${imagenActual === index
+                      ? "ring-4 ring-blue-500 scale-105"
+                      : "ring-2 ring-gray-300 hover:ring-blue-300"
+                      }`}
                   >
                     <Image
                       src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imagen.url}`}
@@ -159,14 +185,31 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
               </p>
 
               {/* Descripción */}
-              {producto.description && (
+              {producto.description || producto.additional_information && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    Descripción
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    {producto.description}
-                  </p>
+                  {producto.description && (
+                    <>
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                        Descripción
+                      </h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        {producto.description}
+                      </p>
+                    </>
+
+                  )}
+
+                  {producto.additional_information && (
+                    <>
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                        Informacion Adicional
+                      </h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        {producto.additional_information}
+                      </p>
+                    </>
+
+                  )}
                 </div>
               )}
 
@@ -176,16 +219,36 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
                   Información del producto
                 </h3>
                 <div className="space-y-2 text-sm text-gray-700">
+
+                  <div className="flex justify-between">
+                    <span className="font-medium">Codigo:</span>
+                    <span>{producto.internal_code == null || '' ? 'Sin Codigo' : producto.internal_code}</span>
+                  </div>
+
                   <div className="flex justify-between">
                     <span className="font-medium">SKU:</span>
-                    <span>{producto.slug}</span>
+                    <span>{producto.sku == null || '' ? 'Sin SKU' : producto.sku}</span>
                   </div>
+
+                  <div className="flex justify-between">
+                    <span className="font-medium">Categoría:</span>
+                    <span>{producto.categoria == null || '' ? 'Sin Categoria' : producto.categoria}</span>
+                  </div>
+
                   <div className="flex justify-between">
                     <span className="font-medium">Disponibilidad:</span>
                     <span className="text-green-600 font-semibold">En stock</span>
                   </div>
                 </div>
               </div>
+
+              {/* Venta minima */}
+              {producto.venta_minima && producto.unidad_venta && (
+                <div className=" bg-green-600/80  backdrop-blur-sm border border-white/60 rounded-2xl p-4 mb-6">
+                  <span className="font-medium text-white">La venta minima del producto es: {producto.venta_minima}  {pluralizeUnit(producto.unidad_venta, producto.venta_minima || 1)}</span>
+                </div>
+              )}
+
             </div>
 
             {/* Selector de cantidad y botón */}

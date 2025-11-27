@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 export interface CartItem {
   id: number;
+  documentId: string;
   name: string;
   price: number;
   images: Array<{ url: string }>;

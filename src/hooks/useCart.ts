@@ -2,6 +2,7 @@ import { useCartStore, CartItem } from '@/stores/useCartStore';
 
 interface AddItemParams {
   id: number;
+  documentId: string;
   name: string;
   price: number;
   images: Array<{ url: string }>;
@@ -25,6 +26,7 @@ export function useCart() {
   const addItem = (params: AddItemParams) => {
     const cartItem: CartItem = {
       id: params.id,
+      documentId: params.documentId,
       name: params.name,
       price: params.price,
       images: params.images,

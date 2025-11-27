@@ -1,17 +1,17 @@
 "use client";
 
-export default function SuccessToast({ title, subtitle }: { title: string, subtitle: string; }) {
+export default function ErrorToast({ title, subtitle }: { title: string, subtitle: string; }) {
   return (
     <div
       className="
         animate-fade-up
         max-w-sm w-full rounded-2xl shadow-xl border border-white/20
-        bg-green-600/80 backdrop-blur-2xl text-white px-4 py-4
-        flex items-center gap-4 relative overflow-hidden
+        bg-red-600/80 backdrop-blur-2xl text-white px-4 py-4
+        flex items-center gap-4 relative overflow-hidden z-250
       "
     >
-      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-600/40 border border-white/20">
-        <span className="text-3xl font-bold">✓</span>
+      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-600/40 border border-white/20">
+        <span className="text-3xl font-bold">X</span>
       </div>
 
       <div className="flex flex-col">

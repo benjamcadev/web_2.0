@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Web 2.0 | Carro de Compras",
@@ -6,6 +7,7 @@ export const metadata = {
 export default function CarritoLayout({ children }: { children: React.ReactNode }) {
   return (
     <section >
+      <Toaster position="bottom-center"/>
       {children}
     </section>
   );

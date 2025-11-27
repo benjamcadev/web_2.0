@@ -6,31 +6,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { TrashIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import Header from "@/components/client/Header/Header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Manrope } from "next/font/google";
+import CotizacionModal from "@/components/CotizacionModal";
 
 const manrope = Manrope({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-
 export default function CarritoPage() {
-  // Obtener las FUNCIONES (no los valores directos)
   const { items, removeItem, updateQuantity, clearCart, getTotalPrice, getTotalItems } = useCart();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Llamar a las funciones para obtener los valores
   const totalPrice = getTotalPrice();
   const totalItems = getTotalItems();
 
   useEffect(() => {
-    document.title = "Nuevo título dinámico";
+    document.title = "Carrito de Compras";
   }, []);
 
   if (items.length === 0) {
     return (
       <>
-      
         <Header />
         <div className={`${manrope.className} min-h-screen flex flex-col items-center justify-center px-4`}>
           <ShoppingBagIcon className="h-24 w-24 text-gray-300 mb-4" />
@@ -49,13 +47,9 @@ export default function CarritoPage() {
 
   return (
     <>
-    
       <Header />
-  
       <main className={`${manrope.className} min-h-screen rounded-2xl bg-white/50 backdrop-blur-lg border border-white/30 ml-3 mr-3 py-8 px-4`}>
-      
         <div className="max-w-6xl mx-auto">
-          {/* Header del carrito */}
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Carrito de Compras</h1>
@@ -71,7 +65,6 @@ export default function CarritoPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Lista de productos */}
             <div className="lg:col-span-2 space-y-4">
               {items.map((item) => (
                 <div
@@ -79,7 +72,6 @@ export default function CarritoPage() {
                   className="bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-shadow"
                 >
                   <div className="flex gap-4">
-                    {/* Imagen */}
                     <div className="relative w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden">
                       <Image
                         src={process.env.NEXT_PUBLIC_STRAPI_URL + item.images[0].url}
@@ -94,7 +86,6 @@ export default function CarritoPage() {
                       )}
                     </div>
 
-                    {/* Información */}
                     <div className="flex-1 flex flex-col justify-between">
                       <div>
                         <Link href={`/tienda/${item.slug}`}>
@@ -108,7 +99,6 @@ export default function CarritoPage() {
                       </div>
 
                       <div className="flex items-center justify-between mt-2">
-                        {/* Controles de cantidad */}
                         <div className="flex items-center gap-3">
                           <button
                             onClick={() => updateQuantity(item.id, item.cantidad - 1)}
@@ -131,7 +121,6 @@ export default function CarritoPage() {
                           </button>
                         </div>
 
-                        {/* Subtotal y eliminar */}
                         <div className="flex items-center gap-4">
                           <p className="font-bold text-gray-900">
                             {formatCLP(item.price * item.cantidad)}
@@ -150,7 +139,6 @@ export default function CarritoPage() {
               ))}
             </div>
 
-            {/* Resumen del pedido */}
             <div className="lg:col-span-1">
               <div className="bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl p-6 shadow-lg sticky top-24">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Resumen del pedido</h2>
@@ -171,7 +159,14 @@ export default function CarritoPage() {
                 </div>
 
                 <button className="w-full bg-gradient-to-br from-blue-800 via-blue-700 to-cyan-400 text-white font-bold py-3 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 mb-3">
-                  Proceder al pago
+                  Continuar Compra
+                </button>
+
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="w-full bg-gradient-to-br from-green-600 via-green-500 to-emerald-400 text-white font-bold py-3 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 mb-3"
+                >
+                  Generar Cotizacion Formal
                 </button>
 
                 <Link
@@ -185,6 +180,14 @@ export default function CarritoPage() {
           </div>
         </div>
       </main>
+
+      <CotizacionModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        items={items}
+        totalPrice={totalPrice}
+        clearCart={clearCart}
+      />
     </>
   );
 }
