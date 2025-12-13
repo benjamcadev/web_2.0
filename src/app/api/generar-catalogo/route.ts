@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
-import { generarHtml } from "@/lib/generarHtmlCatalogo";
+import { generarHtml } from "@/lib/emailsHtml/generarHtmlCatalogo";
 
 export async function POST(req: Request) {
   try {

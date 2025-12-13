@@ -1,6 +1,6 @@
 "use client";
 
-export default function ErrorToast({ title, subtitle }: { title: string, subtitle: string; }) {
+export default function ErrorToast({ title, subtitle }: { title: string, subtitle: React.ReactNode; }) {
   return (
     <div
       className="

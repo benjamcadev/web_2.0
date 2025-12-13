@@ -76,7 +76,9 @@ export async function GET(req: Request) {
       sku: item.sku,
       unidad_venta: item.unidad_venta,
       venta_minima: item.venta_minima,
-      factor_conversion: item.factor_conversion
+      factor_conversion: item.factor_conversion,
+      stock_disponible: item.stock_disponible,
+      
     }));
 
 

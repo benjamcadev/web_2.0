@@ -1,29 +1,46 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { CartItem } from '@/types/cart';
+import { pluralizeUnit } from '@/lib/pluralizeUnit'
 
-export interface CartItem {
-  id: number;
-  documentId: string;
-  name: string;
-  price: number;
-  images: Array<{ url: string }>;
-  slug: string;
-  cantidad: number;
-  oferta?: boolean;
+import {
+  reservarStock,
+  liberarStock,
+  actualizarReserva,
+  limpiarTodasLasReservas
+} from '@/lib/stockReservationService';
+
+export type DeliveryMethod = 'retiro' | 'envio';
+
+export interface ShippingInfo {
+  deliveryMethod: DeliveryMethod;
+  sucursalId: number;
+  sucursalNombre: string;
+  costoEnvio: number;
+
+  // Solo para envío a domicilio
+  comuna?: string;
+  direccion?: string;
 }
 
 interface CartStore {
   items: CartItem[];
-  
-  // Acciones
-  addItem: (item: CartItem) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, cantidad: number) => void;
-  clearCart: () => void;
-  
+  shippingInfo: ShippingInfo | null;
+
+  // Acciones de items (ahora son async por el sistema de reservas)
+  addItem: (item: CartItem) => Promise<{ success: boolean; message?: string }>;
+  removeItem: (id: number) => Promise<{ success: boolean; message?: string }>;
+  updateQuantity: (id: number, cantidad: number) => Promise<{ success: boolean; message?: string }>;
+  clearCart: () => Promise<void>;
+
+  // Acciones de envío
+  setShippingInfo: (info: ShippingInfo) => void;
+  clearShippingInfo: () => void;
+
   // Computed values
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  getTotalWithShipping: () => number;
   getItemQuantity: (id: number) => number;
 }
 
@@ -31,67 +48,173 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      shippingInfo: null,
 
-      // Agregar producto al carrito
-      addItem: (item) => {
+      // ========================================
+      // AGREGAR PRODUCTO AL CARRITO CON RESERVA
+      // ========================================
+      addItem: async (item) => {
+        const existingItem = get().items.find((i) => i.documentId === item.documentId);
+        const cantidadActual = existingItem?.cantidad || 0;
+        const nuevaCantidad = cantidadActual + item.cantidad;
+
+        // Intentar reservar stock
+        const reserva = await reservarStock(item.documentId, item.cantidad);
+
+
+        if (!reserva.success) {
+          return {
+            success: false,
+            message: reserva.message || 'No hay suficiente stock disponible'
+          };
+        }
+
+        // Si la reserva fue exitosa, agregar al carrito
         set((state) => {
-          const existingItem = state.items.find((i) => i.id === item.id);
-          
           if (existingItem) {
-            // Si ya existe, sumar la cantidad
             return {
               items: state.items.map((i) =>
                 i.id === item.id
-                  ? { ...i, cantidad: i.cantidad + item.cantidad }
+                  ? { ...i, cantidad: nuevaCantidad }
                   : i
               ),
             };
           } else {
-            // Si no existe, agregarlo
             return {
               items: [...state.items, item],
             };
           }
         });
+
+        return { success: true };
       },
 
-      // Eliminar producto del carrito
-      removeItem: (id) => {
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== id),
-        }));
-      },
+      // ========================================
+      // ELIMINAR PRODUCTO Y LIBERAR STOCK
+      // ========================================
+      removeItem: async (id) => {
+        const item = get().items.find((i) => i.id === id);
 
-      // Actualizar cantidad de un producto
-      updateQuantity: (id, cantidad) => {
-        if (cantidad <= 0) {
-          get().removeItem(id);
-          return;
+        if (item) {
+          // Liberar stock reservado
+          const response = await liberarStock(item.documentId, item.cantidad);
+
+
+          if (!response.success) {
+            return {
+              success: false,
+              message: response.message || 'No se pudo eliminar el producto y liberar'
+            };
+          }
+
+          set((state) => ({
+            items: state.items.filter((item) => item.id !== id),
+          }));
+
+          return {
+            success: response.success,
+            message: "Stock liberado"
+          };
         }
-        
+
+
+
+        return {
+          success: true,
+          message: "exito"
+        };
+
+      },
+
+      // ========================================
+      // ACTUALIZAR CANTIDAD Y AJUSTAR RESERVA
+      // ========================================
+      updateQuantity: async (id, cantidad) => {
+        if (cantidad <= 0) {
+          await get().removeItem(id);
+          return { success: true };
+        }
+
+        const item = get().items.find((i) => i.id === id);
+
+        if (item?.venta_minima) {
+          if (cantidad < item.venta_minima) {
+            const ventaMin = item.venta_minima || 1;
+            const unidad = pluralizeUnit(item.unidad_venta, ventaMin);
+
+            return { success: false, message: 'Cantidad no corresponde a la venta minima de ' + item.venta_minima + ' ' + unidad };
+          }
+        }
+
+        if (!item) {
+          return { success: false, message: 'Producto no encontrado' };
+        }
+
+        // Actualizar reserva de stock
+        const resultado = await actualizarReserva(item.documentId, item.cantidad, cantidad);
+
+        if (!resultado.success) {
+          return {
+            success: false,
+            message: resultado.message || 'No hay suficiente stock disponible'
+          };
+        }
+
+        // Si la actualización de reserva fue exitosa, actualizar carrito
         set((state) => ({
           items: state.items.map((item) =>
             item.id === id ? { ...item, cantidad } : item
           ),
         }));
+
+        return { success: true };
       },
 
-      // Limpiar carrito
-      clearCart: () => {
-        set({ items: [] });
+      // ========================================
+      // VACIAR CARRITO Y LIBERAR TODAS LAS RESERVAS
+      // ========================================
+      clearCart: async () => {
+        // Liberar todas las reservas de stock
+        await limpiarTodasLasReservas();
+
+        // Limpiar carrito y datos de envío
+        set({ items: [], shippingInfo: null });
       },
+
+      // ========================================
+      // CONFIGURAR INFORMACIÓN DE ENVÍO
+      // ========================================
+      setShippingInfo: (info) => {
+        set({ shippingInfo: info });
+      },
+
+      // Limpiar solo información de envío
+      clearShippingInfo: () => {
+        set({ shippingInfo: null });
+      },
+
+      // ========================================
+      // COMPUTED VALUES (sin cambios)
+      // ========================================
 
       // Obtener total de items (suma de cantidades)
       getTotalItems: () => {
         return get().items.reduce((total, item) => total + item.cantidad, 0);
       },
 
-      // Obtener precio total
+      // Obtener precio total de productos
       getTotalPrice: () => {
         return get().items.reduce(
           (total, item) => total + item.price * item.cantidad,
           0
         );
+      },
+
+      // Obtener total con envío incluido
+      getTotalWithShipping: () => {
+        const subtotal = get().getTotalPrice();
+        const shipping = get().shippingInfo?.costoEnvio || 0;
+        return subtotal + shipping;
       },
 
       // Obtener cantidad de un producto específico
@@ -101,7 +224,7 @@ export const useCartStore = create<CartStore>()(
       },
     }),
     {
-      name: 'cart-storage', // Nombre en localStorage
+      name: 'cart-storage',
       storage: createJSONStorage(() => localStorage),
     }
   )

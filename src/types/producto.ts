@@ -14,6 +14,7 @@ export interface Producto {
     unidad_venta: string;
     venta_minima: number;
     factor_conversion: number;
+    stock_disponible: number;
 }
 
 interface Images {

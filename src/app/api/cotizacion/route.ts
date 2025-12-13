@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { Sucursal } from '@/types/sucursales'
-import { generarHtmlCorreoCotizacion, generarHtmlCorreoCotizacionCliente } from '@/lib/generarHtmlCotizacion'
+import { generarHtmlCorreoCotizacion, generarHtmlCorreoCotizacionCliente } from '@/lib/emailsHtml/generarHtmlCotizacion'
 
 
 async function crearCotizacionEnStrapi(body: any) {

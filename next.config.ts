@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "agroplastic.cl" },
       { protocol: "http", hostname: "localhost" },
+       { protocol: "https", hostname: "e2e5b9e778bb.ngrok-free.app" },
       
     ],
   },

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { CartItem } from '@/stores/useCartStore';
+import { CartItem } from '@/types/cart';
 import { validateRut } from "@/lib/validateRut";
 import { formatRut } from "@/lib/formatRut";
 import SuccessToast from "@/components/UI/SuccessToast";

@@ -5,6 +5,9 @@ import { useCart } from "@/hooks/useCart";
 import { formatCLP } from '@/lib/formatCLP'
 import { useHydration } from "@/hooks/useHydration";
 import Link from "next/link";
+import SuccessToast from "@/components/UI/SuccessToast";
+import ErrorToast from "@/components/UI/ErrorToast";
+import toast from "react-hot-toast";
 
 interface CarritoModalProps {
     isCartOpen: boolean;
@@ -24,6 +27,35 @@ export default function CarritoModal({ isCartOpen, setIsCartOpen }: CarritoModal
     const isHydrated = useHydration();
 
     const totalPrice = isHydrated ? getTotalPrice() : 0;
+
+    const handleRemoveItem = async (idItem : number) => {
+        const response = await removeItem(idItem)
+
+        if (response.success) {
+            toast.custom(
+                <SuccessToast subtitle={'Producto eliminado.'} title={`Listo !`} />,
+                {
+                    duration: 2400,
+                    position: "bottom-center",
+                    icon: null,
+                    style: { background: "transparent", boxShadow: "none", padding: 0 },
+                }
+            );
+        }else{
+             toast.custom(
+                    <ErrorToast subtitle={response.message || "Hubo un error desconocido al eliminar producto"} title={'Error'} />,
+                    {
+                        duration: 2400,
+                        position: "bottom-center",
+                        icon: null,
+                        style: { background: "transparent", boxShadow: "none", padding: 0 },
+                    }
+                );
+        }
+
+       
+
+    }
 
     return (
         <>
@@ -66,7 +98,7 @@ export default function CarritoModal({ isCartOpen, setIsCartOpen }: CarritoModal
 
                                         {/* Botón eliminar */}
                                         <button
-                                            onClick={() => removeItem(item.id)}
+                                            onClick={() => handleRemoveItem(item.id)}
                                             className="flex items-center gap-2 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold 
              hover:bg-red-200 hover:text-red-800 transition-all shadow-sm"
                                         >

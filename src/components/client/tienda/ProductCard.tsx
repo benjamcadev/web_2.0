@@ -22,7 +22,7 @@ export default function ProductCard({ producto }: { producto: Producto }) {
   const [cantidad, setCantidad] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
   const ventaMin = producto.venta_minima || 1;
   const unidad = pluralizeUnit(producto.unidad_venta, ventaMin);
 
@@ -40,7 +40,7 @@ export default function ProductCard({ producto }: { producto: Producto }) {
     return;
   }
 
-  addItem({
+  const respuesta = await addItem({
     id: producto.id,
     documentId: producto.documentId,
     name: producto.name,
@@ -48,8 +48,25 @@ export default function ProductCard({ producto }: { producto: Producto }) {
     images: producto.images,
     slug: producto.slug,
     cantidad,
-    oferta: producto.oferta
+    oferta: producto.oferta,
+    venta_minima: producto.venta_minima,
+    unidad_venta: producto.unidad_venta
   });
+
+
+  if(!respuesta.success){
+     toast.custom(
+    <ErrorToast subtitle={respuesta.message || "Hubo un error al agregar producto"} title={'Error'} />,
+    {
+      duration: 2400,
+      position: "bottom-center",
+      icon: null,
+      style: { background: "transparent", boxShadow: "none", padding: 0 },
+    }
+  );
+
+  return;
+  }
 
   setCantidad(ventaMin);
 

@@ -58,7 +58,7 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
     if (isOpen) setCantidad(1);
   }, [isOpen]);
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
   const ventaMin = producto.venta_minima || 1;
   const unidad = pluralizeUnit(producto.unidad_venta, ventaMin);
   
@@ -78,8 +78,8 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
     return;
   }
 
-  addItem({
-    id: producto.id,
+  const respuesta = await addItem({
+   id: producto.id,
     documentId: producto.documentId,
     name: producto.name,
     price: producto.price,
@@ -87,7 +87,23 @@ export default function ProductModal({ producto, isOpen, onClose }: ProductModal
     slug: producto.slug,
     cantidad,
     oferta: producto.oferta,
+    venta_minima: producto.venta_minima,
+    unidad_venta: producto.unidad_venta
   });
+
+    if(!respuesta.success){
+     toast.custom(
+    <ErrorToast subtitle={respuesta.message || "Hubo un error al agregar producto"} title={'Error'} />,
+    {
+      duration: 2400,
+      position: "bottom-center",
+      icon: null,
+      style: { background: "transparent", boxShadow: "none", padding: 0 },
+    }
+  );
+
+  return;
+  }
 
   setCantidad(ventaMin);
 
