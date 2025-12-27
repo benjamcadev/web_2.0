@@ -23,6 +23,7 @@ export async function POST(req: Request) {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
         },
+        cache: "no-store",
       }
     );
 
@@ -31,8 +32,6 @@ export async function POST(req: Request) {
 
     if (!pago) {
       console.warn("Webhook: pago no encontrado en Strapi:", payment_id);
-
-      // IMPORTANTE: igual respondemos 200
       return NextResponse.json(
         { ok: true, ignored: true, message: "Pago no encontrado" },
         { status: 200 }
@@ -40,13 +39,10 @@ export async function POST(req: Request) {
     }
 
     // Actualizar pago a pagado
-
-   const fechaChileString = new Date().toLocaleString("es-CL", {
-            timeZone: "America/Santiago",
-            hour12: false
-        });
-
-
+    const fechaChileString = new Date().toLocaleString("es-CL", {
+      timeZone: "America/Santiago",
+      hour12: false,
+    });
 
     const updateRes = await fetch(
       `${process.env.STRAPI_URL}/api/pagos/${pago.documentId}`,
@@ -59,7 +55,7 @@ export async function POST(req: Request) {
         body: JSON.stringify({
           data: {
             estado: "pagado",
-           fecha_confirmacion_utc: new Date().toISOString(),
+            fecha_confirmacion_utc: new Date().toISOString(),
             fecha_confirmacion_cl: fechaChileString,
             metadata: body, // Guarda el JSON completo del webhook
           },
@@ -69,7 +65,55 @@ export async function POST(req: Request) {
 
     const updateData = await updateRes.json();
 
-    //Rebajamos stock
+    // Confirmar descuento de Giftcard (si aplica)
+    const giftcardCode = pago?.giftcard_code;
+    const giftcardAmount = pago?.giftcard_amount_applied;
+
+    if (giftcardCode && giftcardAmount && giftcardAmount > 0) {
+      // Buscar el pago de tipo giftcard asociado al mismo pedido
+      const pedidoDocumentId = pago?.pedido?.documentId;
+
+      if (pedidoDocumentId) {
+        const pagoGiftcardRes = await fetch(
+          `${process.env.STRAPI_URL}/api/pagos?filters[pedido][documentId][$eq]=${pedidoDocumentId}&filters[proveedor][$eq]=giftcard`,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+            },
+            cache: "no-store",
+          }
+        );
+
+        const pagoGiftcardData = await pagoGiftcardRes.json();
+        const pagoGiftcard = pagoGiftcardData.data?.[0];
+
+        if (pagoGiftcard) {
+          const giftcardRes = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/pagos/giftcard/confirmar`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                code: giftcardCode,
+                amount: giftcardAmount,
+                pagoId: pagoGiftcard.documentId, // pago giftcard correcto
+                 source: "khipu"
+              }),
+            }
+          );
+
+          const giftcardData = await giftcardRes.json();
+
+          if (!giftcardRes.ok || !giftcardData.success) {
+            console.error("Giftcard NO descontada (Khipu):", giftcardData);
+          }
+        } else {
+          console.warn("No se encontró pago giftcard para el pedido:", pedidoDocumentId);
+        }
+      }
+    }
+
+    // Rebajamos stock
     const completeRes = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/reservas-stock/completada`,
       {
@@ -80,18 +124,14 @@ export async function POST(req: Request) {
     );
 
     const completeData = await completeRes.json();
-
-    console.log("📦 Resultado completar reserva:", completeData);
+    console.log("Resultado completar reserva:", completeData);
 
     if (!completeData.ok) {
-      console.error("Pago OK, pero error al actualizar reservas. "+ sessionId )
-     
+      console.error("Pago OK, pero error al actualizar reservas. " + sessionId);
     }
-
 
     // Responder SIEMPRE 200 OK
     return NextResponse.json({ ok: true }, { status: 200 });
-
   } catch (error) {
     console.error("Error en webhook Khipu:", error);
 

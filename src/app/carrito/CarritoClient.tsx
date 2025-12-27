@@ -12,6 +12,7 @@ import Paso2Envio from "@/components/client/Carrito/Paso2Envio";
 import Paso3Pago from "@/components/client/Carrito/Paso3Pago";
 import SidebarResumen from "@/components/client/Carrito/SidebarResumen";
 import { Sucursal } from '@/types/sucursales'
+import { Cliente } from "@/types/cliente";
 
 interface CarritoProps {
   initialSucursales: Sucursal[];
@@ -44,11 +45,28 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
 
   const totalPrice = getTotalPrice();
   const totalItems = getTotalItems();
-  const totalConEnvio = totalPrice + costoEnvio;
   const [metodoPago, setMetodoPago] = useState<"webpay" | "khipu" | null>(null);
-  const [payerName, setPayerName] = useState("");
-  const [payerEmail, setPayerEmail] = useState("");
 
+  // Giftcard state
+  const [giftcardCode, setGiftcardCode] = useState("");
+  const [giftcardBalance, setGiftcardBalance] = useState<number | null>(null);
+  const [giftcardApplied, setGiftcardApplied] = useState<number>(0);
+  const [giftcardLoading, setGiftcardLoading] = useState(false);
+
+  const totalConEnvio = totalPrice + costoEnvio;
+  const totalFinal = Math.max(totalConEnvio - giftcardApplied, 0);
+
+  const [tipoDTE, setTipoDTE] = useState<"boleta" | "factura">("boleta");
+
+  // PENDIENTE POR HACER:  reemplazar por Zustand / Auth real
+  const isAuthenticated = false;
+
+  const [cliente, setCliente] = useState<Cliente>({
+    nombre: "",
+    rut: "",
+    email: "",
+    telefono: "", // sigue bien inicializarlo
+  });
   useEffect(() => {
     document.title = "Carrito de Compras";
   }, []);
@@ -208,10 +226,13 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
                   direccion={direccion}
                   metodoPago={metodoPago}
                   setMetodoPago={setMetodoPago}
-                  setPayerName={setPayerName}
-                  setPayerEmail={setPayerEmail}
-                  payerName={payerName}
-                  payerEmail={payerEmail}
+                  cliente={cliente}
+                  setCliente={setCliente}
+                  isAuthenticated={isAuthenticated}
+                  totalFinal={totalFinal}
+                  giftcardApplied={giftcardApplied}
+                  tipoDTE={tipoDTE}
+                  setTipoDTE={setTipoDTE}
                 />
               )}
             </div>
@@ -230,11 +251,20 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
                 setIsModalOpen={setIsModalOpen}
                 items={items}
                 metodoPago={metodoPago}
-                payerName={payerName}
-                payerEmail={payerEmail}
+                cliente={cliente}
                 direccion={direccion}
-                comuna={comunaEncontrada?.comuna || ""} 
+                comuna={comunaEncontrada?.comuna || ""}
                 sucursal={selectedSucursal?.nombre || ""}
+                giftcardApplied={giftcardApplied}
+                giftcardCode={giftcardCode}
+                setGiftcardLoading={setGiftcardLoading}
+                setGiftcardBalance={setGiftcardBalance}
+                setGiftcardApplied={setGiftcardApplied}
+                setGiftcardCode={setGiftcardCode}
+                giftcardBalance={giftcardBalance ?? 0}
+                giftcardLoading={giftcardLoading}
+                tipoDTE={tipoDTE}
+
               />
             </div>
           </div>

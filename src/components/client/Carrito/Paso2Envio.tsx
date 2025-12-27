@@ -46,6 +46,8 @@ export default function Paso2Envio({
   setDireccion,
   resetDeliveryOptions
 }: Props) {
+
+  
   return (
     <div className="bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo recibirás tu pedido?</h2>
@@ -143,6 +145,9 @@ export default function Paso2Envio({
                   <h4 className="font-bold text-green-900">¡Listo! Retiro confirmado</h4>
                   <p className="text-sm text-green-700 mt-1">
                     Retirarás tu pedido en <span className="font-bold">{selectedSucursal.nombre}</span>
+                  </p>
+                   <p className="text-sm text-green-700 mt-1">
+                    Horarios:  <span className="font-bold">{selectedSucursal.horarios}</span>
                   </p>
                   <p className="text-lg font-bold text-green-900 mt-2">
                     Costo: {formatCLP(0)}

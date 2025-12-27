@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { amount, payerName, payerEmail, transactionId, pagoId, numeroPago, sessionId } = await req.json();
+    const { amount, cliente, transactionId, pagoId, numeroPago, sessionId } = await req.json();
 
     const apiKey = process.env.KHIPU_API_KEY!;
 
@@ -21,8 +21,8 @@ export async function POST(req: Request) {
         return_url: `${process.env.URL_TUNNEL}/pago/khipu/success?np=${numeroPago}`, // id del pago en strapi
         cancel_url: `${process.env.URL_TUNNEL}/pago/khipu/cancel?np=${numeroPago}`,
         notify_url: `${process.env.URL_TUNNEL}/api/pagos/khipu/webhook?session=${sessionId}`,
-        payer_name: payerName,
-        payer_email: payerEmail,
+        payer_name: cliente.nombre,
+        payer_email: cliente.email,
         //mandatory_payment_method: "simplified_transfer"
       })
     });

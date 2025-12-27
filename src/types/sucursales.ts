@@ -7,4 +7,5 @@ export interface Sucursal {
     correo: string;
     telefono_1: string;
     costosEnvio: Record<string, number>;
+    horarios: string;
 }

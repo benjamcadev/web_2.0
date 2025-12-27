@@ -1,3 +1,4 @@
+import { metadata } from "@/app/layout";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -8,17 +9,16 @@ export async function POST(req: Request) {
             items,
             total,
             metodoPago,
-            payerName,
-            payerEmail,
+            cliente,
             deliveryType,
             direccion,
             comuna,
             sucursal,
             giftcardCode,
-            giftcardApplied
+            giftcardApplied,
+            tipoDTE
         } = body;
 
-        console.log(metodoPago)
 
         //-----------------  OBTENER EL NUMERO DEL ULTIMO PEDIDO ----------------//
         // Obtener y actualizar counter
@@ -35,6 +35,17 @@ export async function POST(req: Request) {
         const newValue = current + 1;
 
         //-----------------------------------------------------------------------------//
+
+        // ----------------------------------- BUSCAR CLIENTE ---------------------------------------//
+        // Obtener datos cliente si esta registrado para hacer la relacion entre las colecciones de strapi de pedido-cliente
+        const clienteRes = await fetch(`${process.env.STRAPI_URL}/api/clientes?filters[rut][$eq]=${cliente.rut}`, {
+            headers: {
+                Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+            },
+        });
+        const clienteData = await clienteRes.json();
+        const clienteEncontrado = clienteData.data?.[0];
+        const idCliente = clienteEncontrado?.documentId ?? null;
 
 
 
@@ -55,8 +66,10 @@ export async function POST(req: Request) {
                     tipo_delivery: deliveryType,
                     direccion_envio: direccion,
                     comuna_envio: comuna,
-                    sucursal
-                    ,
+                    sucursal,
+                    metadata: cliente,
+                    cliente: idCliente,
+                    dte_solicitado: tipoDTE
 
                 },
             }),
@@ -138,68 +151,128 @@ export async function POST(req: Request) {
 
 
         //---------------------- Crear registro de Pago PENDIENTE -------------------//
-        const giftcardAmount = Number(giftcardApplied || 0);
+        const giftcardAmount = Number(giftcardApplied || 0); // giftcardApplied cuánto dinero de la giftcard se aplica como descuento en el pedido actual
         const montoRestante = Math.max(total - giftcardAmount, 0);
+        const soloGiftcard = montoRestante === 0 && giftcardAmount > 0;
 
         const fechaChileString = new Date().toLocaleString("es-CL", {
             timeZone: "America/Santiago",
             hour12: false
         });
 
-        const pagoRes = await fetch(`${process.env.STRAPI_URL}/api/pagos`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
-            },
-            body: JSON.stringify({
-                data: {
-                    numero_pago: newValuePago,
-                    proveedor: metodoPago,
-                    estado: "pendiente",
-                    datos_pago_cliente: { "Nombre Cliente": payerName, "Correo Cliente": payerEmail },
-                    pedido: pedidoId,
-                    fecha_intento_utc: new Date().toISOString(),
-                    fecha_intento_cl: fechaChileString,
-                    monto: montoRestante,
-                    giftcard_code: giftcardCode || null,
-                    giftcard_amount_applied: giftcardAmount || 0
+        let pagoId: string | null = null;
+
+        if (!soloGiftcard) {
+            const pagoRes = await fetch(`${process.env.STRAPI_URL}/api/pagos`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
                 },
-            }),
-        });
+                body: JSON.stringify({
+                    data: {
+                        numero_pago: newValuePago,
+                        proveedor: metodoPago,
+                        estado: "pendiente",
+                        datos_pago_cliente: cliente,
+                        pedido: pedidoId,
+                        fecha_intento_utc: new Date().toISOString(),
+                        fecha_intento_cl: fechaChileString,
+                        monto: montoRestante,
+                        giftcard_code: giftcardCode || null,
+                        giftcard_amount_applied: giftcardAmount || 0
+                    },
+                }),
+            });
 
-        const pagoData = await pagoRes.json();
+            const pagoData = await pagoRes.json();
 
-        if (!pagoRes.ok) {
-            return NextResponse.json(
-                { ok: false, error: pagoData.error },
-                { status: 400 }
-            );
+            if (!pagoRes.ok) {
+                return NextResponse.json(
+                    { ok: false, error: pagoData.error },
+                    { status: 400 }
+                );
+            }
+
+            pagoId = pagoData.data.documentId;
+            const numeroPago = pagoData.data.numero_pago;
+
+            //------------------------------------------------------------------------//
+
+            //------------------ REGISTRAR ULTIMO NUMERO DE PAGO EN CONTADORES -----------------------//
+
+            // Guardar el nuevo valor
+            await fetch(`${process.env.STRAPI_URL}/api/contadores/${idContadorPago}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+                },
+                body: JSON.stringify({
+                    data: { valor: numeroPago },
+                }),
+            });
+            //-----------------------------------------------------------------------------------//
         }
 
-        const pagoId = pagoData.data.documentId;
-        const numeroPago = pagoData.data.numero_pago;
+        if (soloGiftcard) {
+            // Crear SOLO pago por Giftcard (sin Webpay/Khipu)
+            const counterResPagoGift = await fetch(
+                `${process.env.STRAPI_URL}/api/contadores?filters[nombre][$eq]=pago`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+                    },
+                }
+            );
 
-        //------------------------------------------------------------------------//
+            const counterDataPagoGift = await counterResPagoGift.json();
+            let currentPagoGift = Number(counterDataPagoGift.data[0].valor);
+            const idContadorPagoGift = counterDataPagoGift.data[0].documentId;
 
-        //------------------ REGISTRAR ULTIMO NUMERO DE PAGO EN CONTADORES -----------------------//
+            const newValuePagoGift = currentPagoGift + 1;
 
-        // Guardar el nuevo valor
-        await fetch(`${process.env.STRAPI_URL}/api/contadores/${idContadorPago}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
-            },
-            body: JSON.stringify({
-                data: { valor: numeroPago },
-            }),
-        });
-        //-----------------------------------------------------------------------------------//
+            const pagoGiftRes = await fetch(`${process.env.STRAPI_URL}/api/pagos`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        numero_pago: newValuePagoGift,
+                        proveedor: "giftcard",
+                        estado: "pendiente",
+                        pedido: pedidoId,
+                        fecha_intento_utc: new Date().toISOString(),
+                        fecha_intento_cl: fechaChileString,
+                        monto: giftcardAmount,
+                        datos_pago_cliente: cliente,
+                        giftcard_code: giftcardCode,
+                        giftcard_amount_applied: giftcardAmount
+                    },
+                }),
+            });
+
+            const pagoGiftData = await pagoGiftRes.json();
+            pagoId = pagoGiftData.data.documentId;
+
+            // actualizar contador pago
+            await fetch(`${process.env.STRAPI_URL}/api/contadores/${idContadorPagoGift}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+                },
+                body: JSON.stringify({
+                    data: { valor: newValuePagoGift },
+                }),
+            });
+        }
 
 
         // ---------------- Crear pago adicional por Giftcard (si aplica) ----------------
-        if (giftcardAmount > 0) {
+        if (!soloGiftcard && giftcardAmount > 0) {
             const counterResPagoGift = await fetch(
                 `${process.env.STRAPI_URL}/api/contadores?filters[nombre][$eq]=pago`,
                 {
@@ -253,7 +326,7 @@ export async function POST(req: Request) {
             ok: true,
             pedidoId,
             pagoId,
-            numeroPago,
+            numeroPago: soloGiftcard ? null : newValuePago,
             numeroPedido
         });
     } catch (e) {

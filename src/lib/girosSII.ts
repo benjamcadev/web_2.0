@@ -1,0 +1,2598 @@
+
+export interface GiroSii {
+  codigo: number | null;
+  giro: string;
+}
+
+
+
+export const girosSii: GiroSii[] = [
+  {
+    "codigo": 11101,
+    "giro": "CULTIVO DE TRIGO"
+  },
+  {
+    "codigo": 11102,
+    "giro": "CULTIVO DE MAÍZ"
+  },
+  {
+    "codigo": 11103,
+    "giro": "CULTIVO DE AVENA"
+  },
+  {
+    "codigo": 11104,
+    "giro": "CULTIVO DE CEBADA"
+  },
+  {
+    "codigo": 11105,
+    "giro": "CULTIVO DE OTROS CEREALES (EXCEPTO TRIGO, MAÍZ, AVENA Y CEBADA)"
+  },
+  {
+    "codigo": 11106,
+    "giro": "CULTIVO DE POROTOS"
+  },
+  {
+    "codigo": 11107,
+    "giro": "CULTIVO DE LUPINO"
+  },
+  {
+    "codigo": 11108,
+    "giro": "CULTIVO DE OTRAS LEGUMBRES (EXCEPTO POROTOS Y LUPINO)"
+  },
+  {
+    "codigo": 11109,
+    "giro": "CULTIVO DE SEMILLAS DE RAPS"
+  },
+  {
+    "codigo": 11110,
+    "giro": "CULTIVO DE SEMILLAS DE MARAVILLA (GIRASOL)"
+  },
+  {
+    "codigo": 11111,
+    "giro": "CULTIVO DE SEMILLAS DE CEREALES, LEGUMBRES Y OLEAGINOSAS (EXCEPTO SEMILLAS DE RAPS Y MARAVILLA)"
+  },
+  {
+    "codigo": 11200,
+    "giro": "CULTIVO DE ARROZ"
+  },
+  {
+    "codigo": 11301,
+    "giro": "CULTIVO DE PAPAS"
+  },
+  {
+    "codigo": 11302,
+    "giro": "CULTIVO DE CAMOTES"
+  },
+  {
+    "codigo": 11303,
+    "giro": "CULTIVO DE OTROS TUBÉRCULOS (EXCEPTO PAPAS Y CAMOTES)"
+  },
+  {
+    "codigo": 11304,
+    "giro": "CULTIVO DE REMOLACHA AZUCARERA"
+  },
+  {
+    "codigo": 11305,
+    "giro": "CULTIVO DE SEMILLAS DE HORTALIZAS"
+  },
+  {
+    "codigo": 11306,
+    "giro": "CULTIVO DE HORTALIZAS Y MELONES"
+  },
+  {
+    "codigo": 11400,
+    "giro": "CULTIVO DE CAÑA DE AZÚCAR"
+  },
+  {
+    "codigo": 11500,
+    "giro": "CULTIVO DE TABACO"
+  },
+  {
+    "codigo": 11600,
+    "giro": "CULTIVO DE PLANTAS DE FIBRA"
+  },
+  {
+    "codigo": 11901,
+    "giro": "CULTIVO DE FLORES"
+  },
+  {
+    "codigo": 11902,
+    "giro": "CULTIVOS FORRAJEROS EN PRADERAS MEJORADAS O SEMBRADAS; CULTIVOS SUPLEMENTARIOS FORRAJEROS"
+  },
+  {
+    "codigo": 11903,
+    "giro": "CULTIVOS DE SEMILLAS DE FLORES; CULTIVO DE SEMILLAS DE PLANTAS FORRAJERAS"
+  },
+  {
+    "codigo": null,
+    "giro": "CULTIVO DE PLANTAS PERENNES"
+  },
+  {
+    "codigo": 12111,
+    "giro": "CULTIVO DE UVA DESTINADA A LA PRODUCCIÓN DE PISCO Y AGUARDIENTE"
+  },
+  {
+    "codigo": 12112,
+    "giro": "CULTIVO DE UVA DESTINADA A LA PRODUCCIÓN DE VINO"
+  },
+  {
+    "codigo": 12120,
+    "giro": "CULTIVO DE UVA PARA MESA"
+  },
+  {
+    "codigo": 12200,
+    "giro": "CULTIVO DE FRUTAS TROPICALES Y SUBTROPICALES (INCLUYE EL CULTIVO DE PALTAS)"
+  },
+  {
+    "codigo": 12300,
+    "giro": "CULTIVO DE CÍTRICOS"
+  },
+  {
+    "codigo": 12400,
+    "giro": "CULTIVO DE FRUTAS DE PEPITA Y DE HUESO"
+  },
+  {
+    "codigo": 12501,
+    "giro": "CULTIVO DE SEMILLAS DE FRUTAS"
+  },
+  {
+    "codigo": 12502,
+    "giro": "CULTIVO DE OTROS FRUTOS Y NUECES DE ÁRBOLES Y ARBUSTOS"
+  },
+  {
+    "codigo": 12600,
+    "giro": "CULTIVO DE FRUTOS OLEAGINOSOS (INCLUYE EL CULTIVO DE ACEITUNAS)"
+  },
+  {
+    "codigo": 12700,
+    "giro": "CULTIVO DE PLANTAS CON LAS QUE SE PREPARAN BEBIDAS (INCLUYE EL CULTIVO DE CAFÉ, TÉ Y MATE)"
+  },
+  {
+    "codigo": 12801,
+    "giro": "CULTIVO DE ESPECIAS"
+  },
+  {
+    "codigo": 12802,
+    "giro": "CULTIVO DE PLANTAS AROMÁTICAS, MEDICINALES Y FARMACÉUTICAS"
+  },
+  {
+    "codigo": 12900,
+    "giro": "CULTIVO DE OTRAS PLANTAS PERENNES"
+  },
+  {
+    "codigo": 13000,
+    "giro": "CULTIVO DE PLANTAS VIVAS INCLUIDA LA PRODUCCIÓN EN VIVEROS (EXCEPTO VIVEROS FORESTALES)"
+  },
+  {
+    "codigo": 14101,
+    "giro": "CRÍA DE GANADO BOVINO PARA LA PRODUCCIÓN LECHERA"
+  },
+  {
+    "codigo": 14102,
+    "giro": "CRÍA DE GANADO BOVINO PARA LA PRODUCCIÓN DE CARNE O COMO GANADO REPRODUCTOR"
+  },
+  {
+    "codigo": 14200,
+    "giro": "CRÍA DE CABALLOS Y OTROS EQUINOS"
+  },
+  {
+    "codigo": 14300,
+    "giro": "CRÍA DE LLAMAS, ALPACAS, VICUÑAS, GUANACOS Y OTROS CAMÉLIDOS"
+  },
+  {
+    "codigo": 14410,
+    "giro": "CRÍA DE OVEJAS (OVINOS)"
+  },
+  {
+    "codigo": 14420,
+    "giro": "CRÍA DE CABRAS (CAPRINOS)"
+  },
+  {
+    "codigo": 14500,
+    "giro": "CRÍA DE CERDOS"
+  },
+  {
+    "codigo": 14601,
+    "giro": "CRÍA DE AVES DE CORRAL PARA LA PRODUCCIÓN DE CARNE"
+  },
+  {
+    "codigo": 14602,
+    "giro": "CRÍA DE AVES DE CORRAL PARA LA PRODUCCIÓN DE HUEVOS"
+  },
+  {
+    "codigo": 14901,
+    "giro": "APICULTURA"
+  },
+  {
+    "codigo": 14909,
+    "giro": "CRÍA DE OTROS ANIMALES N.C.P."
+  },
+  {
+    "codigo": 15000,
+    "giro": "CULTIVO DE PRODUCTOS AGRÍCOLAS EN COMBINACIÓN CON LA CRÍA DE ANIMALES (EXPLOTACIÓN MIXTA)"
+  },
+  {
+    "codigo": 16100,
+    "giro": "ACTIVIDADES DE APOYO A LA AGRICULTURA"
+  },
+  {
+    "codigo": 16200,
+    "giro": "ACTIVIDADES DE APOYO A LA GANADERÍA"
+  },
+  {
+    "codigo": 16300,
+    "giro": "ACTIVIDADES POSCOSECHA"
+  },
+  {
+    "codigo": 16400,
+    "giro": "TRATAMIENTO DE SEMILLAS PARA PROPAGACIÓN"
+  },
+  {
+    "codigo": 17000,
+    "giro": "CAZA ORDINARIA Y MEDIANTE TRAMPAS Y ACTIVIDADES DE SERVICIOS CONEXAS"
+  },
+  {
+    "codigo": 21001,
+    "giro": "EXPLOTACIÓN DE VIVEROS FORESTALES"
+  },
+  {
+    "codigo": 21002,
+    "giro": "SILVICULTURA Y OTRAS ACTIVIDADES FORESTALES (EXCEPTO EXPLOTACIÓN DE VIVEROS FORESTALES)"
+  },
+  {
+    "codigo": 22000,
+    "giro": "EXTRACCIÓN DE MADERA"
+  },
+  {
+    "codigo": 23000,
+    "giro": "RECOLECCIÓN DE PRODUCTOS FORESTALES DISTINTOS DE LA MADERA"
+  },
+  {
+    "codigo": 24001,
+    "giro": "SERVICIOS DE FORESTACIÓN A CAMBIO DE UNA RETRIBUCIÓN O POR CONTRATA"
+  },
+  {
+    "codigo": 24002,
+    "giro": "SERVICIOS DE CORTA DE MADERA A CAMBIO DE UNA RETRIBUCIÓN O POR CONTRATA"
+  },
+  {
+    "codigo": 24003,
+    "giro": "SERVICIOS DE EXTINCIÓN Y PREVENCIÓN DE INCENDIOS FORESTALES"
+  },
+  {
+    "codigo": 24009,
+    "giro": "OTROS SERVICIOS DE APOYO A LA SILVICULTURA N.C.P."
+  },
+  {
+    "codigo": 31110,
+    "giro": "PESCA MARÍTIMA INDUSTRIAL, EXCEPTO DE BARCOS FACTORÍA"
+  },
+  {
+    "codigo": 31120,
+    "giro": "PESCA MARÍTIMA ARTESANAL"
+  },
+  {
+    "codigo": 31130,
+    "giro": "RECOLECCIÓN Y EXTRACCIÓN DE PRODUCTOS MARINOS"
+  },
+  {
+    "codigo": 31140,
+    "giro": "SERVICIOS RELACIONADOS CON LA PESCA MARÍTIMA"
+  },
+  {
+    "codigo": 31200,
+    "giro": "PESCA DE AGUA DULCE"
+  },
+  {
+    "codigo": 32110,
+    "giro": "CULTIVO Y CRIANZA DE PECES MARINOS"
+  },
+  {
+    "codigo": 32120,
+    "giro": "CULTIVO, REPRODUCCIÓN Y MANEJO DE ALGAS MARINAS"
+  },
+  {
+    "codigo": 32130,
+    "giro": "REPRODUCCIÓN Y CRÍA DE MOLUSCOS, CRUSTÁCEOS Y GUSANOS MARINOS"
+  },
+  {
+    "codigo": 32140,
+    "giro": "SERVICIOS RELACIONADOS CON LA ACUICULTURA MARINA"
+  },
+  {
+    "codigo": 32200,
+    "giro": "ACUICULTURA DE AGUA DULCE"
+  },
+  {
+    "codigo": 40000,
+    "giro": "EXTRACCIÓN Y PROCESAMIENTO DE COBRE"
+  },
+  {
+    "codigo": 51000,
+    "giro": "EXTRACCIÓN DE CARBÓN DE PIEDRA"
+  },
+  {
+    "codigo": 52000,
+    "giro": "EXTRACCIÓN DE LIGNITO"
+  },
+  {
+    "codigo": 61000,
+    "giro": "EXTRACCIÓN DE PETRÓLEO CRUDO"
+  },
+  {
+    "codigo": 62000,
+    "giro": "EXTRACCIÓN DE GAS NATURAL"
+  },
+  {
+    "codigo": 71000,
+    "giro": "EXTRACCIÓN DE MINERALES DE HIERRO"
+  },
+  {
+    "codigo": 72100,
+    "giro": "EXTRACCIÓN DE MINERALES DE URANIO Y TORIO"
+  },
+  {
+    "codigo": 72910,
+    "giro": "EXTRACCIÓN DE ORO Y PLATA"
+  },
+  {
+    "codigo": 72991,
+    "giro": "EXTRACCIÓN DE ZINC Y PLOMO"
+  },
+  {
+    "codigo": 72992,
+    "giro": "EXTRACCIÓN DE MANGANESO"
+  },
+  {
+    "codigo": 72999,
+    "giro": "EXTRACCIÓN DE OTROS MINERALES METALÍFEROS NO FERROSOS N.C.P. (EXCEPTO ZINC, PLOMO Y MANGANESO)"
+  },
+  {
+    "codigo": 81000,
+    "giro": "EXTRACCIÓN DE PIEDRA, ARENA Y ARCILLA"
+  },
+  {
+    "codigo": 89110,
+    "giro": "EXTRACCIÓN Y PROCESAMIENTO DE LITIO"
+  },
+  {
+    "codigo": 89190,
+    "giro": "EXTRACCIÓN DE MINERALES PARA LA FABRICACIÓN DE ABONOS Y PRODUCTOS QUÍMICOS N.C.P."
+  },
+  {
+    "codigo": 89200,
+    "giro": "EXTRACCIÓN DE TURBA"
+  },
+  {
+    "codigo": 89300,
+    "giro": "EXTRACCIÓN DE SAL"
+  },
+  {
+    "codigo": 89900,
+    "giro": "EXPLOTACIÓN DE OTRAS MINAS Y CANTERAS N.C.P."
+  },
+  {
+    "codigo": 91001,
+    "giro": "ACTIVIDADES DE APOYO PARA LA EXTRACCIÓN DE PETRÓLEO Y GAS NATURAL PRESTADOS POR EMPRESAS"
+  },
+  {
+    "codigo": 91002,
+    "giro": "ACTIVIDADES DE APOYO PARA LA EXTRACCIÓN DE PETRÓLEO Y GAS NATURAL PRESTADOS POR PROFESIONALES"
+  },
+  {
+    "codigo": 99001,
+    "giro": "ACTIVIDADES DE APOYO PARA LA EXPLOTACIÓN DE OTRAS MINAS Y CANTERAS PRESTADOS POR EMPRESAS"
+  },
+  {
+    "codigo": 99002,
+    "giro": "ACTIVIDADES DE APOYO PARA LA EXPLOTACIÓN DE OTRAS MINAS Y CANTERAS PRESTADOS POR PROFESIONALES"
+  },
+  {
+    "codigo": 101011,
+    "giro": "EXPLOTACIÓN DE MATADEROS DE BOVINOS, OVINOS, EQUINOS, CAPRINOS, PORCINOS Y CAMÉLIDOS"
+  },
+  {
+    "codigo": 101019,
+    "giro": "EXPLOTACIÓN DE MATADEROS DE AVES Y DE OTROS TIPOS DE ANIMALES N.C.P."
+  },
+  {
+    "codigo": 101020,
+    "giro": "ELABORACIÓN Y CONSERVACIÓN DE CARNE Y PRODUCTOS CÁRNICOS"
+  },
+  {
+    "codigo": 102010,
+    "giro": "PRODUCCIÓN DE HARINA DE PESCADO"
+  },
+  {
+    "codigo": 102020,
+    "giro": "ELABORACIÓN Y CONSERVACIÓN DE SALMÓNIDOS"
+  },
+  {
+    "codigo": 102030,
+    "giro": "ELABORACIÓN Y CONSERVACIÓN DE OTROS PESCADOS, EN PLANTAS EN TIERRA (EXCEPTO BARCOS FACTORÍA)"
+  },
+  {
+    "codigo": 102040,
+    "giro": "ELABORACIÓN Y CONSERVACIÓN DE CRUSTÁCEOS, MOLUSCOS Y OTROS PRODUCTOS ACUÁTICOS, EN PLANTAS EN TIERRA"
+  },
+  {
+    "codigo": 102050,
+    "giro": "ACTIVIDADES DE ELABORACIÓN Y CONSERVACIÓN DE PESCADO, REALIZADAS EN BARCOS FACTORÍA"
+  },
+  {
+    "codigo": 102060,
+    "giro": "ELABORACIÓN Y PROCESAMIENTO DE ALGAS"
+  },
+  {
+    "codigo": 103000,
+    "giro": "ELABORACIÓN Y CONSERVACIÓN DE FRUTAS, LEGUMBRES Y HORTALIZAS"
+  },
+  {
+    "codigo": 104000,
+    "giro": "ELABORACIÓN DE ACEITES Y GRASAS DE ORIGEN VEGETAL Y ANIMAL (EXCEPTO ELABORACIÓN DE MANTEQUILLA)"
+  },
+  {
+    "codigo": 105000,
+    "giro": "ELABORACIÓN DE PRODUCTOS LÁCTEOS"
+  },
+  {
+    "codigo": 106101,
+    "giro": "MOLIENDA DE TRIGO: PRODUCCIÓN DE HARINA, SÉMOLA Y GRÁNULOS"
+  },
+  {
+    "codigo": 106102,
+    "giro": "MOLIENDA DE ARROZ; PRODUCCIÓN DE HARINA DE ARROZ"
+  },
+  {
+    "codigo": 106109,
+    "giro": "ELABORACIÓN DE OTROS PRODUCTOS DE MOLINERÍA N.C.P."
+  },
+  {
+    "codigo": 106200,
+    "giro": "ELABORACIÓN DE ALMIDONES Y PRODUCTOS DERIVADOS DEL ALMIDÓN"
+  },
+  {
+    "codigo": 107100,
+    "giro": "ELABORACIÓN DE PRODUCTOS DE PANADERÍA Y PASTELERÍA"
+  },
+  {
+    "codigo": 107200,
+    "giro": "ELABORACIÓN DE AZÚCAR"
+  },
+  {
+    "codigo": 107300,
+    "giro": "ELABORACIÓN DE CACAO, CHOCOLATE Y DE PRODUCTOS DE CONFITERÍA"
+  },
+  {
+    "codigo": 107400,
+    "giro": "ELABORACIÓN DE MACARRONES, FIDEOS, ALCUZCUZ Y PRODUCTOS FARINÁCEOS SIMILARES"
+  },
+  {
+    "codigo": 107500,
+    "giro": "ELABORACIÓN DE COMIDAS Y PLATOS PREPARADOS ENVASADOS, ROTULADOS Y CON INFORMACIÓN NUTRICIONAL"
+  },
+  {
+    "codigo": 107901,
+    "giro": "ELABORACIÓN DE TÉ, CAFÉ, MATE E INFUSIONES DE HIERBAS"
+  },
+  {
+    "codigo": 107902,
+    "giro": "ELABORACIÓN DE LEVADURAS NATURALES O ARTIFICIALES"
+  },
+  {
+    "codigo": 107903,
+    "giro": "ELABORACIÓN DE VINAGRES, MOSTAZAS, MAYONESAS Y CONDIMENTOS EN GENERAL"
+  },
+  {
+    "codigo": 107909,
+    "giro": "ELABORACIÓN DE OTROS PRODUCTOS ALIMENTICIOS N.C.P."
+  },
+  {
+    "codigo": 108000,
+    "giro": "ELABORACIÓN DE PIENSOS PREPARADOS PARA ANIMALES"
+  },
+  {
+    "codigo": 110110,
+    "giro": "ELABORACIÓN DE PISCO (INDUSTRIAS PISQUERAS)"
+  },
+  {
+    "codigo": 110120,
+    "giro": "DESTILACIÓN, RECTIFICACIÓN Y MEZCLAS DE BEBIDAS ALCOHÓLICAS; EXCEPTO PISCO"
+  },
+  {
+    "codigo": 110200,
+    "giro": "ELABORACIÓN DE VINOS"
+  },
+  {
+    "codigo": 110300,
+    "giro": "ELABORACIÓN DE BEBIDAS MALTEADAS Y DE MALTA"
+  },
+  {
+    "codigo": 110401,
+    "giro": "ELABORACIÓN DE BEBIDAS NO ALCOHÓLICAS"
+  },
+  {
+    "codigo": 110402,
+    "giro": "PRODUCCIÓN DE AGUAS MINERALES Y OTRAS AGUAS EMBOTELLADAS"
+  },
+  {
+    "codigo": 120001,
+    "giro": "ELABORACIÓN DE CIGARROS Y CIGARRILLOS"
+  },
+  {
+    "codigo": 120009,
+    "giro": "ELABORACIÓN DE OTROS PRODUCTOS DE TABACO N.C.P."
+  },
+  {
+    "codigo": 131100,
+    "giro": "PREPARACIÓN E HILATURA DE FIBRAS TEXTILES"
+  },
+  {
+    "codigo": 131200,
+    "giro": "TEJEDURA DE PRODUCTOS TEXTILES"
+  },
+  {
+    "codigo": 131300,
+    "giro": "ACABADO DE PRODUCTOS TEXTILES"
+  },
+  {
+    "codigo": 139100,
+    "giro": "FABRICACIÓN DE TEJIDOS DE PUNTO Y GANCHILLO"
+  },
+  {
+    "codigo": 139200,
+    "giro": "FABRICACIÓN DE ARTÍCULOS CONFECCIONADOS DE MATERIALES TEXTILES, EXCEPTO PRENDAS DE VESTIR"
+  },
+  {
+    "codigo": 139300,
+    "giro": "FABRICACIÓN DE TAPICES Y ALFOMBRAS"
+  },
+  {
+    "codigo": 139400,
+    "giro": "FABRICACIÓN DE CUERDAS, CORDELES, BRAMANTES Y REDES"
+  },
+  {
+    "codigo": 139900,
+    "giro": "FABRICACIÓN DE OTROS PRODUCTOS TEXTILES N.C.P."
+  },
+  {
+    "codigo": 141001,
+    "giro": "FABRICACIÓN DE PRENDAS DE VESTIR DE MATERIALES TEXTILES Y SIMILARES"
+  },
+  {
+    "codigo": 141002,
+    "giro": "FABRICACIÓN DE PRENDAS DE VESTIR DE CUERO NATURAL O ARTIFICIAL"
+  },
+  {
+    "codigo": 141003,
+    "giro": "FABRICACIÓN DE ACCESORIOS DE VESTIR"
+  },
+  {
+    "codigo": 141004,
+    "giro": "FABRICACIÓN DE ROPA DE TRABAJO"
+  },
+  {
+    "codigo": 142000,
+    "giro": "FABRICACIÓN DE ARTÍCULOS DE PIEL"
+  },
+  {
+    "codigo": 143000,
+    "giro": "FABRICACIÓN DE ARTÍCULOS DE PUNTO Y GANCHILLO"
+  },
+  {
+    "codigo": 151100,
+    "giro": "CURTIDO Y ADOBO DE CUEROS; ADOBO Y TEÑIDO DE PIELES"
+  },
+  {
+    "codigo": 151200,
+    "giro": "FABRICACIÓN DE MALETAS, BOLSOS Y ARTÍCULOS SIMILARES, ARTÍCULOS DE TALABARTERÍA Y GUARNICIONERÍA"
+  },
+  {
+    "codigo": 152000,
+    "giro": "FABRICACIÓN DE CALZADO"
+  },
+  {
+    "codigo": 161000,
+    "giro": "ASERRADO Y ACEPILLADURA DE MADERA"
+  },
+  {
+    "codigo": 162100,
+    "giro": "FABRICACIÓN DE HOJAS DE MADERA PARA ENCHAPADO Y TABLEROS A BASE DE MADERA"
+  },
+  {
+    "codigo": 162200,
+    "giro": "FABRICACIÓN DE PARTES Y PIEZAS DE CARPINTERÍA PARA EDIFICIOS Y CONSTRUCCIONES"
+  },
+  {
+    "codigo": 162300,
+    "giro": "FABRICACIÓN DE RECIPIENTES DE MADERA"
+  },
+  {
+    "codigo": 162900,
+    "giro": "FABRICACIÓN DE OTROS PRODUCTOS DE MADERA, DE ARTÍCULOS DE CORCHO, PAJA Y MATERIALES TRENZABLES"
+  },
+  {
+    "codigo": 170110,
+    "giro": "FABRICACIÓN DE CELULOSA Y OTRAS PASTAS DE MADERA"
+  },
+  {
+    "codigo": 170190,
+    "giro": "FABRICACIÓN DE PAPEL Y CARTÓN PARA SU POSTERIOR USO INDUSTRIAL N.C.P."
+  },
+  {
+    "codigo": 170200,
+    "giro": "FABRICACIÓN DE PAPEL Y CARTÓN ONDULADO Y DE ENVASES DE PAPEL Y CARTÓN"
+  },
+  {
+    "codigo": 170900,
+    "giro": "FABRICACIÓN DE OTROS ARTÍCULOS DE PAPEL Y CARTÓN"
+  },
+  {
+    "codigo": 181101,
+    "giro": "IMPRESIÓN DE LIBROS"
+  },
+  {
+    "codigo": 181109,
+    "giro": "OTRAS ACTIVIDADES DE IMPRESIÓN N.C.P."
+  },
+  {
+    "codigo": 181200,
+    "giro": "ACTIVIDADES DE SERVICIOS RELACIONADAS CON LA IMPRESIÓN"
+  },
+  {
+    "codigo": 182000,
+    "giro": "REPRODUCCIÓN DE GRABACIONES"
+  },
+  {
+    "codigo": 191000,
+    "giro": "FABRICACIÓN DE PRODUCTOS DE HORNOS DE COQUE"
+  },
+  {
+    "codigo": 192000,
+    "giro": "FABRICACIÓN DE PRODUCTOS DE LA REFINACIÓN DEL PETRÓLEO"
+  },
+  {
+    "codigo": 201101,
+    "giro": "FABRICACIÓN DE CARBÓN VEGETAL (EXCEPTO ACTIVADO); FABRICACIÓN DE BRIQUETAS DE CARBÓN VEGETAL"
+  },
+  {
+    "codigo": 201109,
+    "giro": "FABRICACIÓN DE OTRAS SUSTANCIAS QUÍMICAS BÁSICAS N.C.P."
+  },
+  {
+    "codigo": 201200,
+    "giro": "FABRICACIÓN DE ABONOS Y COMPUESTOS DE NITRÓGENO"
+  },
+  {
+    "codigo": 201300,
+    "giro": "FABRICACIÓN DE PLÁSTICOS Y CAUCHO SINTÉTICO EN FORMAS PRIMARIAS"
+  },
+  {
+    "codigo": 202100,
+    "giro": "FABRICACIÓN DE PLAGUICIDAS Y OTROS PRODUCTOS QUÍMICOS DE USO AGROPECUARIO"
+  },
+  {
+    "codigo": 202200,
+    "giro": "FABRICACIÓN DE PINTURAS, BARNICES Y PRODUCTOS DE REVESTIMIENTO, TINTAS DE IMPRENTA Y MASILLAS"
+  },
+  {
+    "codigo": 202300,
+    "giro": "FABRICACIÓN DE JABONES Y DETERGENTES, PREPARADOS PARA LIMPIAR, PERFUMES Y PREPARADOS DE TOCADOR"
+  },
+  {
+    "codigo": 202901,
+    "giro": "FABRICACIÓN DE EXPLOSIVOS Y PRODUCTOS PIROTÉCNICOS"
+  },
+  {
+    "codigo": 202909,
+    "giro": "FABRICACIÓN DE OTROS PRODUCTOS QUÍMICOS N.C.P."
+  },
+  {
+    "codigo": 203000,
+    "giro": "FABRICACIÓN DE FIBRAS ARTIFICIALES"
+  },
+  {
+    "codigo": 210000,
+    "giro": "FABRICACIÓN DE PRODUCTOS FARMACÉUTICOS, SUSTANCIAS QUÍMICAS MEDICINALES Y PRODUCTOS BOTÁNICOS"
+  },
+  {
+    "codigo": 221100,
+    "giro": "FABRICACIÓN DE CUBIERTAS Y CÁMARAS DE CAUCHO; RECAUCHUTADO Y RENOVACIÓN DE CUBIERTAS DE CAUCHO"
+  },
+  {
+    "codigo": 221900,
+    "giro": "FABRICACIÓN DE OTROS PRODUCTOS DE CAUCHO"
+  },
+  {
+    "codigo": 222000,
+    "giro": "FABRICACIÓN DE PRODUCTOS DE PLÁSTICO"
+  },
+  {
+    "codigo": 231001,
+    "giro": "FABRICACIÓN DE VIDRIO PLANO"
+  },
+  {
+    "codigo": 231002,
+    "giro": "FABRICACIÓN DE VIDRIO HUECO"
+  },
+  {
+    "codigo": 231003,
+    "giro": "FABRICACIÓN DE FIBRAS DE VIDRIO"
+  },
+  {
+    "codigo": 231009,
+    "giro": "FABRICACIÓN DE PRODUCTOS DE VIDRIO N.C.P."
+  },
+  {
+    "codigo": 239100,
+    "giro": "FABRICACIÓN DE PRODUCTOS REFRACTARIOS"
+  },
+  {
+    "codigo": 239200,
+    "giro": "FABRICACIÓN DE MATERIALES DE CONSTRUCCIÓN DE ARCILLA"
+  },
+  {
+    "codigo": 239300,
+    "giro": "FABRICACIÓN DE OTROS PRODUCTOS DE PORCELANA Y DE CERÁMICA"
+  },
+  {
+    "codigo": 239400,
+    "giro": "FABRICACIÓN DE CEMENTO, CAL Y YESO"
+  },
+  {
+    "codigo": 239500,
+    "giro": "FABRICACIÓN DE ARTÍCULOS DE HORMIGÓN, CEMENTO Y YESO"
+  },
+  {
+    "codigo": 239600,
+    "giro": "CORTE, TALLA Y ACABADO DE LA PIEDRA"
+  },
+  {
+    "codigo": 239900,
+    "giro": "FABRICACIÓN DE OTROS PRODUCTOS MINERALES NO METÁLICOS N.C.P."
+  },
+  {
+    "codigo": 241000,
+    "giro": "INDUSTRIAS BÁSICAS DE HIERRO Y ACERO"
+  },
+  {
+    "codigo": 242001,
+    "giro": "FABRICACIÓN DE PRODUCTOS PRIMARIOS DE COBRE"
+  },
+  {
+    "codigo": 242002,
+    "giro": "FABRICACIÓN DE PRODUCTOS PRIMARIOS DE ALUMINIO"
+  },
+  {
+    "codigo": 242009,
+    "giro": "FABRICACIÓN DE PRODUCTOS PRIMARIOS DE METALES PRECIOSOS Y DE OTROS METALES NO FERROSOS N.C.P."
+  },
+  {
+    "codigo": 243100,
+    "giro": "FUNDICIÓN DE HIERRO Y ACERO"
+  },
+  {
+    "codigo": 243200,
+    "giro": "FUNDICIÓN DE METALES NO FERROSOS"
+  },
+  {
+    "codigo": 251100,
+    "giro": "FABRICACIÓN DE PRODUCTOS METÁLICOS PARA USO ESTRUCTURAL"
+  },
+  {
+    "codigo": 251201,
+    "giro": "FABRICACIÓN DE RECIPIENTES DE METAL PARA GASES COMPRIMIDOS O LICUADOS"
+  },
+  {
+    "codigo": 251209,
+    "giro": "FABRICACIÓN DE TANQUES, DEPÓSITOS Y RECIPIENTES DE METAL N.C.P."
+  },
+  {
+    "codigo": 251300,
+    "giro": "FABRICACIÓN DE GENERADORES DE VAPOR, EXCEPTO CALDERAS DE AGUA CALIENTE PARA CALEFACCIÓN CENTRAL"
+  },
+  {
+    "codigo": 259300,
+    "giro": "FABRICACIÓN DE ARTÍCULOS DE CUCHILLERÍA, HERRAMIENTAS DE MANO Y ARTÍCULOS DE FERRETERÍA"
+  },
+  {
+    "codigo": 263000,
+    "giro": "FABRICACIÓN DE EQUIPO DE COMUNICACIONES"
+  },
+  {
+    "codigo": 264000,
+    "giro": "FABRICACIÓN DE APARATOS ELECTRÓNICOS DE CONSUMO"
+  },
+  {
+    "codigo": 265100,
+    "giro": "FABRICACIÓN DE EQUIPO DE MEDICIÓN, PRUEBA, NAVEGACIÓN Y CONTROL"
+  },
+  {
+    "codigo": 265200,
+    "giro": "FABRICACIÓN DE RELOJES"
+  },
+  {
+    "codigo": 271000,
+    "giro": "FABRICACIÓN DE MOTORES, GENERADORES Y TRANSFORMADORES ELÉCTRICOS, APARATOS DE DISTRIBUCIÓN Y CONTROL"
+  },
+  {
+    "codigo": 273300,
+    "giro": "FABRICACIÓN DE DISPOSITIVOS DE CABLEADO"
+  },
+  {
+    "codigo": 281100,
+    "giro": "FABRICACIÓN DE MOTORES Y TURBINAS, EXCEPTO PARA AERONAVES, VEHÍCULOS AUTOMOTORES Y MOTOCICLETAS"
+  },
+  {
+    "codigo": 281500,
+    "giro": "FABRICACIÓN DE HORNOS, CALDERAS Y QUEMADORES"
+  },
+  {
+    "codigo": 281900,
+    "giro": "FABRICACIÓN DE OTROS TIPOS DE MAQUINARIA DE USO GENERAL"
+  },
+  {
+    "codigo": 282200,
+    "giro": "FABRICACIÓN DE MAQUINARIA PARA LA CONFORMACIÓN DE METALES Y DE MÁQUINAS HERRAMIENTA"
+  },
+  {
+    "codigo": 282600,
+    "giro": "FABRICACIÓN DE MAQUINARIA PARA LA ELABORACIÓN DE PRODUCTOS TEXTILES, PRENDAS DE VESTIR Y CUEROS"
+  },
+  {
+    "codigo": 301100,
+    "giro": "CONSTRUCCIÓN DE BUQUES, EMBARCACIONES MENORES Y ESTRUCTURAS FLOTANTES"
+  },
+  {
+    "codigo": 301200,
+    "giro": "CONSTRUCCIÓN DE EMBARCACIONES DE RECREO Y DE DEPORTE"
+  },
+  {
+    "codigo": 302000,
+    "giro": "FABRICACIÓN DE LOCOMOTORAS Y MATERIAL RODANTE"
+  },
+  {
+    "codigo": 303000,
+    "giro": "FABRICACIÓN DE AERONAVES, NAVES ESPACIALES Y MAQUINARIA CONEXA"
+  },
+  {
+    "codigo": 304000,
+    "giro": "FABRICACIÓN DE VEHÍCULOS MILITARES DE COMBATE"
+  },
+  {
+    "codigo": 309100,
+    "giro": "FABRICACIÓN DE MOTOCICLETAS"
+  },
+  {
+    "codigo": 309200,
+    "giro": "FABRICACIÓN DE BICICLETAS Y DE SILLAS DE RUEDAS"
+  },
+  {
+    "codigo": 309900,
+    "giro": "FABRICACIÓN DE OTROS TIPOS DE EQUIPO DE TRANSPORTE N.C.P."
+  },
+  {
+    "codigo": 310001,
+    "giro": "FABRICACIÓN DE MUEBLES PRINCIPALMENTE DE MADERA"
+  },
+  {
+    "codigo": 310009,
+    "giro": "FABRICACIÓN DE COLCHONES; FABRICACIÓN DE OTROS MUEBLES N.C.P."
+  },
+  {
+    "codigo": 321100,
+    "giro": "FABRICACIÓN DE JOYAS Y ARTÍCULOS CONEXOS"
+  },
+  {
+    "codigo": 321200,
+    "giro": "FABRICACIÓN DE BISUTERÍA Y ARTÍCULOS CONEXOS"
+  },
+  {
+    "codigo": 322000,
+    "giro": "FABRICACIÓN DE INSTRUMENTOS MUSICALES"
+  },
+  {
+    "codigo": 323000,
+    "giro": "FABRICACIÓN DE ARTÍCULOS DE DEPORTE"
+  },
+  {
+    "codigo": 324000,
+    "giro": "FABRICACIÓN DE JUEGOS Y JUGUETES"
+  },
+  {
+    "codigo": 325001,
+    "giro": "ACTIVIDADES DE LABORATORIOS DENTALES"
+  },
+  {
+    "codigo": 325009,
+    "giro": "FABRICACIÓN DE INSTRUMENTOS Y MATERIALES MÉDICOS, OFTALMOLÓGICOS Y ODONTOLÓGICOS N.C.P."
+  },
+  {
+    "codigo": 329000,
+    "giro": "OTRAS INDUSTRIAS MANUFACTURERAS N.C.P."
+  },
+  {
+    "codigo": 331100,
+    "giro": "REPARACIÓN DE PRODUCTOS ELABORADOS DE METAL"
+  },
+  {
+    "codigo": 331201,
+    "giro": "REPARACIÓN DE MAQUINARIA AGROPECUARIA Y FORESTAL"
+  },
+  {
+    "codigo": 331202,
+    "giro": "REPARACIÓN DE MAQUINARIA METALÚRGICA, PARA LA MINERÍA, EXTRACCIÓN DE PETRÓLEO Y PARA LA CONSTRUCCIÓN"
+  },
+  {
+    "codigo": 331203,
+    "giro": "REPARACIÓN DE MAQUINARIA PARA LA ELABORACIÓN DE ALIMENTOS, BEBIDAS Y TABACO"
+  },
+  {
+    "codigo": 331204,
+    "giro": "REPARACIÓN DE MAQUINARIA PARA PRODUCIR TEXTILES, PRENDAS DE VESTIR, ARTÍCULOS DE CUERO Y CALZADO"
+  },
+  {
+    "codigo": 331209,
+    "giro": "REPARACIÓN DE OTRO TIPO DE MAQUINARIA Y EQUIPOS INDUSTRIALES N.C.P."
+  },
+  {
+    "codigo": 331301,
+    "giro": "REPARACIÓN DE EQUIPO DE MEDICIÓN, PRUEBA, NAVEGACIÓN Y CONTROL"
+  },
+  {
+    "codigo": 331309,
+    "giro": "REPARACIÓN DE OTROS EQUIPOS ELECTRÓNICOS Y ÓPTICOS N.C.P."
+  },
+  {
+    "codigo": 331400,
+    "giro": "REPARACIÓN DE EQUIPO ELÉCTRICO (EXCEPTO REPARACIÓN DE EQUIPO Y ENSERES DOMÉSTICOS)"
+  },
+  {
+    "codigo": 331501,
+    "giro": "REPARACIÓN DE BUQUES, EMBARCACIONES MENORES Y ESTRUCTURAS FLOTANTES"
+  },
+  {
+    "codigo": 331502,
+    "giro": "REPARACIÓN DE AERONAVES Y NAVES ESPACIALES"
+  },
+  {
+    "codigo": 331509,
+    "giro": "REPARACIÓN DE OTROS EQUIPOS DE TRANSPORTE N.C.P., EXCEPTO VEHÍCULOS AUTOMOTORES"
+  },
+  {
+    "codigo": 331900,
+    "giro": "REPARACIÓN DE OTROS TIPOS DE EQUIPO"
+  },
+  {
+    "codigo": 332000,
+    "giro": "INSTALACIÓN DE MAQUINARIA Y EQUIPOS INDUSTRIALES"
+  },
+  {
+    "codigo": 351011,
+    "giro": "GENERACIÓN DE ENERGÍA ELÉCTRICA EN CENTRALES HIDROELÉCTRICAS"
+  },
+  {
+    "codigo": 351012,
+    "giro": "GENERACIÓN DE ENERGÍA ELÉCTRICA EN CENTRALES TERMOELÉCTRICAS"
+  },
+  {
+    "codigo": 351019,
+    "giro": "GENERACIÓN DE ENERGÍA ELÉCTRICA EN OTRAS CENTRALES N.C.P."
+  },
+  {
+    "codigo": 351020,
+    "giro": "TRANSMISIÓN DE ENERGÍA ELÉCTRICA"
+  },
+  {
+    "codigo": 351030,
+    "giro": "DISTRIBUCIÓN DE ENERGÍA ELÉCTRICA"
+  },
+  {
+    "codigo": 352010,
+    "giro": "REGASIFICACIÓN DE GAS NATURAL LICUADO (GNL)"
+  },
+  {
+    "codigo": 352020,
+    "giro": "FABRICACIÓN DE GAS; DISTRIBUCIÓN DE COMBUSTIBLES GASEOSOS POR TUBERÍA, EXCEPTO REGASIFICACIÓN DE GNL"
+  },
+  {
+    "codigo": 353001,
+    "giro": "SUMINISTRO DE VAPOR Y DE AIRE ACONDICIONADO"
+  },
+  {
+    "codigo": 353002,
+    "giro": "ELABORACIÓN DE HIELO (EXCEPTO FABRICACIÓN DE HIELO SECO)"
+  },
+  {
+    "codigo": 360000,
+    "giro": "CAPTACIÓN, TRATAMIENTO Y DISTRIBUCIÓN DE AGUA"
+  },
+  {
+    "codigo": 370000,
+    "giro": "EVACUACIÓN Y TRATAMIENTO DE AGUAS SERVIDAS"
+  },
+  {
+    "codigo": 381100,
+    "giro": "RECOGIDA DE DESECHOS NO PELIGROSOS"
+  },
+  {
+    "codigo": 381200,
+    "giro": "RECOGIDA DE DESECHOS PELIGROSOS"
+  },
+  {
+    "codigo": 382100,
+    "giro": "TRATAMIENTO Y ELIMINACIÓN DE DESECHOS NO PELIGROSOS"
+  },
+  {
+    "codigo": 382200,
+    "giro": "TRATAMIENTO Y ELIMINACIÓN DE DESECHOS PELIGROSOS"
+  },
+  {
+    "codigo": 383001,
+    "giro": "RECUPERACIÓN Y RECICLAMIENTO DE DESPERDICIOS Y DESECHOS METÁLICOS"
+  },
+  {
+    "codigo": 383002,
+    "giro": "RECUPERACIÓN Y RECICLAMIENTO DE PAPEL"
+  },
+  {
+    "codigo": 383003,
+    "giro": "RECUPERACIÓN Y RECICLAMIENTO DE VIDRIO"
+  },
+  {
+    "codigo": 383009,
+    "giro": "RECUPERACIÓN Y RECICLAMIENTO DE OTROS DESPERDICIOS Y DESECHOS N.C.P."
+  },
+  {
+    "codigo": 390000,
+    "giro": "ACTIVIDADES DE DESCONTAMINACIÓN Y OTROS SERVICIOS DE GESTIÓN DE DESECHOS"
+  },
+  {
+    "codigo": 410010,
+    "giro": "CONSTRUCCIÓN DE EDIFICIOS PARA USO RESIDENCIAL"
+  },
+  {
+    "codigo": 410020,
+    "giro": "CONSTRUCCIÓN DE EDIFICIOS PARA USO NO RESIDENCIAL"
+  },
+  {
+    "codigo": 421000,
+    "giro": "CONSTRUCCIÓN DE CARRETERAS Y LÍNEAS DE FERROCARRIL"
+  },
+  {
+    "codigo": 422000,
+    "giro": "CONSTRUCCIÓN DE PROYECTOS DE SERVICIO PÚBLICO"
+  },
+  {
+    "codigo": 429000,
+    "giro": "CONSTRUCCIÓN DE OTRAS OBRAS DE INGENIERÍA CIVIL"
+  },
+  {
+    "codigo": 431100,
+    "giro": "DEMOLICIÓN"
+  },
+  {
+    "codigo": 431200,
+    "giro": "PREPARACIÓN DEL TERRENO"
+  },
+  {
+    "codigo": 432100,
+    "giro": "INSTALACIONES ELÉCTRICAS"
+  },
+  {
+    "codigo": 432200,
+    "giro": "INSTALACIONES DE GASFITERÍA, CALEFACCIÓN Y AIRE ACONDICIONADO"
+  },
+  {
+    "codigo": 432900,
+    "giro": "OTRAS INSTALACIONES PARA OBRAS DE CONSTRUCCIÓN"
+  },
+  {
+    "codigo": 433000,
+    "giro": "TERMINACIÓN Y ACABADO DE EDIFICIOS"
+  },
+  {
+    "codigo": 439000,
+    "giro": "OTRAS ACTIVIDADES ESPECIALIZADAS DE CONSTRUCCIÓN"
+  },
+  {
+    "codigo": 451001,
+    "giro": "VENTA AL POR MAYOR DE VEHÍCULOS AUTOMOTORES"
+  },
+  {
+    "codigo": 451002,
+    "giro": "VENTA AL POR MENOR DE VEHÍCULOS AUTOMOTORES NUEVOS O USADOS (INCLUYE COMPRAVENTA)"
+  },
+  {
+    "codigo": 452001,
+    "giro": "SERVICIO DE LAVADO DE VEHÍCULOS AUTOMOTORES"
+  },
+  {
+    "codigo": 452002,
+    "giro": "MANTENIMIENTO Y REPARACIÓN DE VEHÍCULOS AUTOMOTORES"
+  },
+  {
+    "codigo": 453000,
+    "giro": "VENTA DE PARTES, PIEZAS Y ACCESORIOS PARA VEHÍCULOS AUTOMOTORES"
+  },
+  {
+    "codigo": 454001,
+    "giro": "VENTA DE MOTOCICLETAS"
+  },
+  {
+    "codigo": 454002,
+    "giro": "VENTA DE PARTES, PIEZAS Y ACCESORIOS DE MOTOCICLETAS"
+  },
+  {
+    "codigo": 454003,
+    "giro": "MANTENIMIENTO Y REPARACIÓN DE MOTOCICLETAS"
+  },
+  {
+    "codigo": 461001,
+    "giro": "CORRETAJE AL POR MAYOR DE PRODUCTOS AGRÍCOLAS"
+  },
+  {
+    "codigo": 461002,
+    "giro": "CORRETAJE AL POR MAYOR DE GANADO"
+  },
+  {
+    "codigo": 461009,
+    "giro": "OTROS TIPOS DE CORRETAJES O REMATES AL POR MAYOR N.C.P."
+  },
+  {
+    "codigo": 462010,
+    "giro": "VENTA AL POR MAYOR DE MATERIAS PRIMAS AGRÍCOLAS"
+  },
+  {
+    "codigo": 462020,
+    "giro": "VENTA AL POR MAYOR DE ANIMALES VIVOS"
+  },
+  {
+    "codigo": 462090,
+    "giro": "VENTA AL POR MAYOR DE OTRAS MATERIAS PRIMAS AGROPECUARIAS N.C.P."
+  },
+  {
+    "codigo": 463011,
+    "giro": "VENTA AL POR MAYOR DE FRUTAS Y VERDURAS"
+  },
+  {
+    "codigo": 463012,
+    "giro": "VENTA AL POR MAYOR DE CARNE Y PRODUCTOS CÁRNICOS"
+  },
+  {
+    "codigo": 463013,
+    "giro": "VENTA AL POR MAYOR DE PRODUCTOS DEL MAR (PESCADOS, MARISCOS Y ALGAS)"
+  },
+  {
+    "codigo": 463014,
+    "giro": "VENTA AL POR MAYOR DE PRODUCTOS DE CONFITERÍA"
+  },
+  {
+    "codigo": 463019,
+    "giro": "VENTA AL POR MAYOR DE HUEVOS, LÁCTEOS, ABARROTES Y DE OTROS ALIMENTOS N.C.P."
+  },
+  {
+    "codigo": 463020,
+    "giro": "VENTA AL POR MAYOR DE BEBIDAS ALCOHÓLICAS Y NO ALCOHÓLICAS"
+  },
+  {
+    "codigo": 463030,
+    "giro": "VENTA AL POR MAYOR DE TABACO"
+  },
+  {
+    "codigo": 464100,
+    "giro": "VENTA AL POR MAYOR DE PRODUCTOS TEXTILES, PRENDAS DE VESTIR Y CALZADO"
+  },
+  {
+    "codigo": 464901,
+    "giro": "VENTA AL POR MAYOR DE MUEBLES, EXCEPTO MUEBLES DE OFICINA"
+  },
+  {
+    "codigo": 464902,
+    "giro": "VENTA AL POR MAYOR DE ARTÍCULOS ELÉCTRICOS Y ELECTRÓNICOS PARA EL HOGAR"
+  },
+  {
+    "codigo": 464903,
+    "giro": "VENTA AL POR MAYOR DE ARTÍCULOS DE PERFUMERÍA, DE TOCADOR Y COSMÉTICOS"
+  },
+  {
+    "codigo": 464904,
+    "giro": "VENTA AL POR MAYOR DE ARTÍCULOS DE PAPELERÍA Y ESCRITORIO"
+  },
+  {
+    "codigo": 464905,
+    "giro": "VENTA AL POR MAYOR DE LIBROS"
+  },
+  {
+    "codigo": 464906,
+    "giro": "VENTA AL POR MAYOR DE DIARIOS Y REVISTAS"
+  },
+  {
+    "codigo": 464907,
+    "giro": "VENTA AL POR MAYOR DE PRODUCTOS FARMACÉUTICOS Y MEDICINALES"
+  },
+  {
+    "codigo": 464908,
+    "giro": "VENTA AL POR MAYOR DE INSTRUMENTOS CIENTÍFICOS Y QUIRÚRGICOS"
+  },
+  {
+    "codigo": 464909,
+    "giro": "VENTA AL POR MAYOR DE OTROS ENSERES DOMÉSTICOS N.C.P."
+  },
+  {
+    "codigo": 465100,
+    "giro": "VENTA AL POR MAYOR DE COMPUTADORES, EQUIPO PERIFÉRICO Y PROGRAMAS INFORMÁTICOS"
+  },
+  {
+    "codigo": 465200,
+    "giro": "VENTA AL POR MAYOR DE EQUIPO, PARTES Y PIEZAS ELECTRÓNICOS Y DE TELECOMUNICACIONES"
+  },
+  {
+    "codigo": 465300,
+    "giro": "VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES AGROPECUARIOS"
+  },
+  {
+    "codigo": 465901,
+    "giro": "VENTA AL POR MAYOR DE MAQUINARIA METALÚRGICA, PARA LA MINERÍA, EXTRACCIÓN DE PETRÓLEO Y CONSTRUCCIÓN"
+  },
+  {
+    "codigo": 465902,
+    "giro": "VENTA AL POR MAYOR DE MAQUINARIA PARA LA ELABORACIÓN DE ALIMENTOS, BEBIDAS Y TABACO"
+  },
+  {
+    "codigo": 465903,
+    "giro": "VENTA AL POR MAYOR DE MAQUINARIA PARA LA INDUSTRIA TEXTIL, DEL CUERO Y DEL CALZADO"
+  },
+  {
+    "codigo": 465904,
+    "giro": "VENTA AL POR MAYOR DE MAQUINARIA Y EQUIPO DE OFICINA; VENTA AL POR MAYOR DE MUEBLES DE OFICINA"
+  },
+  {
+    "codigo": 465905,
+    "giro": "VENTA AL POR MAYOR DE EQUIPO DE TRANSPORTE(EXCEPTO VEHÍCULOS AUTOMOTORES, MOTOCICLETAS Y BICICLETAS)"
+  },
+  {
+    "codigo": 465909,
+    "giro": "VENTA AL POR MAYOR DE OTROS TIPOS DE MAQUINARIA Y EQUIPO N.C.P."
+  },
+  {
+    "codigo": 466100,
+    "giro": "VENTA AL POR MAYOR DE COMBUSTIBLES SÓLIDOS, LÍQUIDOS Y GASEOSOS Y PRODUCTOS CONEXOS"
+  },
+  {
+    "codigo": 466200,
+    "giro": "VENTA AL POR MAYOR DE METALES Y MINERALES METALÍFEROS"
+  },
+  {
+    "codigo": 466301,
+    "giro": "VENTA AL POR MAYOR DE MADERA EN BRUTO Y PRODUCTOS PRIMARIOS DE LA ELABORACIÓN DE MADERA"
+  },
+  {
+    "codigo": 466302,
+    "giro": "VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCIÓN, ARTÍCULOS DE FERRETERÍA, GASFITERÍA Y CALEFACCIÓN"
+  },
+  {
+    "codigo": 466901,
+    "giro": "VENTA AL POR MAYOR DE PRODUCTOS QUÍMICOS"
+  },
+  {
+    "codigo": 466902,
+    "giro": "VENTA AL POR MAYOR DE DESECHOS METÁLICOS (CHATARRA)"
+  },
+  {
+    "codigo": 466909,
+    "giro": "VENTA AL POR MAYOR DE DESPERDICIOS, DESECHOS Y OTROS PRODUCTOS N.C.P."
+  },
+  {
+    "codigo": 469000,
+    "giro": "VENTA AL POR MAYOR NO ESPECIALIZADA"
+  },
+  {
+    "codigo": 471100,
+    "giro": "VENTA AL POR MENOR EN COMERCIOS DE ALIMENTOS, BEBIDAS O TABACO (SUPERMERCADOS E HIPERMERCADOS)"
+  },
+  {
+    "codigo": 471910,
+    "giro": "VENTA AL POR MENOR EN COMERCIOS DE VESTUARIO Y PRODUCTOS PARA EL HOGAR (GRANDES TIENDAS)"
+  },
+  {
+    "codigo": 471990,
+    "giro": "OTRAS ACTIVIDADES DE VENTA AL POR MENOR EN COMERCIOS NO ESPECIALIZADOS N.C.P."
+  },
+  {
+    "codigo": 472101,
+    "giro": "VENTA AL POR MENOR DE ALIMENTOS EN COMERCIOS ESPECIALIZADOS (ALMACENES PEQUEÑOS Y MINIMARKET)"
+  },
+  {
+    "codigo": 472102,
+    "giro": "VENTA AL POR MENOR EN COMERCIOS ESPECIALIZADOS DE CARNE Y PRODUCTOS CÁRNICOS"
+  },
+  {
+    "codigo": 472103,
+    "giro": "VENTA AL POR MENOR EN COMERCIOS ESPECIALIZADOS DE FRUTAS Y VERDURAS (VERDULERÍAS)"
+  },
+  {
+    "codigo": 472104,
+    "giro": "VENTA AL POR MENOR EN COMERCIOS ESPECIALIZADOS DE PESCADO, MARISCOS Y PRODUCTOS CONEXOS"
+  },
+  {
+    "codigo": 472105,
+    "giro": "VENTA AL POR MENOR EN COMERCIOS ESPECIALIZADOS DE PRODUCTOS DE PANADERÍA Y PASTELERÍA"
+  },
+  {
+    "codigo": 472109,
+    "giro": "VENTA AL POR MENOR EN COMERCIOS ESPECIALIZADOS DE HUEVOS, CONFITES Y PRODUCTOS ALIMENTICIOS N.C.P."
+  },
+  {
+    "codigo": 472200,
+    "giro": "VENTA AL POR MENOR DE BEBIDAS ALCOHÓLICAS Y NO ALCOHÓLICAS EN COMERCIOS ESPECIALIZADOS (BOTILLERÍAS)"
+  },
+  {
+    "codigo": 472300,
+    "giro": "VENTA AL POR MENOR DE TABACO Y PRODUCTOS DE TABACO EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 473000,
+    "giro": "VENTA AL POR MENOR DE COMBUSTIBLES PARA VEHÍCULOS AUTOMOTORES EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 474100,
+    "giro": "VENTA AL POR MENOR DE COMPUTADORES, EQUIPO PERIFÉRICO, PROGRAMAS INFORMÁTICOS Y EQUIPO DE TELECOM."
+  },
+  {
+    "codigo": 474200,
+    "giro": "VENTA AL POR MENOR DE EQUIPO DE SONIDO Y DE VIDEO EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 475100,
+    "giro": "VENTA AL POR MENOR DE TELAS, LANAS, HILOS Y SIMILARES EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 475201,
+    "giro": "VENTA AL POR MENOR DE ARTÍCULOS DE FERRETERÍA Y MATERIALES DE CONSTRUCCIÓN"
+  },
+  {
+    "codigo": 475202,
+    "giro": "VENTA AL POR MENOR DE PINTURAS, BARNICES Y LACAS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 475203,
+    "giro": "VENTA AL POR MENOR DE PRODUCTOS DE VIDRIO EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 475300,
+    "giro": "VENTA AL POR MENOR DE TAPICES, ALFOMBRAS Y CUBRIMIENTOS PARA PAREDES Y PISOS"
+  },
+  {
+    "codigo": 475901,
+    "giro": "VENTA AL POR MENOR DE MUEBLES Y COLCHONES EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 475902,
+    "giro": "VENTA AL POR MENOR DE INSTRUMENTOS MUSICALES EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 475909,
+    "giro": "VENTA AL POR MENOR DE APARATOS ELÉCTRICOS, TEXTILES PARA EL HOGAR Y OTROS ENSERES DOMÉSTICOS N.C.P."
+  },
+  {
+    "codigo": 476101,
+    "giro": "VENTA AL POR MENOR DE LIBROS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 476102,
+    "giro": "VENTA AL POR MENOR DE DIARIOS Y REVISTAS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 476103,
+    "giro": "VENTA AL POR MENOR DE ARTÍCULOS DE PAPELERÍA Y ESCRITORIO EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 476200,
+    "giro": "VENTA AL POR MENOR DE GRABACIONES DE MÚSICA Y DE VIDEO EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 476301,
+    "giro": "VENTA AL POR MENOR DE ARTÍCULOS DE CAZA Y PESCA EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 476302,
+    "giro": "VENTA AL POR MENOR DE BICICLETAS Y SUS REPUESTOS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 476309,
+    "giro": "VENTA AL POR MENOR DE OTROS ARTÍCULOS Y EQUIPOS DE DEPORTE N.C.P."
+  },
+  {
+    "codigo": 476400,
+    "giro": "VENTA AL POR MENOR DE JUEGOS Y JUGUETES EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477101,
+    "giro": "VENTA AL POR MENOR DE CALZADO EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477102,
+    "giro": "VENTA AL POR MENOR DE PRENDAS Y ACCESORIOS DE VESTIR EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477103,
+    "giro": "VENTA AL POR MENOR DE CARTERAS, MALETAS Y OTROS ACCESORIOS DE VIAJE EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477201,
+    "giro": "VENTA AL POR MENOR DE PRODUCTOS FARMACÉUTICOS Y MEDICINALES EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477202,
+    "giro": "VENTA AL POR MENOR DE ARTÍCULOS ORTOPÉDICOS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477203,
+    "giro": "VENTA AL POR MENOR DE ARTÍCULOS DE PERFUMERÍA, DE TOCADOR Y COSMÉTICOS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477310,
+    "giro": "VENTA AL POR MENOR DE GAS LICUADO EN BOMBONAS (CILINDROS) EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477391,
+    "giro": "VENTA AL POR MENOR DE ALIMENTO Y ACCESORIOS PARA MASCOTAS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477392,
+    "giro": "VENTA AL POR MENOR DE ARMAS Y MUNICIONES EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477393,
+    "giro": "VENTA AL POR MENOR DE ARTÍCULOS ÓPTICOS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477394,
+    "giro": "VENTA AL POR MENOR DE ARTÍCULOS DE JOYERÍA, BISUTERÍA Y RELOJERÍA EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477395,
+    "giro": "VENTA AL POR MENOR DE CARBÓN, LEÑA Y OTROS COMBUSTIBLES DE USO DOMÉSTICO EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477396,
+    "giro": "VENTA AL POR MENOR DE RECUERDOS, ARTESANÍAS Y ARTÍCULOS RELIGIOSOS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477397,
+    "giro": "VENTA AL POR MENOR DE FLORES, PLANTAS, ARBOLES, SEMILLAS Y ABONOS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477398,
+    "giro": "VENTA AL POR MENOR DE MASCOTAS EN COMERCIOS ESPECIALIZADOS"
+  },
+  {
+    "codigo": 477399,
+    "giro": "VENTA AL POR MENOR DE OTROS PRODUCTOS EN COMERCIOS ESPECIALIZADOS N.C.P."
+  },
+  {
+    "codigo": 477401,
+    "giro": "VENTA AL POR MENOR DE ANTIGÜEDADES EN COMERCIOS"
+  },
+  {
+    "codigo": 477402,
+    "giro": "VENTA AL POR MENOR DE ROPA USADA EN COMERCIOS"
+  },
+  {
+    "codigo": 477409,
+    "giro": "VENTA AL POR MENOR DE OTROS ARTÍCULOS DE SEGUNDA MANO EN COMERCIOS N.C.P."
+  },
+  {
+    "codigo": 478100,
+    "giro": "VENTA AL POR MENOR DE ALIMENTOS, BEBIDAS Y TABACO EN PUESTOS DE VENTA Y MERCADOS (INCLUYE FERIAS)"
+  },
+  {
+    "codigo": 478200,
+    "giro": "VENTA AL POR MENOR DE PRODUCTOS TEXTILES, PRENDAS DE VESTIR Y CALZADO EN PUESTOS DE VENTA Y MERCADOS"
+  },
+  {
+    "codigo": 478900,
+    "giro": "VENTA AL POR MENOR DE OTROS PRODUCTOS EN PUESTOS DE VENTA Y MERCADOS (INCLUYE FERIAS)"
+  },
+  {
+    "codigo": 479100,
+    "giro": "VENTA AL POR MENOR POR CORREO, POR INTERNET Y VÍA TELEFÓNICA"
+  },
+  {
+    "codigo": 479901,
+    "giro": "VENTA AL POR MENOR REALIZADA POR INDEPENDIENTES EN LA LOCOMOCIÓN COLECTIVA (LEY 20.388)"
+  },
+  {
+    "codigo": 479902,
+    "giro": "VENTA AL POR MENOR MEDIANTE MAQUINAS EXPENDEDORAS"
+  },
+  {
+    "codigo": 479903,
+    "giro": "VENTA AL POR MENOR POR COMISIONISTAS (NO DEPENDIENTES DE COMERCIOS)"
+  },
+  {
+    "codigo": 479909,
+    "giro": "OTRAS ACTIVIDADES DE VENTA POR MENOR NO REALIZADAS EN COMERCIOS, PUESTOS DE VENTA O MERCADOS N.C.P."
+  },
+  {
+    "codigo": 491100,
+    "giro": "TRANSPORTE INTERURBANO DE PASAJEROS POR FERROCARRIL"
+  },
+  {
+    "codigo": 491200,
+    "giro": "TRANSPORTE DE CARGA POR FERROCARRIL"
+  },
+  {
+    "codigo": 492110,
+    "giro": "TRANSPORTE URBANO Y SUBURBANO DE PASAJEROS VÍA METRO Y METROTREN"
+  },
+  {
+    "codigo": 492120,
+    "giro": "TRANSPORTE URBANO Y SUBURBANO DE PASAJEROS VÍA LOCOMOCIÓN COLECTIVA"
+  },
+  {
+    "codigo": 492130,
+    "giro": "TRANSPORTE DE PASAJEROS VÍA TAXI COLECTIVO"
+  },
+  {
+    "codigo": 492190,
+    "giro": "OTRAS ACTIVIDADES DE TRANSPORTE URBANO Y SUBURBANO DE PASAJEROS POR VÍA TERRESTRE N.C.P."
+  },
+  {
+    "codigo": 492210,
+    "giro": "SERVICIOS DE TRANSPORTE DE ESCOLARES"
+  },
+  {
+    "codigo": 492220,
+    "giro": "SERVICIOS DE TRANSPORTE DE TRABAJADORES"
+  },
+  {
+    "codigo": 492230,
+    "giro": "SERVICIOS DE TRANSPORTE DE PASAJEROS EN TAXIS LIBRES Y RADIOTAXIS"
+  },
+  {
+    "codigo": 492240,
+    "giro": "SERVICIOS DE TRANSPORTE A TURISTAS"
+  },
+  {
+    "codigo": 492250,
+    "giro": "TRANSPORTE DE PASAJEROS EN BUSES INTERURBANOS"
+  },
+  {
+    "codigo": 492290,
+    "giro": "OTRAS ACTIVIDADES DE TRANSPORTE DE PASAJEROS POR VÍA TERRESTRE N.C.P."
+  },
+  {
+    "codigo": 492300,
+    "giro": "TRANSPORTE DE CARGA POR CARRETERA"
+  },
+  {
+    "codigo": 493010,
+    "giro": "TRANSPORTE POR OLEODUCTOS"
+  },
+  {
+    "codigo": 493020,
+    "giro": "TRANSPORTE POR GASODUCTOS"
+  },
+  {
+    "codigo": 493090,
+    "giro": "OTRAS ACTIVIDADES DE TRANSPORTE POR TUBERÍAS N.C.P."
+  },
+  {
+    "codigo": 501100,
+    "giro": "TRANSPORTE DE PASAJEROS MARÍTIMO Y DE CABOTAJE"
+  },
+  {
+    "codigo": 501200,
+    "giro": "TRANSPORTE DE CARGA MARÍTIMO Y DE CABOTAJE"
+  },
+  {
+    "codigo": 502100,
+    "giro": "TRANSPORTE DE PASAJEROS POR VÍAS DE NAVEGACIÓN INTERIORES"
+  },
+  {
+    "codigo": 502200,
+    "giro": "TRANSPORTE DE CARGA POR VÍAS DE NAVEGACIÓN INTERIORES"
+  },
+  {
+    "codigo": 511000,
+    "giro": "TRANSPORTE DE PASAJEROS POR VÍA AÉREA"
+  },
+  {
+    "codigo": 512000,
+    "giro": "TRANSPORTE DE CARGA POR VÍA AÉREA"
+  },
+  {
+    "codigo": 521001,
+    "giro": "EXPLOTACIÓN DE FRIGORÍFICOS PARA ALMACENAMIENTO Y DEPÓSITO"
+  },
+  {
+    "codigo": 521009,
+    "giro": "OTROS SERVICIOS DE ALMACENAMIENTO Y DEPÓSITO N.C.P."
+  },
+  {
+    "codigo": 522110,
+    "giro": "EXPLOTACIÓN DE TERMINALES TERRESTRES DE PASAJEROS"
+  },
+  {
+    "codigo": 522120,
+    "giro": "EXPLOTACIÓN DE ESTACIONAMIENTOS DE VEHÍCULOS AUTOMOTORES Y PARQUÍMETROS"
+  },
+  {
+    "codigo": 522130,
+    "giro": "SERVICIOS PRESTADOS POR CONCESIONARIOS DE CARRETERAS"
+  },
+  {
+    "codigo": 522190,
+    "giro": "ACTIVIDADES DE SERVICIOS VINCULADAS AL TRANSPORTE TERRESTRE N.C.P."
+  },
+  {
+    "codigo": 522200,
+    "giro": "ACTIVIDADES DE SERVICIOS VINCULADAS AL TRANSPORTE ACUÁTICO"
+  },
+  {
+    "codigo": 522300,
+    "giro": "ACTIVIDADES DE SERVICIOS VINCULADAS AL TRANSPORTE AÉREO"
+  },
+  {
+    "codigo": 522400,
+    "giro": "MANIPULACIÓN DE LA CARGA"
+  },
+  {
+    "codigo": 522910,
+    "giro": "AGENCIAS DE ADUANAS"
+  },
+  {
+    "codigo": 522920,
+    "giro": "AGENCIAS DE NAVES"
+  },
+  {
+    "codigo": 522990,
+    "giro": "OTRAS ACTIVIDADES DE APOYO AL TRANSPORTE N.C.P."
+  },
+  {
+    "codigo": 531000,
+    "giro": "ACTIVIDADES POSTALES"
+  },
+  {
+    "codigo": 532000,
+    "giro": "ACTIVIDADES DE MENSAJERÍA"
+  },
+  {
+    "codigo": 551001,
+    "giro": "ACTIVIDADES DE HOTELES"
+  },
+  {
+    "codigo": 551002,
+    "giro": "ACTIVIDADES DE MOTELES"
+  },
+  {
+    "codigo": 551003,
+    "giro": "ACTIVIDADES DE RESIDENCIALES PARA TURISTAS"
+  },
+  {
+    "codigo": 551009,
+    "giro": "OTRAS ACTIVIDADES DE ALOJAMIENTO PARA TURISTAS N.C.P."
+  },
+  {
+    "codigo": 552000,
+    "giro": "ACTIVIDADES DE CAMPING Y DE PARQUES PARA CASAS RODANTES"
+  },
+  {
+    "codigo": 559001,
+    "giro": "ACTIVIDADES DE RESIDENCIALES PARA ESTUDIANTES Y TRABAJADORES"
+  },
+  {
+    "codigo": 559009,
+    "giro": "OTRAS ACTIVIDADES DE ALOJAMIENTO N.C.P."
+  },
+  {
+    "codigo": 561000,
+    "giro": "ACTIVIDADES DE RESTAURANTES Y DE SERVICIO MÓVIL DE COMIDAS"
+  },
+  {
+    "codigo": 562100,
+    "giro": "SUMINISTRO DE COMIDAS POR ENCARGO (SERVICIOS DE BANQUETERÍA)"
+  },
+  {
+    "codigo": 562900,
+    "giro": "SUMINISTRO INDUSTRIAL DE COMIDAS POR ENCARGO; CONCESIÓN DE SERVICIOS DE ALIMENTACIÓN"
+  },
+  {
+    "codigo": 563001,
+    "giro": "ACTIVIDADES DE DISCOTECAS Y CABARET (NIGHT CLUB), CON PREDOMINIO DEL SERVICIO DE BEBIDAS"
+  },
+  {
+    "codigo": 563009,
+    "giro": "OTRAS ACTIVIDADES DE SERVICIO DE BEBIDAS N.C.P."
+  },
+  {
+    "codigo": 581100,
+    "giro": "EDICIÓN DE LIBROS"
+  },
+  {
+    "codigo": 581200,
+    "giro": "EDICIÓN DE DIRECTORIOS Y LISTAS DE CORREO"
+  },
+  {
+    "codigo": 581300,
+    "giro": "EDICIÓN DE DIARIOS, REVISTAS Y OTRAS PUBLICACIONES PERIÓDICAS"
+  },
+  {
+    "codigo": 581900,
+    "giro": "OTRAS ACTIVIDADES DE EDICIÓN"
+  },
+  {
+    "codigo": 582000,
+    "giro": "EDICIÓN DE PROGRAMAS INFORMÁTICOS"
+  },
+  {
+    "codigo": 591100,
+    "giro": "ACTIVIDADES DE PRODUCCIÓN DE PELÍCULAS CINEMATOGRÁFICAS, VIDEOS Y PROGRAMAS DE TELEVISIÓN"
+  },
+  {
+    "codigo": 591200,
+    "giro": "ACTIVIDADES DE POSTPRODUCCIÓN DE PELÍCULAS CINEMATOGRÁFICAS, VIDEOS Y PROGRAMAS DE TELEVISIÓN"
+  },
+  {
+    "codigo": 591300,
+    "giro": "ACTIVIDADES DE DISTRIBUCIÓN DE PELÍCULAS CINEMATOGRÁFICAS, VIDEOS Y PROGRAMAS DE TELEVISIÓN"
+  },
+  {
+    "codigo": 591400,
+    "giro": "ACTIVIDADES DE EXHIBICIÓN DE PELÍCULAS CINEMATOGRÁFICAS Y CINTAS DE VIDEO"
+  },
+  {
+    "codigo": 592000,
+    "giro": "ACTIVIDADES DE GRABACIÓN DE SONIDO Y EDICIÓN DE MÚSICA"
+  },
+  {
+    "codigo": 601000,
+    "giro": "TRANSMISIONES DE RADIO"
+  },
+  {
+    "codigo": 602000,
+    "giro": "PROGRAMACIÓN Y TRANSMISIONES DE TELEVISIÓN"
+  },
+  {
+    "codigo": 611010,
+    "giro": "TELEFONÍA FIJA"
+  },
+  {
+    "codigo": 611020,
+    "giro": "TELEFONÍA LARGA DISTANCIA"
+  },
+  {
+    "codigo": 611030,
+    "giro": "TELEVISIÓN DE PAGO POR CABLE"
+  },
+  {
+    "codigo": 611090,
+    "giro": "OTROS SERVICIOS DE TELECOMUNICACIONES ALÁMBRICAS N.C.P."
+  },
+  {
+    "codigo": 612010,
+    "giro": "TELEFONÍA MÓVIL CELULAR"
+  },
+  {
+    "codigo": 612020,
+    "giro": "RADIOCOMUNICACIONES MÓVILES"
+  },
+  {
+    "codigo": 612030,
+    "giro": "TELEVISIÓN DE PAGO INALÁMBRICA"
+  },
+  {
+    "codigo": 612090,
+    "giro": "OTROS SERVICIOS DE TELECOMUNICACIONES INALÁMBRICAS N.C.P."
+  },
+  {
+    "codigo": 613010,
+    "giro": "TELEFONÍA MÓVIL SATELITAL"
+  },
+  {
+    "codigo": 613020,
+    "giro": "TELEVISIÓN DE PAGO SATELITAL"
+  },
+  {
+    "codigo": 613090,
+    "giro": "OTROS SERVICIOS DE TELECOMUNICACIONES POR SATÉLITE N.C.P."
+  },
+  {
+    "codigo": 619010,
+    "giro": "CENTROS DE LLAMADOS Y CENTROS DE ACCESO A INTERNET"
+  },
+  {
+    "codigo": 619090,
+    "giro": "OTRAS ACTIVIDADES DE TELECOMUNICACIONES N.C.P."
+  },
+  {
+    "codigo": 620100,
+    "giro": "ACTIVIDADES DE PROGRAMACIÓN INFORMÁTICA"
+  },
+  {
+    "codigo": 620200,
+    "giro": "ACTIVIDADES DE CONSULTORÍA DE INFORMÁTICA Y DE GESTIÓN DE INSTALACIONES INFORMÁTICAS"
+  },
+  {
+    "codigo": 620900,
+    "giro": "OTRAS ACTIVIDADES DE TECNOLOGÍA DE LA INFORMACIÓN Y DE SERVICIOS INFORMÁTICOS"
+  },
+  {
+    "codigo": 631100,
+    "giro": "PROCESAMIENTO DE DATOS, HOSPEDAJE Y ACTIVIDADES CONEXAS"
+  },
+  {
+    "codigo": 631200,
+    "giro": "PORTALES WEB"
+  },
+  {
+    "codigo": 639100,
+    "giro": "ACTIVIDADES DE AGENCIAS DE NOTICIAS"
+  },
+  {
+    "codigo": 639900,
+    "giro": "OTRAS ACTIVIDADES DE SERVICIOS DE INFORMACIÓN N.C.P."
+  },
+  {
+    "codigo": 641100,
+    "giro": "BANCA CENTRAL"
+  },
+  {
+    "codigo": 641910,
+    "giro": "ACTIVIDADES BANCARIAS"
+  },
+  {
+    "codigo": 641990,
+    "giro": "OTROS TIPOS DE INTERMEDIACIÓN MONETARIA N.C.P."
+  },
+  {
+    "codigo": 642000,
+    "giro": "ACTIVIDADES DE SOCIEDADES DE CARTERA"
+  },
+  {
+    "codigo": 643000,
+    "giro": "FONDOS Y SOCIEDADES DE INVERSIÓN Y ENTIDADES FINANCIERAS SIMILARES"
+  },
+  {
+    "codigo": 649100,
+    "giro": "LEASING FINANCIERO"
+  },
+  {
+    "codigo": 649201,
+    "giro": "FINANCIERAS"
+  },
+  {
+    "codigo": 649202,
+    "giro": "ACTIVIDADES DE CRÉDITO PRENDARIO"
+  },
+  {
+    "codigo": 649203,
+    "giro": "CAJAS DE COMPENSACIÓN"
+  },
+  {
+    "codigo": 649209,
+    "giro": "OTRAS ACTIVIDADES DE CONCESIÓN DE CRÉDITO N.C.P."
+  },
+  {
+    "codigo": 649900,
+    "giro": "OTRAS ACTIVIDADES DE SERVICIOS FINANCIEROS, EXCEPTO LAS DE SEGUROS Y FONDOS DE PENSIONES N.C.P."
+  },
+  {
+    "codigo": 651100,
+    "giro": "SEGUROS DE VIDA"
+  },
+  {
+    "codigo": 651210,
+    "giro": "SEGUROS GENERALES, EXCEPTO ACTIVIDADES DE ISAPRES"
+  },
+  {
+    "codigo": 651220,
+    "giro": "ACTIVIDADES DE ISAPRES"
+  },
+  {
+    "codigo": 652000,
+    "giro": "REASEGUROS"
+  },
+  {
+    "codigo": 653000,
+    "giro": "FONDOS DE PENSIONES"
+  },
+  {
+    "codigo": 661100,
+    "giro": "ADMINISTRACIÓN DE MERCADOS FINANCIEROS"
+  },
+  {
+    "codigo": 661201,
+    "giro": "ACTIVIDADES DE SECURITIZADORAS"
+  },
+  {
+    "codigo": 661202,
+    "giro": "CORREDORES DE BOLSA"
+  },
+  {
+    "codigo": 661203,
+    "giro": "AGENTES DE VALORES"
+  },
+  {
+    "codigo": 661204,
+    "giro": "ACTIVIDADES DE CASAS DE CAMBIO Y OPERADORES DE DIVISA"
+  },
+  {
+    "codigo": 661209,
+    "giro": "OTROS SERVICIOS DE CORRETAJE DE VALORES Y COMMODITIES N.C.P."
+  },
+  {
+    "codigo": 661901,
+    "giro": "ACTIVIDADES DE CÁMARAS DE COMPENSACIÓN"
+  },
+  {
+    "codigo": 661902,
+    "giro": "ADMINISTRACIÓN DE TARJETAS DE CRÉDITO"
+  },
+  {
+    "codigo": 661903,
+    "giro": "EMPRESAS DE ASESORÍA Y CONSULTORÍA EN INVERSIÓN FINANCIERA; SOCIEDADES DE APOYO AL GIRO"
+  },
+  {
+    "codigo": 661904,
+    "giro": "ACTIVIDADES DE CLASIFICADORAS DE RIESGO"
+  },
+  {
+    "codigo": 661909,
+    "giro": "OTRAS ACTIVIDADES AUXILIARES DE LAS ACTIVIDADES DE SERVICIOS FINANCIEROS N.C.P."
+  },
+  {
+    "codigo": 662100,
+    "giro": "EVALUACIÓN DE RIESGOS Y DAÑOS (INCLUYE ACTIVIDADES DE LIQUIDADORES DE SEGUROS)"
+  },
+  {
+    "codigo": 662200,
+    "giro": "ACTIVIDADES DE AGENTES Y CORREDORES DE SEGUROS"
+  },
+  {
+    "codigo": 662900,
+    "giro": "OTRAS ACTIVIDADES AUXILIARES DE LAS ACTIVIDADES DE SEGUROS Y FONDOS DE PENSIONES"
+  },
+  {
+    "codigo": 663010,
+    "giro": "ADMINISTRADORAS DE FONDOS DE PENSIONES (AFP)"
+  },
+  {
+    "codigo": 663091,
+    "giro": "ADMINISTRADORAS DE FONDOS DE INVERSIÓN"
+  },
+  {
+    "codigo": 663092,
+    "giro": "ADMINISTRADORAS DE FONDOS MUTUOS"
+  },
+  {
+    "codigo": 663093,
+    "giro": "ADMINISTRADORAS DE FICES (FONDOS DE INVERSIÓN DE CAPITAL EXTRANJERO)"
+  },
+  {
+    "codigo": 663094,
+    "giro": "ADMINISTRADORAS DE FONDOS PARA LA VIVIENDA"
+  },
+  {
+    "codigo": 663099,
+    "giro": "ADMINISTRADORAS DE FONDOS PARA OTROS FINES N.C.P."
+  },
+  {
+    "codigo": 681011,
+    "giro": "ALQUILER DE BIENES INMUEBLES AMOBLADOS O CON EQUIPOS Y MAQUINARIAS"
+  },
+  {
+    "codigo": 681012,
+    "giro": "COMPRA, VENTA Y ALQUILER (EXCEPTO AMOBLADOS) DE INMUEBLES"
+  },
+  {
+    "codigo": 681020,
+    "giro": "SERVICIOS IMPUTADOS DE ALQUILER DE VIVIENDAS"
+  },
+  {
+    "codigo": 682000,
+    "giro": "ACTIVIDADES INMOBILIARIAS REALIZADAS A CAMBIO DE UNA RETRIBUCIÓN O POR CONTRATA"
+  },
+  {
+    "codigo": 691001,
+    "giro": "SERVICIOS DE ASESORAMIENTO Y REPRESENTACIÓN JURÍDICA"
+  },
+  {
+    "codigo": 691002,
+    "giro": "SERVICIO NOTARIAL"
+  },
+  {
+    "codigo": 691003,
+    "giro": "CONSERVADOR DE BIENES RAÍCES"
+  },
+  {
+    "codigo": 691004,
+    "giro": "RECEPTORES JUDICIALES"
+  },
+  {
+    "codigo": 691009,
+    "giro": "SERVICIOS DE ARBITRAJE; SÍNDICOS DE QUIEBRA Y PERITOS JUDICIALES; OTRAS ACTIVIDADES JURÍDICAS N.C.P."
+  },
+  {
+    "codigo": 692000,
+    "giro": "ACTIVIDADES DE CONTABILIDAD, TENEDURÍA DE LIBROS Y AUDITORÍA; CONSULTORÍA FISCAL"
+  },
+  {
+    "codigo": 701000,
+    "giro": "ACTIVIDADES DE OFICINAS PRINCIPALES"
+  },
+  {
+    "codigo": 702000,
+    "giro": "ACTIVIDADES DE CONSULTORÍA DE GESTIÓN"
+  },
+  {
+    "codigo": 711001,
+    "giro": "SERVICIOS DE ARQUITECTURA (DISEÑO DE EDIFICIOS, DIBUJO DE PLANOS DE CONSTRUCCIÓN, ENTRE OTROS)"
+  },
+  {
+    "codigo": 711002,
+    "giro": "EMPRESAS DE SERVICIOS DE INGENIERÍA Y ACTIVIDADES CONEXAS DE CONSULTORÍA TÉCNICA"
+  },
+  {
+    "codigo": 711003,
+    "giro": "SERVICIOS PROFESIONALES DE INGENIERÍA Y ACTIVIDADES CONEXAS DE CONSULTORÍA TÉCNICA"
+  },
+  {
+    "codigo": 712001,
+    "giro": "ACTIVIDADES DE PLANTAS DE REVISIÓN TÉCNICA PARA VEHÍCULOS AUTOMOTORES"
+  },
+  {
+    "codigo": 712009,
+    "giro": "OTROS SERVICIOS DE ENSAYOS Y ANÁLISIS TÉCNICOS (EXCEPTO ACTIVIDADES DE PLANTAS DE REVISIÓN TÉCNICA)"
+  },
+  {
+    "codigo": 721000,
+    "giro": "INVESTIGACIONES Y DESARROLLO EXPERIMENTAL EN EL CAMPO DE LAS CIENCIAS NATURALES Y LA INGENIERÍA"
+  },
+  {
+    "codigo": 722000,
+    "giro": "INVESTIGACIONES Y DESARROLLO EXPERIMENTAL EN EL CAMPO DE LAS CIENCIAS SOCIALES Y LAS HUMANIDADES"
+  },
+  {
+    "codigo": 731001,
+    "giro": "SERVICIOS DE PUBLICIDAD PRESTADOS POR EMPRESAS"
+  },
+  {
+    "codigo": 731002,
+    "giro": "SERVICIOS DE PUBLICIDAD PRESTADOS POR PROFESIONALES"
+  },
+  {
+    "codigo": 732000,
+    "giro": "ESTUDIOS DE MERCADO Y ENCUESTAS DE OPINIÓN PÚBLICA"
+  },
+  {
+    "codigo": 741001,
+    "giro": "ACTIVIDADES DE DISEÑO DE VESTUARIO"
+  },
+  {
+    "codigo": 741002,
+    "giro": "ACTIVIDADES DE DISEÑO Y DECORACIÓN DE INTERIORES"
+  },
+  {
+    "codigo": 741009,
+    "giro": "OTRAS ACTIVIDADES ESPECIALIZADAS DE DISEÑO N.C.P."
+  },
+  {
+    "codigo": 742001,
+    "giro": "SERVICIOS DE REVELADO, IMPRESIÓN Y AMPLIACIÓN DE FOTOGRAFÍAS"
+  },
+  {
+    "codigo": 742002,
+    "giro": "SERVICIOS Y ACTIVIDADES DE FOTOGRAFÍA"
+  },
+  {
+    "codigo": 742003,
+    "giro": "SERVICIOS PERSONALES DE FOTOGRAFÍA"
+  },
+  {
+    "codigo": 749001,
+    "giro": "ASESORÍA Y GESTIÓN EN LA COMPRA O VENTA DE PEQUEÑAS Y MEDIANAS EMPRESAS"
+  },
+  {
+    "codigo": 749002,
+    "giro": "SERVICIOS DE TRADUCCIÓN E INTERPRETACIÓN PRESTADOS POR EMPRESAS"
+  },
+  {
+    "codigo": 749003,
+    "giro": "SERVICIOS PERSONALES DE TRADUCCIÓN E INTERPRETACIÓN"
+  },
+  {
+    "codigo": 749004,
+    "giro": "ACTIVIDADES DE AGENCIAS Y AGENTES DE REPRESENTACIÓN DE ACTORES, DEPORTISTAS Y OTRAS FIGURAS PÚBLICAS"
+  },
+  {
+    "codigo": 749009,
+    "giro": "OTRAS ACTIVIDADES PROFESIONALES, CIENTÍFICAS Y TÉCNICAS N.C.P."
+  },
+  {
+    "codigo": 750001,
+    "giro": "ACTIVIDADES DE CLÍNICAS VETERINARIAS"
+  },
+  {
+    "codigo": 750002,
+    "giro": "ACTIVIDADES DE VETERINARIOS, TÉCNICOS Y OTRO PERSONAL AUXILIAR, PRESTADOS DE FORMA INDEPENDIENTE"
+  },
+  {
+    "codigo": 771000,
+    "giro": "ALQUILER DE VEHÍCULOS AUTOMOTORES SIN CHOFER"
+  },
+  {
+    "codigo": 772100,
+    "giro": "ALQUILER Y ARRENDAMIENTO DE EQUIPO RECREATIVO Y DEPORTIVO"
+  },
+  {
+    "codigo": 772200,
+    "giro": "ALQUILER DE CINTAS DE VIDEO Y DISCOS"
+  },
+  {
+    "codigo": 772900,
+    "giro": "ALQUILER DE OTROS EFECTOS PERSONALES Y ENSERES DOMÉSTICOS (INCLUYE MOBILIARIO PARA EVENTOS)"
+  },
+  {
+    "codigo": 773001,
+    "giro": "ALQUILER DE EQUIPOS DE TRANSPORTE SIN OPERARIO, EXCEPTO VEHÍCULOS AUTOMOTORES"
+  },
+  {
+    "codigo": 773002,
+    "giro": "ALQUILER DE MAQUINARIA Y EQUIPO AGROPECUARIO, FORESTAL, DE CONSTRUCCIÓN E ING. CIVIL, SIN OPERARIOS"
+  },
+  {
+    "codigo": 773003,
+    "giro": "ALQUILER DE MAQUINARIA Y EQUIPO DE OFICINA, SIN OPERARIOS (SIN SERVICIO ADMINISTRATIVO)"
+  },
+  {
+    "codigo": 773009,
+    "giro": "ALQUILER DE OTROS TIPOS DE MAQUINARIAS Y EQUIPOS SIN OPERARIO N.C.P."
+  },
+  {
+    "codigo": 774000,
+    "giro": "ARRENDAMIENTO DE PROPIEDAD INTELECTUAL Y SIMILARES, EXCEPTO OBRAS PROTEGIDAS POR DERECHOS DE AUTOR"
+  },
+  {
+    "codigo": 781000,
+    "giro": "ACTIVIDADES DE AGENCIAS DE EMPLEO"
+  },
+  {
+    "codigo": 782000,
+    "giro": "ACTIVIDADES DE AGENCIAS DE EMPLEO TEMPORAL (INCLUYE EMPRESAS DE SERVICIOS TRANSITORIOS)"
+  },
+  {
+    "codigo": 783000,
+    "giro": "OTRAS ACTIVIDADES DE DOTACIÓN DE RECURSOS HUMANOS"
+  },
+  {
+    "codigo": 791100,
+    "giro": "ACTIVIDADES DE AGENCIAS DE VIAJES"
+  },
+  {
+    "codigo": 791200,
+    "giro": "ACTIVIDADES DE OPERADORES TURÍSTICOS"
+  },
+  {
+    "codigo": 799000,
+    "giro": "OTROS SERVICIOS DE RESERVAS Y ACTIVIDADES CONEXAS (INCLUYE VENTA DE ENTRADAS PARA TEATRO, Y OTROS)"
+  },
+  {
+    "codigo": 801001,
+    "giro": "SERVICIOS DE SEGURIDAD PRIVADA PRESTADOS POR EMPRESAS"
+  },
+  {
+    "codigo": 801002,
+    "giro": "SERVICIO DE TRANSPORTE DE VALORES EN VEHÍCULOS BLINDADOS"
+  },
+  {
+    "codigo": 801003,
+    "giro": "SERVICIOS DE SEGURIDAD PRIVADA PRESTADOS POR INDEPENDIENTES"
+  },
+  {
+    "codigo": 802000,
+    "giro": "ACTIVIDADES DE SERVICIOS DE SISTEMAS DE SEGURIDAD (INCLUYE SERVICIOS DE CERRAJERÍA)"
+  },
+  {
+    "codigo": 803000,
+    "giro": "ACTIVIDADES DE INVESTIGACIÓN (INCLUYE ACTIVIDADES DE INVESTIGADORES Y DETECTIVES PRIVADOS)"
+  },
+  {
+    "codigo": 811000,
+    "giro": "ACTIVIDADES COMBINADAS DE APOYO A INSTALACIONES"
+  },
+  {
+    "codigo": 812100,
+    "giro": "LIMPIEZA GENERAL DE EDIFICIOS"
+  },
+  {
+    "codigo": 812901,
+    "giro": "DESRATIZACIÓN, DESINFECCIÓN Y EXTERMINIO DE PLAGAS NO AGRÍCOLAS"
+  },
+  {
+    "codigo": 812909,
+    "giro": "OTRAS ACTIVIDADES DE LIMPIEZA DE EDIFICIOS E INSTALACIONES INDUSTRIALES N.C.P."
+  },
+  {
+    "codigo": 813000,
+    "giro": "ACTIVIDADES DE PAISAJISMO, SERVICIOS DE JARDINERÍA Y SERVICIOS CONEXOS"
+  },
+  {
+    "codigo": 821100,
+    "giro": "ACTIVIDADES COMBINADAS DE SERVICIOS ADMINISTRATIVOS DE OFICINA"
+  },
+  {
+    "codigo": 821900,
+    "giro": "FOTOCOPIADO, PREPARACIÓN DE DOCUMENTOS Y OTRAS ACTIVIDADES ESPECIALIZADAS DE APOYO DE OFICINA"
+  },
+  {
+    "codigo": 822000,
+    "giro": "ACTIVIDADES DE CALL-CENTER"
+  },
+  {
+    "codigo": 823000,
+    "giro": "ORGANIZACIÓN DE CONVENCIONES Y EXPOSICIONES COMERCIALES"
+  },
+  {
+    "codigo": 829110,
+    "giro": "ACTIVIDADES DE AGENCIAS DE COBRO"
+  },
+  {
+    "codigo": 829120,
+    "giro": "ACTIVIDADES DE AGENCIAS DE CALIFICACIÓN CREDITICIA"
+  },
+  {
+    "codigo": 829200,
+    "giro": "ACTIVIDADES DE ENVASADO Y EMPAQUETADO"
+  },
+  {
+    "codigo": 829900,
+    "giro": "OTRAS ACTIVIDADES DE SERVICIOS DE APOYO A LAS EMPRESAS N.C.P."
+  },
+  {
+    "codigo": 841100,
+    "giro": "ACTIVIDADES DE LA ADMINISTRACIÓN PÚBLICA EN GENERAL"
+  },
+  {
+    "codigo": 841200,
+    "giro": "REGULACIÓN DE LAS ACTIVIDADES DE ORGANISMOS QUE PRESTAN SERVICIOS SANITARIOS, EDUCATIVOS, CULTURALES"
+  },
+  {
+    "codigo": 841300,
+    "giro": "REGULACIÓN Y FACILITACIÓN DE LA ACTIVIDAD ECONÓMICA"
+  },
+  {
+    "codigo": 842100,
+    "giro": "RELACIONES EXTERIORES"
+  },
+  {
+    "codigo": 842200,
+    "giro": "ACTIVIDADES DE DEFENSA"
+  },
+  {
+    "codigo": 842300,
+    "giro": "ACTIVIDADES DE MANTENIMIENTO DEL ORDEN PÚBLICO Y DE SEGURIDAD"
+  },
+  {
+    "codigo": 843010,
+    "giro": "FONDO NACIONAL DE SALUD (FONASA)"
+  },
+  {
+    "codigo": 843020,
+    "giro": "INSTITUTO DE PREVISIÓN SOCIAL (IPS)"
+  },
+  {
+    "codigo": 843090,
+    "giro": "OTROS PLANES DE SEGURIDAD SOCIAL DE AFILIACIÓN OBLIGATORIA N.C.P."
+  },
+  {
+    "codigo": 850011,
+    "giro": "ENSEÑANZA PREESCOLAR PÚBLICA"
+  },
+  {
+    "codigo": 850012,
+    "giro": "ENSEÑANZA PRIMARIA, SECUNDARIA CIENTÍFICO HUMANISTA Y TÉCNICO PROFESIONAL PÚBLICA"
+  },
+  {
+    "codigo": 850021,
+    "giro": "ENSEÑANZA PREESCOLAR PRIVADA"
+  },
+  {
+    "codigo": 850022,
+    "giro": "ENSEÑANZA PRIMARIA, SECUNDARIA CIENTÍFICO HUMANISTA Y TÉCNICO PROFESIONAL PRIVADA"
+  },
+  {
+    "codigo": 853110,
+    "giro": "ENSEÑANZA SUPERIOR EN UNIVERSIDADES PÚBLICAS"
+  },
+  {
+    "codigo": 853120,
+    "giro": "ENSEÑANZA SUPERIOR EN UNIVERSIDADES PRIVADAS"
+  },
+  {
+    "codigo": 853201,
+    "giro": "ENSEÑANZA SUPERIOR EN INSTITUTOS PROFESIONALES"
+  },
+  {
+    "codigo": 853202,
+    "giro": "ENSEÑANZA SUPERIOR EN CENTROS DE FORMACIÓN TÉCNICA"
+  },
+  {
+    "codigo": 854100,
+    "giro": "ENSEÑANZA DEPORTIVA Y RECREATIVA"
+  },
+  {
+    "codigo": 854200,
+    "giro": "ENSEÑANZA CULTURAL"
+  },
+  {
+    "codigo": 854901,
+    "giro": "ENSEÑANZA PREUNIVERSITARIA"
+  },
+  {
+    "codigo": 854902,
+    "giro": "SERVICIOS PERSONALES DE EDUCACIÓN"
+  },
+  {
+    "codigo": 854909,
+    "giro": "OTROS TIPOS DE ENSEÑANZA N.C.P."
+  },
+  {
+    "codigo": 855000,
+    "giro": "ACTIVIDADES DE APOYO A LA ENSEÑANZA"
+  },
+  {
+    "codigo": 861010,
+    "giro": "ACTIVIDADES DE HOSPITALES Y CLÍNICAS PÚBLICAS"
+  },
+  {
+    "codigo": 861020,
+    "giro": "ACTIVIDADES DE HOSPITALES Y CLÍNICAS PRIVADAS"
+  },
+  {
+    "codigo": 862010,
+    "giro": "ACTIVIDADES DE CENTROS DE SALUD MUNICIPALIZADOS (SERVICIOS DE SALUD PÚBLICA)"
+  },
+  {
+    "codigo": 862021,
+    "giro": "CENTROS MÉDICOS PRIVADOS (ESTABLECIMIENTOS DE ATENCIÓN AMBULATORIA)"
+  },
+  {
+    "codigo": 862022,
+    "giro": "CENTROS DE ATENCIÓN ODONTOLÓGICA PRIVADOS (ESTABLECIMIENTOS DE ATENCIÓN AMBULATORIA)"
+  },
+  {
+    "codigo": 862031,
+    "giro": "SERVICIOS DE MÉDICOS PRESTADOS DE FORMA INDEPENDIENTE"
+  },
+  {
+    "codigo": 862032,
+    "giro": "SERVICIOS DE ODONTÓLOGOS PRESTADOS DE FORMA INDEPENDIENTE"
+  },
+  {
+    "codigo": 869010,
+    "giro": "ACTIVIDADES DE LABORATORIOS CLÍNICOS Y BANCOS DE SANGRE"
+  },
+  {
+    "codigo": 869091,
+    "giro": "OTROS SERVICIOS DE ATENCIÓN DE LA SALUD HUMANA PRESTADOS POR EMPRESAS"
+  },
+  {
+    "codigo": 869092,
+    "giro": "SERVICIOS PRESTADOS DE FORMA INDEPENDIENTE POR OTROS PROFESIONALES DE LA SALUD"
+  },
+  {
+    "codigo": 871000,
+    "giro": "ACTIVIDADES DE ATENCIÓN DE ENFERMERÍA EN INSTITUCIONES"
+  },
+  {
+    "codigo": 872000,
+    "giro": "ACTIVIDADES DE ATENCIÓN EN INSTITUCIONES PARA PERSONAS CON DISCAPACIDAD MENTAL Y TOXICÓMANOS"
+  },
+  {
+    "codigo": 873000,
+    "giro": "ACTIVIDADES DE ATENCIÓN EN INSTITUCIONES PARA PERSONAS DE EDAD Y PERSONAS CON DISCAPACIDAD FÍSICA"
+  },
+  {
+    "codigo": 879000,
+    "giro": "OTRAS ACTIVIDADES DE ATENCIÓN EN INSTITUCIONES"
+  },
+  {
+    "codigo": 881000,
+    "giro": "ACTIVIDADES DE ASISTENCIA SOCIAL SIN ALOJAMIENTO PARA PERSONAS DE EDAD Y PERSONAS CON DISCAPACIDAD"
+  },
+  {
+    "codigo": 889000,
+    "giro": "OTRAS ACTIVIDADES DE ASISTENCIA SOCIAL SIN ALOJAMIENTO"
+  },
+  {
+    "codigo": 900001,
+    "giro": "SERVICIOS DE PRODUCCIÓN DE OBRAS DE TEATRO, CONCIERTOS, ESPECTÁCULOS DE DANZA, OTRAS PROD. ESCÉNICAS"
+  },
+  {
+    "codigo": 900002,
+    "giro": "ACTIVIDADES ARTÍSTICAS REALIZADAS POR BANDAS DE MÚSICA, COMPAÑÍAS DE TEATRO, CIRCENSES Y SIMILARES"
+  },
+  {
+    "codigo": 900003,
+    "giro": "ACTIVIDADES DE ARTISTAS REALIZADAS DE FORMA INDEPENDIENTE: ACTORES, MÚSICOS, ESCRITORES, ENTRE OTROS"
+  },
+  {
+    "codigo": 900004,
+    "giro": "SERVICIOS PRESTADOS POR PERIODISTAS INDEPENDIENTES"
+  },
+  {
+    "codigo": 900009,
+    "giro": "OTRAS ACTIVIDADES CREATIVAS, ARTÍSTICAS Y DE ENTRETENIMIENTO N.C.P."
+  },
+  {
+    "codigo": 910100,
+    "giro": "ACTIVIDADES DE BIBLIOTECAS Y ARCHIVOS"
+  },
+  {
+    "codigo": 910200,
+    "giro": "ACTIVIDADES DE MUSEOS, GESTIÓN DE LUGARES Y EDIFICIOS HISTÓRICOS"
+  },
+  {
+    "codigo": 910300,
+    "giro": "ACTIVIDADES DE JARDINES BOTÁNICOS, ZOOLÓGICOS Y RESERVAS NATURALES"
+  },
+  {
+    "codigo": 920010,
+    "giro": "ACTIVIDADES DE CASINOS DE JUEGOS"
+  },
+  {
+    "codigo": 920090,
+    "giro": "OTRAS ACTIVIDADES DE JUEGOS DE AZAR Y APUESTAS N.C.P."
+  },
+  {
+    "codigo": 931101,
+    "giro": "HIPÓDROMOS"
+  },
+  {
+    "codigo": 931102,
+    "giro": "GESTIÓN DE SALAS DE BILLAR; GESTIÓN DE SALAS DE BOLOS (BOWLING)"
+  },
+  {
+    "codigo": 931109,
+    "giro": "GESTIÓN DE OTRAS INSTALACIONES DEPORTIVAS N.C.P."
+  },
+  {
+    "codigo": 931201,
+    "giro": "ACTIVIDADES DE CLUBES DE FÚTBOL AMATEUR Y PROFESIONAL"
+  },
+  {
+    "codigo": 931209,
+    "giro": "ACTIVIDADES DE OTROS CLUBES DEPORTIVOS N.C.P."
+  },
+  {
+    "codigo": 931901,
+    "giro": "PROMOCIÓN Y ORGANIZACIÓN DE COMPETENCIAS DEPORTIVAS"
+  },
+  {
+    "codigo": 931909,
+    "giro": "OTRAS ACTIVIDADES DEPORTIVAS N.C.P."
+  },
+  {
+    "codigo": 932100,
+    "giro": "ACTIVIDADES DE PARQUES DE ATRACCIONES Y PARQUES TEMÁTICOS"
+  },
+  {
+    "codigo": 932901,
+    "giro": "GESTIÓN DE SALAS DE POOL; GESTIÓN (EXPLOTACIÓN) DE JUEGOS ELECTRÓNICOS"
+  },
+  {
+    "codigo": 932909,
+    "giro": "OTRAS ACTIVIDADES DE ESPARCIMIENTO Y RECREATIVAS N.C.P."
+  },
+  {
+    "codigo": 941100,
+    "giro": "ACTIVIDADES DE ASOCIACIONES EMPRESARIALES Y DE EMPLEADORES"
+  },
+  {
+    "codigo": 941200,
+    "giro": "ACTIVIDADES DE ASOCIACIONES PROFESIONALES"
+  },
+  {
+    "codigo": 942000,
+    "giro": "ACTIVIDADES DE SINDICATOS"
+  },
+  {
+    "codigo": 949100,
+    "giro": "ACTIVIDADES DE ORGANIZACIONES RELIGIOSAS"
+  },
+  {
+    "codigo": 949200,
+    "giro": "ACTIVIDADES DE ORGANIZACIONES POLÍTICAS"
+  },
+  {
+    "codigo": 949901,
+    "giro": "ACTIVIDADES DE CENTROS DE MADRES"
+  },
+  {
+    "codigo": 949902,
+    "giro": "ACTIVIDADES DE CLUBES SOCIALES"
+  },
+  {
+    "codigo": 949903,
+    "giro": "FUNDACIONES Y CORPORACIONES; ASOCIACIONES QUE PROMUEVEN ACTIVIDADES CULTURALES O RECREATIVAS"
+  },
+  {
+    "codigo": 949904,
+    "giro": "CONSEJO DE ADMINISTRACIÓN DE EDIFICIOS Y CONDOMINIOS"
+  },
+  {
+    "codigo": 949909,
+    "giro": "ACTIVIDADES DE OTRAS ASOCIACIONES N.C.P."
+  },
+  {
+    "codigo": 951100,
+    "giro": "REPARACIÓN DE COMPUTADORES Y EQUIPO PERIFÉRICO"
+  },
+  {
+    "codigo": 951200,
+    "giro": "REPARACIÓN DE EQUIPO DE COMUNICACIONES (INCLUYE LA REPARACIÓN TELÉFONOS CELULARES)"
+  },
+  {
+    "codigo": 952100,
+    "giro": "REPARACIÓN DE APARATOS ELECTRÓNICOS DE CONSUMO (INCLUYE APARATOS DE TELEVISIÓN Y RADIO)"
+  },
+  {
+    "codigo": 952200,
+    "giro": "REPARACIÓN DE APARATOS DE USO DOMÉSTICO, EQUIPO DOMÉSTICO Y DE JARDINERÍA"
+  },
+  {
+    "codigo": 952300,
+    "giro": "REPARACIÓN DE CALZADO Y DE ARTÍCULOS DE CUERO"
+  },
+  {
+    "codigo": 952400,
+    "giro": "REPARACIÓN DE MUEBLES Y ACCESORIOS DOMÉSTICOS"
+  },
+  {
+    "codigo": 952900,
+    "giro": "REPARACIÓN DE OTROS EFECTOS PERSONALES Y ENSERES DOMÉSTICOS"
+  },
+  {
+    "codigo": 960100,
+    "giro": "LAVADO Y LIMPIEZA, INCLUIDA LA LIMPIEZA EN SECO, DE PRODUCTOS TEXTILES Y DE PIEL"
+  },
+  {
+    "codigo": 960200,
+    "giro": "PELUQUERÍA Y OTROS TRATAMIENTOS DE BELLEZA"
+  },
+  {
+    "codigo": 960310,
+    "giro": "SERVICIOS FUNERARIOS"
+  },
+  {
+    "codigo": 960320,
+    "giro": "SERVICIOS DE CEMENTERIOS"
+  },
+  {
+    "codigo": 960901,
+    "giro": "SERVICIOS DE ADIESTRAMIENTO, GUARDERÍA, PELUQUERÍA, PASEO DE MASCOTAS (EXCEPTO ACT. VETERINARIAS)"
+  },
+  {
+    "codigo": 960902,
+    "giro": "ACTIVIDADES DE SALONES DE MASAJES, BAÑOS TURCOS, SAUNAS, SERVICIO DE BAÑOS PÚBLICOS"
+  },
+  {
+    "codigo": 960909,
+    "giro": "OTRAS ACTIVIDADES DE SERVICIOS PERSONALES N.C.P."
+  },
+  {
+    "codigo": 970000,
+    "giro": "ACTIVIDADES DE LOS HOGARES COMO EMPLEADORES DE PERSONAL DOMÉSTICO"
+  },
+  {
+    "codigo": 990000,
+    "giro": "ACTIVIDADES DE ORGANIZACIONES Y ÓRGANOS EXTRATERRITORIALES"
+  }
+];
+
+export const girosSiiOrdenados = [...girosSii].sort((a, b) =>
+  a.giro.localeCompare(b.giro, "es")
+);

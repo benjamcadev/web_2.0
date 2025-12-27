@@ -6,9 +6,12 @@ import { Producto } from '@/types/producto';
 import { validarCarritoAntesDePagar } from "@/lib/validarCarrito";
 import toast from "react-hot-toast";
 import ErrorToast from '@/components/UI/ErrorToast'
+import SuccessToast from "@/components/UI/SuccessToast";
 import LoadingToast from '@/components/UI/LoadingToast'
 import { getSessionId } from '@/lib/stockReservationService'
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Cliente } from '@/types/cliente'
+import { validateRut } from "@/lib/validateRut";
 
 type DeliveryType = "retiro" | "envio" | null;
 
@@ -24,11 +27,19 @@ interface Props {
   setIsModalOpen: (open: boolean) => void;
   items: CartItem[];
   metodoPago: "webpay" | "khipu" | null;
-  payerName: string;
-  payerEmail: string;
+  cliente: Cliente;
   direccion: string | "";
   comuna: string | "";
   sucursal: string | "";
+  giftcardApplied: number;
+  giftcardCode: string;
+  giftcardBalance: number | 0;
+  giftcardLoading: boolean;
+  setGiftcardBalance: Dispatch<SetStateAction<number | null>>;
+  setGiftcardApplied: Dispatch<SetStateAction<number>>;
+  setGiftcardCode: Dispatch<SetStateAction<string>>;
+  setGiftcardLoading: Dispatch<SetStateAction<boolean>>;
+  tipoDTE: "boleta" | "factura";
 }
 
 export default function SidebarResumen({
@@ -43,18 +54,24 @@ export default function SidebarResumen({
   setIsModalOpen,
   items,
   metodoPago,
-  payerName,
-  payerEmail,
+  cliente,
   direccion,
   comuna,
-  sucursal
+  sucursal,
+  giftcardApplied,
+  giftcardCode,
+  setGiftcardLoading,
+  setGiftcardBalance,
+  setGiftcardApplied,
+  setGiftcardCode,
+  giftcardBalance,
+  giftcardLoading,
+  tipoDTE,
 }: Props) {
 
-  // Giftcard state
-  const [giftcardCode, setGiftcardCode] = useState("");
-  const [giftcardBalance, setGiftcardBalance] = useState<number | null>(null);
-  const [giftcardApplied, setGiftcardApplied] = useState<number>(0);
-  const [giftcardLoading, setGiftcardLoading] = useState(false);
+  const [showGiftcard, setShowGiftcard] = useState(false);
+
+
 
   const totalFinal = Math.max(totalConEnvio - giftcardApplied, 0);
 
@@ -77,7 +94,13 @@ export default function SidebarResumen({
       if (!data.valid) {
         setGiftcardBalance(null);
         setGiftcardApplied(0);
-        toast.error("Giftcard inválida o sin saldo");
+        let subtitle = "Giftcard inválida o expirada";
+        if (data.reason === "SIN_SALDO") subtitle = "Giftcard sin saldo disponible";
+        toast.custom(
+          <ErrorToast
+            title='Error' subtitle={subtitle} />,
+          { duration: 6000, position: "bottom-center", icon: null, style: { background: "transparent", boxShadow: "none", padding: 0 }, }
+        );
         return;
       }
 
@@ -85,19 +108,23 @@ export default function SidebarResumen({
       // Aplicar automáticamente la giftcard
       const applied = Math.min(data.balance, totalConEnvio);
       setGiftcardApplied(applied);
-      toast.success("Giftcard válida");
+      toast.custom(
+        <SuccessToast subtitle={''} title={'Giftcard válida'} />,
+        { duration: 2400, position: "bottom-center", icon: null, style: { background: "transparent", boxShadow: "none", padding: 0 }, }
+      );
     } catch (e) {
-      toast.error("Error al validar giftcard");
+      toast.custom(
+        <ErrorToast
+          title='Error'
+          subtitle={'Error al validar giftcard'}
+        />,
+        { duration: 6000, position: "bottom-center", icon: null, style: { background: "transparent", boxShadow: "none", padding: 0 }, }
+      );
     } finally {
       setGiftcardLoading(false);
     }
   };
 
-  const handleApplyGiftcard = () => {
-    if (!giftcardBalance) return;
-    const applied = Math.min(giftcardBalance, totalConEnvio);
-    setGiftcardApplied(applied);
-  };
 
   const handleRemoveGiftcard = () => {
     setGiftcardApplied(0);
@@ -105,7 +132,100 @@ export default function SidebarResumen({
     setGiftcardCode("");
   };
 
+  const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+
+const [legalPdfUrl, setLegalPdfUrl] = useState<string | null>(null);
+const [privacyPdfUrl, setPrivacyPdfUrl] = useState<string | null>(null);
+
+useEffect(() => {
+  const loadLegalPdf = async () => {
+    try {
+      const res = await fetch(
+        `${STRAPI_URL}/api/configuracions?populate=*`,
+        { cache: "no-store" }
+      );
+      const json = await res.json();
+
+      const legalUrl =
+        Array.isArray(json?.data) && json.data.length > 0
+          ? json.data[0]?.terminos_condiciones_pdf?.url
+          : null;
+
+      const privacyUrl =
+        Array.isArray(json?.data) && json.data.length > 0
+          ? json.data[0]?.politica_privacidad_pdf?.url
+          : null;
+
+      setLegalPdfUrl(legalUrl ?? null);
+      setPrivacyPdfUrl(privacyUrl ?? null);
+    } catch (error) {
+      console.error("Error cargando PDF de términos y condiciones", error);
+    }
+  };
+
+  loadLegalPdf();
+}, [STRAPI_URL]);
+
   const handlePago = async () => {
+    // validar email
+    const isEmailValid = cliente.email.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cliente.email);
+
+    // validar campos base (boleta vs factura)
+    if (
+      !cliente.email ||
+      !validateRut(cliente.rut) ||
+      !cliente.telefono ||
+      !isEmailValid ||
+      (tipoDTE === "boleta" && !cliente.nombre)
+    ) {
+      toast.custom(
+        <ErrorToast
+          title="Error"
+          subtitle={
+            tipoDTE === "boleta"
+              ? "Debes ingresar nombre, rut, teléfono y correo válido antes de continuar con el pago."
+              : "Debes ingresar rut, teléfono y correo válido antes de continuar con el pago."
+          }
+        />,
+        {
+          duration: 6000,
+          position: "bottom-center",
+          icon: null,
+          style: { background: "transparent", boxShadow: "none", padding: 0 },
+        }
+      );
+      return;
+    }
+
+    // Validar datos de factura SOLO si aplica
+    if (tipoDTE === "factura") {
+      const factura = cliente.factura;
+
+      if (
+        !factura ||
+        !factura.razonSocial ||
+        !factura.giro ||
+        !factura.calle ||
+        !factura.numero ||
+        !factura.comuna
+      ) {
+        toast.custom(
+          <ErrorToast
+            title="Datos de Factura incompletos"
+            subtitle="Debes completar razón social, giro y dirección tributaria para emitir factura."
+          />,
+          {
+            duration: 6000,
+            position: "bottom-center",
+            icon: null,
+            style: { background: "transparent", boxShadow: "none", padding: 0 },
+          }
+        );
+        return;
+      }
+    }
+
+
     // Validar stock y reservas
 
     const loadingToastId = toast.custom(
@@ -160,15 +280,14 @@ export default function SidebarResumen({
           items,
           total: totalConEnvio,
           metodoPago,
-          payerName,
-          payerEmail,
+          tipoDTE,
+          cliente,
           deliveryType,
           direccion,
           comuna,
           sucursal,
           giftcardCode,
           giftcardApplied
-
         }),
       });
 
@@ -192,24 +311,32 @@ export default function SidebarResumen({
         return;
       }
 
+
       const pedidoId = pedidoData.pedidoId;
       const pagoId = pedidoData.pagoId;
       const numeroPago = pedidoData.numeroPago;
       const numeroPedido = pedidoData.numeroPedido;
 
+      // Pago solo con Giftcard (totalFinal = 0)
+      if (totalFinal === 0 && giftcardApplied > 0) {
+        const confirmRes = await fetch("/api/pagos/giftcard/confirmar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: giftcardCode,
+            amount: giftcardApplied,
+            pagoId, // pago proveedor = giftcard
+            source: "giftcard_only"
+          }),
+        });
 
-      const sessionId = getSessionId();
+        const confirmData = await confirmRes.json();
 
-      //Metodo pago Khipu
-      if (metodoPago === "khipu") {
-        const isEmailValid =
-          payerEmail.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payerEmail);
-
-        if (!payerName || !payerEmail || !isEmailValid) {
+        if (!confirmRes.ok || !confirmData.success) {
           toast.custom(
             <ErrorToast
-              title='Error'
-              subtitle={'Debes ingresar nombre y correo valido antes de continuar con el pago.'}
+              title="Error"
+              subtitle="No se pudo confirmar la giftcard. Intenta nuevamente."
             />,
             {
               duration: 6000,
@@ -221,13 +348,38 @@ export default function SidebarResumen({
           return;
         }
 
+        // Redirigir a página de éxito (sin pasarela)
+        const loadingToastGifcard = toast.custom(
+          <LoadingToast
+            title="Pagando con Giftcard..."
+            subtitle="Por favor espera un momento."
+          />,
+          {
+            duration: Infinity,
+            position: "bottom-center",
+            icon: null,
+            style: { background: "transparent", boxShadow: "none", padding: 0 },
+          }
+        );
+        setTimeout(() => {
+          toast.dismiss(loadingToastGifcard);
+          // Redirigir pagina de exito giftcard
+          window.location.href = `/pago/giftcard/success?pedido=${pedidoId}`;
+        }, 2500);
+        return;
+      }
+
+      const sessionId = getSessionId();
+
+      //Metodo pago Khipu
+      if (metodoPago === "khipu") {
+
         const res = await fetch("/api/pagos/khipu/init", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             amount: totalFinal,
-            payerName,
-            payerEmail,
+            cliente,
             transactionId: `KHP-${Date.now()}`,
             pagoId,
             numeroPago,
@@ -238,7 +390,7 @@ export default function SidebarResumen({
         const data = await res.json();
 
         if (!data.ok) {
-           toast.custom(
+          toast.custom(
             <ErrorToast
               title='Error'
               subtitle={'Error al iniciar pago con Khipu.'}
@@ -371,45 +523,71 @@ export default function SidebarResumen({
         </div>
         {/* Giftcard */}
         <div className="border-t border-gray-300 pt-3 space-y-2">
-          <span className="font-semibold text-gray-800">Giftcard</span>
-
-          {!giftcardBalance && (
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={giftcardCode}
-                onChange={(e) => setGiftcardCode(e.target.value)}
-                placeholder="Código giftcard"
-                className="flex-1 border rounded-lg px-3 py-2 text-sm"
+          {/* Toggle Giftcard */}
+          <button
+            type="button"
+            onClick={() => setShowGiftcard((prev) => !prev)}
+            className="flex items-center gap-2 text-gray-800 font-semibold hover:text-blue-600 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-blue-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 10h18M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"
               />
-              <button
-                onClick={handleValidateGiftcard}
-                disabled={giftcardLoading}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
-              >
-                {giftcardLoading ? "Validando..." : "Validar"}
-              </button>
-            </div>
-          )}
+            </svg>
+            <span>Ingresar Giftcard</span>
+          </button>
 
-          {giftcardBalance !== null && giftcardApplied > 0 && (
-            <div className="flex justify-between items-center text-sm text-green-700">
-              <span>Saldo disponible</span>
-              <span>{formatCLP(giftcardBalance)}</span>
-            </div>
-          )}
+          {/* Contenido Giftcard */}
+          {showGiftcard && (
+            <>
+              {!giftcardBalance && (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={giftcardCode}
+                    onChange={(e) => setGiftcardCode(e.target.value)}
+                    placeholder="Código giftcard"
+                    className="flex-1 border rounded-lg px-3 py-2 text-sm"
+                  />
+                  <button
+                    onClick={handleValidateGiftcard}
+                    disabled={giftcardLoading}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {giftcardLoading ? "Validando..." : "Aplicar"}
+                  </button>
+                </div>
+              )}
 
-          {giftcardApplied > 0 && (
-            <div className="flex justify-between items-center text-sm text-green-700">
-              <span>Giftcard aplicada</span>
-              <span>-{formatCLP(giftcardApplied)}</span>
-              <button
-                onClick={handleRemoveGiftcard}
-                className="text-red-600 text-xs ml-2 hover:underline"
-              >
-                Quitar
-              </button>
-            </div>
+              {giftcardBalance !== null && giftcardApplied > 0 && (
+                <div className="flex justify-between items-center text-sm text-green-700">
+                  <span>Saldo disponible</span>
+                  <span>{formatCLP(giftcardBalance)}</span>
+                </div>
+              )}
+
+              {giftcardApplied > 0 && (
+                <div className="flex justify-between items-center text-sm text-green-700">
+                  <span>Giftcard aplicada</span>
+                  <span>-{formatCLP(giftcardApplied)}</span>
+                  <button
+                    onClick={handleRemoveGiftcard}
+                    className="text-red-600 text-xs ml-2 hover:underline"
+                  >
+                    Quitar
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="border-t border-gray-300 pt-3 flex justify-between text-lg font-bold text-gray-900">
@@ -457,14 +635,18 @@ export default function SidebarResumen({
         {currentStep === 3 && (
           <>
             <button
-              disabled={!metodoPago}
-              className={`w-full font-bold py-3 rounded-xl transition-all duration-300 ${metodoPago
+              disabled={totalFinal > 0 && !metodoPago}
+              className={`w-full font-bold py-3 rounded-xl transition-all duration-300 ${totalFinal === 0 || metodoPago
                 ? "bg-gradient-to-br from-green-600 via-green-500 to-emerald-400 text-white hover:shadow-lg hover:scale-105"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               onClick={handlePago}
             >
-              {metodoPago ? `Pagar ${formatCLP(totalFinal)}` : "Selecciona un método de pago"}
+              {totalFinal === 0
+                ? "Confirmar compra"
+                : metodoPago
+                  ? `Pagar ${formatCLP(totalFinal)}`
+                  : "Selecciona un método de pago"}
             </button>
             <button
               onClick={() => setCurrentStep(2)}
@@ -492,6 +674,37 @@ export default function SidebarResumen({
           ← Seguir comprando
         </Link>
       </div>
+      {/* Términos y condiciones */}
+      <p className="mt-6 text-xs text-gray-500 text-center leading-snug">
+        Al continuar con la compra, estoy aceptando los{" "}
+        <a
+          href={legalPdfUrl ? `${STRAPI_URL}${legalPdfUrl}` : "#"}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`underline ${
+            legalPdfUrl
+              ? "text-blue-600 hover:text-blue-700"
+              : "text-gray-400 cursor-not-allowed"
+          }`}
+        >
+          Términos y condiciones
+        </a>{" "}
+        y las{" "}
+        <a
+          href={privacyPdfUrl ? `${STRAPI_URL}${privacyPdfUrl}` : "#"}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`underline ${
+            privacyPdfUrl
+              ? "text-blue-600 hover:text-blue-700"
+              : "text-gray-400 cursor-not-allowed"
+          }`}
+        >
+          Políticas de Privacidad
+        </a>.
+      </p>
     </div>
   );
 }

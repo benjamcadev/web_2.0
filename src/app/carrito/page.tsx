@@ -29,7 +29,8 @@ async function getSucursales(): Promise<Sucursal[]> {
       nombre: s.nombre,
       comunas: s.comunas || [],
       costosEnvio: s.costos_envio || {},
-      direccion: s.direccion
+      direccion: s.direccion,
+      horarios: s.horarios
     }));
   } catch (error) {
     console.error("Error al cargar sucursales:", error);

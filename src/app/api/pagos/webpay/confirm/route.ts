@@ -99,24 +99,46 @@ export async function POST(req: Request) {
     const giftcardAmount = pago?.giftcard_amount_applied;
 
     if (giftcardCode && giftcardAmount && giftcardAmount > 0) {
-      const giftcardRes = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/pagos/giftcard/confirmar`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            code: giftcardCode,
-            amount: giftcardAmount,
-            pagoId: pago.documentId,
-          }),
+      // Buscar el pago de tipo giftcard asociado al mismo pedido
+      const pedidoDocumentId = pago?.pedido?.documentId;
+
+      if (pedidoDocumentId) {
+        const pagoGiftcardRes = await fetch(
+          `${process.env.STRAPI_URL}/api/pagos?filters[pedido][documentId][$eq]=${pedidoDocumentId}&filters[proveedor][$eq]=giftcard`,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+            },
+            cache: "no-store",
+          }
+        );
+
+        const pagoGiftcardData = await pagoGiftcardRes.json();
+        const pagoGiftcard = pagoGiftcardData.data?.[0];
+
+        if (pagoGiftcard) {
+          const giftcardRes = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/pagos/giftcard/confirmar`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                code: giftcardCode,
+                amount: giftcardAmount,
+                pagoId: pagoGiftcard.documentId, // pago giftcard correcto
+                 source: "webpay"
+              }),
+            }
+          );
+
+          const giftcardData = await giftcardRes.json();
+
+          if (!giftcardRes.ok || !giftcardData.success) {
+            console.error("Giftcard NO descontada (Webpay):", giftcardData);
+          }
+        } else {
+          console.warn("No se encontró pago giftcard para el pedido:", pedidoDocumentId);
         }
-      );
-
-      const giftcardData = await giftcardRes.json();
-
-      if (!giftcardRes.ok || !giftcardData.success) {
-        console.error("Giftcard NO descontada:", giftcardData);
-        // No se corta el flujo: el pago ya fue autorizado
       }
     }
 
@@ -130,7 +152,7 @@ export async function POST(req: Request) {
     });
 
   } catch (error: any) {
-    console.error("❌ Error confirm Webpay:", error);
+    console.error("Error confirm Webpay:", error);
     return NextResponse.json(
       { ok: false, error: error.message },
       { status: 500 }

@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const { code, orderTotal } = await req.json();
 
-  
+
     if (!code || typeof orderTotal !== "number") {
       return NextResponse.json(
         { valid: false, reason: "DATOS_INVALIDOS" },
@@ -42,15 +42,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ valid: false, reason: "EXPIRADA" });
     }
 
-    if (balance < orderTotal) {
-      return NextResponse.json({ valid: false, reason: "SALDO_INSUFICIENTE" });
+    if (balance <= 0) {
+      return NextResponse.json({ valid: false, reason: "SIN_SALDO" });
     }
+
+    const coversTotal = balance >= orderTotal;
+    const remaining = coversTotal ? balance - orderTotal : orderTotal - balance;
 
     return NextResponse.json({
       valid: true,
       balance,
-      coversTotal: balance >= orderTotal,
-      remaining: balance - orderTotal,
+      coversTotal,
+      remaining,
       expires_at,
     });
   } catch (error) {
