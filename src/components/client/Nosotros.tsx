@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Queue from './Header/Queue'
 import { Yellowtail } from 'next/font/google'
 import Image from 'next/image'
 
@@ -35,6 +36,7 @@ interface VideoProps {
 export default function Nosotros({ sucursales, nosotros }: { sucursales: Sucursal[], nosotros: Nosotros[] }) {
 
   const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+  const [isQueueOpen, setIsQueueOpen] = useState(false);
 
   return (
     <div className="flex flex-col md:items-center md:flex-row mt-6 gap-3 2xl:gap-6 rounded-2xl bg-white/50 backdrop-blur-lg border border-white/30 ml-3 mr-3">
@@ -74,7 +76,6 @@ export default function Nosotros({ sucursales, nosotros }: { sucursales: Sucursa
 
             {sucursales.map((sucursal, index) => (
               <div key={index} className="bg-white/20 backdrop-blur-md border border-white/30 rounded-xl overflow-hidden shadow-lg flex flex-col hover:scale-[1.02] transition-transform duration-300">
-                {/* Imagen (desde Strapi más adelante) */}
                 <div className="relative  h-40 w-full">
                   <Image
                     src={`${STRAPI_URL}${sucursal.imagen?.url}` || ''}
@@ -93,22 +94,31 @@ export default function Nosotros({ sucursales, nosotros }: { sucursales: Sucursa
                   />
 
                 </div>
-                <div className="p-4 text-center text-white">
+                <div className="p-4 text-center text-white space-y-3">
                   <h3 className="text-xl font-semibold">{sucursal.ciudad}</h3>
                   <p>{sucursal.direccion}</p>
+
+                  {/* Botón ZeroQ solo La Serena */}
+                  {sucursal.nombre === "La Serena Casa Matriz" ? (
+                    <button
+                      onClick={() => setIsQueueOpen(true)}
+                      className="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-md px-4 py-2 text-sm font-semibold text-black hover:bg-white transition shadow-lg"
+                    >
+                      🎫 Obtener turno
+                    </button>
+                  ) : (
+                    <div className="h-[40px]" />
+                  )}
                 </div>
               </div>
 
             ))}
 
-            {/* Sucursal La Serena */}
-
-
-
           </div>
         </div>
       </div>
+      {/* Modal de Fila */}
+      <Queue isOpen={isQueueOpen} onClose={() => setIsQueueOpen(false)} />
     </div>
   )
 }
-

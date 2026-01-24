@@ -1,11 +1,12 @@
 import { Manrope } from "next/font/google";
 import CarritoClient from "./CarritoClient";
 import { Sucursal } from '@/types/sucursales'
+
+
 const manrope = Manrope({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
-
 
 
 async function getSucursales(): Promise<Sucursal[]> {

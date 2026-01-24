@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
+import { Toaster } from "react-hot-toast";
 
 
 import { ChatProvider } from '@/context/ChatContext';
@@ -32,18 +32,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-     
-
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Toaster position="bottom-center" />
         <ChatProvider >
           {children}
         </ChatProvider>
-
-
-
       </body>
     </html>
   );

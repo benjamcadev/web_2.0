@@ -7,10 +7,10 @@ import { validarCarritoAntesDePagar } from "@/lib/validarCarrito";
 import toast from "react-hot-toast";
 import ErrorToast from '@/components/UI/ErrorToast'
 import SuccessToast from "@/components/UI/SuccessToast";
-import LoadingToast from '@/components/UI/LoadingToast'
-import { getSessionId } from '@/lib/stockReservationService'
+import LoadingToast from '@/components/UI/LoadingToast';
+import { getSessionId } from '@/lib/stockReservationService';
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Cliente } from '@/types/cliente'
+import { Cliente } from '@/types/cliente';
 import { validateRut } from "@/lib/validateRut";
 
 type DeliveryType = "retiro" | "envio" | null;

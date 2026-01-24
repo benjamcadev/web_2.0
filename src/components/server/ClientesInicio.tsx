@@ -125,7 +125,7 @@ export default function ClientesInicio() {
                         <a
                             // El index debe ser único, especialmente después de duplicar
                             key={`${cliente.id}-${index}`}
-                            href={cliente.logo.url || "#"}
+                            href={cliente.logo?.url || "#"}
                             target="_blank"
                             rel="noreferrer"
                             className="flex-shrink-0 w-64 bg-white/70 rounded-2xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all"

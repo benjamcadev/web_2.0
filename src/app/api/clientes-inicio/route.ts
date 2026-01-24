@@ -2,7 +2,15 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const res = await fetch(`${process.env.STRAPI_URL_API}/clientes?filters[mostrar_inicio][$eq]=true&populate=*`);
+      const res = await fetch(
+      `${process.env.STRAPI_URL_API}/clientes?filters[mostrar_inicio][$eq]=true&populate=*`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+        },
+      }
+    );
+
     const data = await res.json();
     
     return NextResponse.json(data.data);

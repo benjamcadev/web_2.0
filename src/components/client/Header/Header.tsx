@@ -1,23 +1,37 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { HomeIcon, Bars3Icon, XMarkIcon, ShoppingCartIcon, UserGroupIcon } from "@heroicons/react/24/outline";
-import Queue from "./Queue";
+import { useRouter } from "next/navigation";
+import { HomeIcon, Bars3Icon, XMarkIcon, ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import SearchBar from "./SearchBar";
 import { useCart } from "@/hooks/useCart";
 import { useHydration } from "@/hooks/useHydration";
 import CarritoModal from "./CarritoModal";
+import LoginModal from "./LoginModal";
+import { useAuthStore } from "@/stores/useAuthStore";
+import toast from "react-hot-toast";
+import ErrorToast from '@/components/UI/ErrorToast';
+import SuccessToast from "@/components/UI/SuccessToast";
 
 export default function Header() {
   const [active, setActive] = useState("Inicio");
   const [open, setOpen] = useState(false);
-  const [isQueueOpen, setIsQueueOpen] = useState(false);
-  const [peopleQueuing] = useState(5);
   const links2 = [{ nombre: "Inicio", href: "/" }, { nombre: "Tienda", href: "/tienda" }, { nombre: "Empresas", href: "/empresas" }]
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { getTotalItems } = useCart();
   const [animar, setAnimar] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isRehydrating, setIsRehydrating] = useState(true);
+
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const cliente = useAuthStore((s) => s.cliente);
+  const setAuthFromBackend = useAuthStore((s) => s.setAuthFromBackend);
+  const logout = useAuthStore((s) => s.logout);
+
+  // hidratacion para el inicio de sesion
+  const rehydrateAttemptsRef = useRef(0);
 
   // Evitar error de hidratación
   const isHydrated = useHydration();
@@ -25,10 +39,70 @@ export default function Header() {
   //  Solo ejecutar getTotalItems() después de hidratar
   const totalItems = isHydrated ? getTotalItems() : 0;
 
+  const router = useRouter();
+
   useEffect(() => {
     setAnimar(true);
     setTimeout(() => setAnimar(false), 5000);
   }, [totalItems])
+
+  useEffect(() => {
+    const handleClickOutside = () => setIsUserMenuOpen(false);
+    if (isUserMenuOpen) {
+      window.addEventListener("click", handleClickOutside);
+    }
+    return () => window.removeEventListener("click", handleClickOutside);
+  }, [isUserMenuOpen]);
+
+  // useefect para la hidratacion del inicio de sesion
+  useEffect(() => {
+    // Allow at most 2 attempts (initial + 1 retry) to avoid infinite loops
+    if (rehydrateAttemptsRef.current >= 2) return;
+    rehydrateAttemptsRef.current += 1;
+
+    const rehydrate = async () => {
+      try {
+        const res = await fetch("/api/auth/me", {
+          method: "GET",
+          credentials: "include",
+          headers: { Accept: "application/json" },
+        });
+
+        if (!res.ok) {
+          logout();
+          return;
+        }
+
+        const data = await res.json();
+
+        if (data?.user) {
+          setAuthFromBackend({
+            user: data.user,
+            cliente: data.cliente ?? null,
+          });
+
+          // If we have a valid session but cliente is still null, retry once shortly
+          if (!data.cliente && rehydrateAttemptsRef.current < 2) {
+            setTimeout(() => {
+              // trigger another attempt by forcing a re-render via state
+              setIsRehydrating(true);
+            }, 150);
+          }
+        } else {
+          logout();
+        }
+      } catch {
+        logout();
+      } finally {
+        setIsRehydrating(false);
+      }
+    };
+
+    rehydrate();
+    // Re-run only when we explicitly toggle rehydration (retry) or auth setters change
+  }, [setAuthFromBackend, logout, isRehydrating]);
+
+
   return (
     <>
 
@@ -61,6 +135,8 @@ export default function Header() {
 
           {/* Menú desktop + iconos */}
           <div className="hidden md:flex items-center space-x-6 flex-shrink-0">
+
+
             <nav className="flex space-x-8">
               {links2.map((link) => (
                 <Link key={link.nombre} href={link.href}>
@@ -84,24 +160,6 @@ export default function Header() {
             {/* Separador */}
             <div className="h-6 w-px bg-black"></div>
 
-            {/* Fila de tienda */}
-            <div
-              className="relative cursor-pointer group"
-              onClick={() => setIsQueueOpen(true)}
-            >
-              <UserGroupIcon className="h-7 w-7 text-black" />
-              {peopleQueuing > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full z-10">
-                  {peopleQueuing}
-                </span>
-              )}
-              <span className="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 p-2 whitespace-nowrap bg-gray-800 text-white text-sm rounded shadow-lg z-20 hidden group-hover:block">
-                Personas esperando en fila en la tienda
-              </span>
-            </div>
-
-            {/* Separador */}
-            <div className="h-6 w-px bg-black"></div>
 
             {/* Carrito - ACTUALIZADO */}
             <div
@@ -113,6 +171,83 @@ export default function Header() {
               {isHydrated && totalItems > 0 && (
                 <span className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold ${animar ? 'animate-pulse' : ''}`}>
                   {totalItems}
+                </span>
+              )}
+            </div>
+
+            {/* Separador */}
+            <div className="h-6 w-px bg-black"></div>
+
+            {/* Login / Usuario */}
+            <div
+              className="relative cursor-pointer group flex flex-col items-center"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isAuthenticated) {
+                  setIsLoginOpen(true);
+                } else {
+                  setIsUserMenuOpen((prev) => !prev);
+                }
+              }}
+            >
+              <UserCircleIcon
+                className={`h-7 w-7 transition-transform group-hover:scale-110 ${isAuthenticated ? "text-blue-600" : "text-black"
+                  }`}
+              />
+
+              {isRehydrating ? (
+                <>
+                  <span className="text-[8px] text-gray-700 mt-1">Hola!</span>
+                  <div className="h-3 w-20 bg-gray-300/60 rounded animate-pulse mt-1" />
+                </>
+              ) : isAuthenticated ? (
+                <>
+                  <span className="text-[8px] text-gray-700 mt-1">Hola!</span>
+                  <span className="text-[12px]">
+                    {cliente
+                      ? (cliente.nombre || cliente.razon_social || "Cliente")
+                      : "Cargando..."}
+                  </span>
+
+                  {isUserMenuOpen && (
+                    <div className="absolute top-full mt-2 right-0 w-44 bg-white backdrop-blur-lg border border-white/30 rounded-xl shadow-lg z-50 overflow-hidden">
+                      <button
+                        className="w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-white/50 transition-colors"
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          router.push("/mi-cuenta");
+                        }}
+                      >
+                        Mi Cuenta
+                      </button>
+
+                      <div className="h-px bg-gray-200" />
+
+                      <button
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        onClick={async () => {
+                          const resLogout = await fetch("/api/auth/logout", { method: "POST" });
+                          if (!resLogout.ok) {
+                            toast.custom(
+                              <ErrorToast title="Error" subtitle="Error al cerrar sesion" />
+                            );
+                            return;
+                          }
+                          logout();
+                          toast.custom(<SuccessToast subtitle={''} title={'Sesión Cerrada'} />, { duration: 2400, position: "bottom-center", icon: null, style: { background: "transparent", boxShadow: "none", padding: 0 }, });
+                          setIsUserMenuOpen(false);
+                          router.push("/");
+
+                        }}
+                      >
+                        Cerrar sesión
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <span className="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 p-2 whitespace-nowrap bg-gray-800 text-white text-sm rounded shadow-lg z-20 hidden group-hover:block">
+                  Iniciar sesión
                 </span>
               )}
             </div>
@@ -151,19 +286,6 @@ export default function Header() {
                 </Link>
               ))}
 
-              {/* Personas en fila */}
-              <div
-                className="relative mt-4 cursor-pointer"
-                onClick={() => setIsQueueOpen(true)}
-              >
-                <UserGroupIcon className="h-7 w-7 text-black" />
-                {peopleQueuing > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                    {peopleQueuing}
-                  </span>
-                )}
-              </div>
-
               {/* Carrito móvil - ACTUALIZADO */}
               <Link href="/carrito" className="relative mt-4">
                 <ShoppingCartIcon className="h-7 w-7 text-black" />
@@ -178,11 +300,14 @@ export default function Header() {
         )}
       </header>
 
-      {/* Modal de Fila */}
-      <Queue isOpen={isQueueOpen} onClose={() => setIsQueueOpen(false)} />
-
       {/* Modal de Carrito */}
       <CarritoModal isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+
+      {/* Modal Login */}
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+      />
 
     </>
   );

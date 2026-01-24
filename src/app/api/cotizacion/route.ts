@@ -16,7 +16,7 @@ async function crearCotizacionEnStrapi(body: any) {
   const cotizacionRes = await fetch(`${strapiUrl}/api/cotizacions`, {
     method: "POST",
     headers: {
-     "Content-Type": "application/json",
+      "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({
@@ -56,9 +56,9 @@ async function crearCotizacionEnStrapi(body: any) {
       },
       body: JSON.stringify({
         data: {
-          cotizacion: cotizacionId,        
-          producto: item.documentId,  
-          nombre: item.name,           
+          cotizacion: cotizacionId,
+          producto: item.documentId,
+          nombre: item.name,
           cantidad: item.cantidad,
           precio_unitario: item.price,
           precio_total: item.price * item.cantidad,
@@ -121,42 +121,30 @@ export async function POST(request: NextRequest) {
     // Determinar sucursal según comuna
     const sucursal = determinarSucursal(cliente.comuna, sucursales);
 
-     // Guardar cotización en Strapi
+    // Guardar cotización en Strapi
     const cotizacionId = await crearCotizacionEnStrapi(body);
 
-    // Configurar el transportador de nodemailer
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
+    const htmlSucursal = generarHtmlCorreoCotizacion({ items, sucursal, cliente, totalPrice, cotizacionId });
+    const htmlCliente = generarHtmlCorreoCotizacionCliente({ items, sucursal, cliente, totalPrice, cotizacionId });
+
+
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/email/send`, {
+      method: "POST",
+      body: JSON.stringify({
+        to: sucursal.correo,
+        subject: `Nueva Cotización - ${cliente.nombre} ${cliente.apellidos}`,
+        html: htmlSucursal,
+      }),
     });
 
-    const htmlSucursal = generarHtmlCorreoCotizacion({items, sucursal, cliente, totalPrice, cotizacionId});
-    const htmlCliente = generarHtmlCorreoCotizacionCliente({items, sucursal, cliente, totalPrice, cotizacionId});
-    
-  
-    // Enviar correo a la sucursal
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM,
-      to: sucursal.correo,
-      subject: `Nueva Cotización - ${cliente.nombre} ${cliente.apellidos}`,
-      html: htmlSucursal,
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/email/send`, {
+      method: "POST",
+      body: JSON.stringify({
+        to: cliente.email,
+        subject: 'Confirmación de Solicitud de Cotización',
+        html: htmlCliente,
+      }),
     });
-
-    // Enviar copia al cliente
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM,
-      to: cliente.email,
-      subject: 'Confirmación de Solicitud de Cotización',
-      html: htmlCliente,
-    });
-
-   
-
 
     return NextResponse.json({
       success: true,
