@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
-import { logAudit } from '@/lib/logAudit'
+import { logAudit } from '@/lib/logAudit';
+import { getLogoBase64 } from "@/lib/getLogoBase64";
+import { codigo2FAEmail } from "@/lib/emailsHtml/codigo2FAEmail";
+
+function generate2FACode() {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // 6 dígitos
+}
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_TOKEN = process.env.STRAPI_TOKEN;
 const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET_KEY;
 
 // Rate limit en memoria (IP -> intentos)
@@ -177,27 +184,86 @@ export async function POST(req: Request) {
     const user = strapiData.user;
     const cliente = strapiData.cliente;
 
-    // 3) Set cookie HttpOnly
-    const res = NextResponse.json({ user, cliente }, { status: 200 });
+    // 3) Verificar que el cliente tenga email
+    if (!cliente?.email) {
+      await logAudit({
+        event_type: "AUTH_LOGIN_NO_EMAIL",
+        level: "SECURITY",
+        message: "Cliente sin email, no se puede enviar 2FA",
+        ip,
+        rut: normalizedRut,
+        user_id: user.documentId,
+      });
 
-    res.cookies.set("ap_jwt", jwt, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24, // 1 día
+      return NextResponse.json(
+        { message: "Tu cuenta no tiene un correo asociado. Contacta a soporte." },
+        { status: 403 }
+      );
+    }
+
+    // 4) Generar código 2FA
+    const twoFACode = generate2FACode();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 5 minutos
+
+    // Guardar código 2FA + JWT temporal en Strapi (cliente)
+    const saveCodeRes = await fetch(
+      `${STRAPI_URL}/api/clientes/${cliente.documentId}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${STRAPI_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: {
+            two_factor_code: twoFACode,
+            two_factor_expires_at: expiresAt.toISOString(),
+            temp_jwt: jwt,
+            two_factor_attempts: 0, 
+          },
+        }),
+      }
+    );
+
+    if (!saveCodeRes.ok) {
+      throw new Error("Error guardando código 2FA en Strapi");
+    }
+
+    // Enviar email con el código
+
+    const logoBase64 = await getLogoBase64();
+    const html = codigo2FAEmail({ nombre: cliente.nombre, codigo: twoFACode, logoBase64, });
+
+    const emailRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/email/send`, {
+      method: "POST",
+      body: JSON.stringify({
+        to: cliente.email,
+        subject: "Código de Verificación",
+        html,
+      }),
     });
 
+    if (!emailRes.ok) {
+      throw new Error("Error enviando email 2FA");
+    }
+
     await logAudit({
-      event_type: "AUTH_LOGIN_SUCCESS",
+      event_type: "AUTH_2FA_CODE_SENT",
       level: "INFO",
-      message: "Inicio de sesión exitoso",
+      message: "Código 2FA generado",
       ip,
       rut: normalizedRut,
       user_id: user.documentId,
     });
 
-    return res;
+    // 5) Responder que requiere 2FA (sin cookie aún)
+    return NextResponse.json(
+      {
+        needs2FA: true,
+        tempUserId: user.documentId,
+      },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("LOGIN ERROR:", err);
     return NextResponse.json({ message: "Error interno del servidor" }, { status: 500 });
