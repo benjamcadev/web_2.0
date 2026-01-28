@@ -13,6 +13,7 @@ import Paso3Pago from "@/components/client/Carrito/Paso3Pago";
 import SidebarResumen from "@/components/client/Carrito/SidebarResumen";
 import { Sucursal } from '@/types/sucursales'
 import { Cliente } from "@/types/cliente";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 interface CarritoProps {
   initialSucursales: Sucursal[];
@@ -45,7 +46,7 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
 
   const totalPrice = getTotalPrice();
   const totalItems = getTotalItems();
-  const [metodoPago, setMetodoPago] = useState<"webpay" | "khipu" | null>(null);
+  const [metodoPago, setMetodoPago] = useState<"webpay" | "khipu" | "credito" | null>(null);
 
   // Giftcard state
   const [giftcardCode, setGiftcardCode] = useState("");
@@ -58,15 +59,79 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
 
   const [tipoDTE, setTipoDTE] = useState<"boleta" | "factura">("boleta");
 
-  // PENDIENTE POR HACER:  reemplazar por Zustand / Auth real
-  const isAuthenticated = false;
+
+  const clienteSesion = useAuthStore((s) => s.cliente);
 
   const [cliente, setCliente] = useState<Cliente>({
     nombre: "",
     rut: "",
     email: "",
-    telefono: "", // sigue bien inicializarlo
+    telefono: "",
+    tipo_cliente: "",
+    credito_habilitado: false
   });
+
+  const [direccionesCliente, setDireccionesCliente] = useState<any[]>([]);
+  const [direccionSeleccionada, setDireccionSeleccionada] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!clienteSesion) return;
+
+    // Persona
+    if (clienteSesion.tipo_cliente === 'persona') {
+      setDireccionesCliente([]);
+      setDireccionSeleccionada(null);
+
+      setCliente({
+        nombre: clienteSesion.nombre ?? '',
+        rut: clienteSesion.rut ?? '',
+        email: clienteSesion.email ?? '',
+        telefono: clienteSesion.telefono ?? '',
+        tipo_cliente: clienteSesion.tipo_cliente ?? '',
+        credito_habilitado: clienteSesion.credito_habilitado ?? false
+      });
+    }
+
+    // Empresa
+    if (clienteSesion.tipo_cliente === 'empresa') {
+      const direcciones = clienteSesion?.direcciones ?? [];
+
+      const direccionPorDefecto =
+        direcciones.find((dir: any) => dir.es_principal) ??
+        direcciones[0] ??
+        null;
+
+      setDireccionesCliente(direcciones);
+      setDireccionSeleccionada(direccionPorDefecto);
+
+      setCliente({
+        documentId: clienteSesion.documentId ?? '',
+        id: clienteSesion.id ?? '',
+        nombre: clienteSesion.nombre ?? '',
+        rut: clienteSesion.rut ?? '',
+        email: clienteSesion.email ?? '',
+        telefono: clienteSesion.telefono ?? '',
+        tipo_cliente: clienteSesion.tipo_cliente ?? '',
+        credito_habilitado: clienteSesion.credito_habilitado ?? false,
+        cupo_disponible: clienteSesion.cupo_disponible ?? 0,
+        cupo_total: clienteSesion.cupo_total ?? 0,
+        cupo_utilizado: clienteSesion.cupo_utilizado ?? 0,
+        factura: direccionPorDefecto
+          ? {
+            razonSocial: clienteSesion.razon_social ?? '',
+            giro: clienteSesion.giro ?? '',
+            calle: direccionPorDefecto.calle ?? '',
+            numero: direccionPorDefecto.numero ?? '',
+            comuna: direccionPorDefecto.comuna ?? '',
+            ciudad: direccionPorDefecto.ciudad ?? '',
+            complemento: direccionPorDefecto.complemento ?? '',
+          }
+          : undefined,
+      });
+    }
+  }, [clienteSesion]);
+
+
   useEffect(() => {
     document.title = "Carrito de Compras";
   }, []);
@@ -215,6 +280,7 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
                   direccion={direccion}
                   setDireccion={setDireccion}
                   resetDeliveryOptions={resetDeliveryOptions}
+                  direccionesCliente={direccionesCliente}
                 />
               )}
 
@@ -228,11 +294,13 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
                   setMetodoPago={setMetodoPago}
                   cliente={cliente}
                   setCliente={setCliente}
-                  isAuthenticated={isAuthenticated}
                   totalFinal={totalFinal}
                   giftcardApplied={giftcardApplied}
                   tipoDTE={tipoDTE}
                   setTipoDTE={setTipoDTE}
+                  direccionesCliente={direccionesCliente}
+                  direccionSeleccionada={direccionSeleccionada}
+                  setDireccionSeleccionada={setDireccionSeleccionada}
                 />
               )}
             </div>

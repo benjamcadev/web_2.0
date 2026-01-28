@@ -2,6 +2,7 @@
 
 export interface Cliente {
   id?: number;
+  documentId?: string;
 
   // Datos base (persona natural o empresa)
   rut: string;
@@ -12,6 +13,13 @@ export interface Cliente {
   // Dirección básica (boleta / envío)
   direccion?: string;
   comuna?: string;
+
+  //Datos si tiene cupo y si es empresa
+  tipo_cliente: string;
+  credito_habilitado: boolean;
+  cupo_disponible?: number;
+  cupo_total?: number;
+  cupo_utilizado?: number;
 
   // Datos SOLO si es factura
   factura?: DatosFactura;

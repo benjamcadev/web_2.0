@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const clientesRes = await fetch(
       `${STRAPI_URL}/api/clientes?filters[users_permissions_user][documentId][$eq]=${encodeURIComponent(
         tempUserId
-      )}&populate=users_permissions_user`,
+      )}&populate=users_permissions_user&populate=direcciones`,
       {
         headers: {
           Authorization: `Bearer ${STRAPI_TOKEN}`,

@@ -26,7 +26,7 @@ interface Props {
   setCurrentStep: (step: number) => void;
   setIsModalOpen: (open: boolean) => void;
   items: CartItem[];
-  metodoPago: "webpay" | "khipu" | null;
+  metodoPago: "webpay" | "khipu" | "credito" | null;
   cliente: Cliente;
   direccion: string | "";
   comuna: string | "";
@@ -316,6 +316,80 @@ useEffect(() => {
       const pagoId = pedidoData.pagoId;
       const numeroPago = pedidoData.numeroPago;
       const numeroPedido = pedidoData.numeroPedido;
+
+      // Pago con Crédito Interno
+      if (metodoPago === "credito") {
+        const loadingToastCredito = toast.custom(
+          <LoadingToast
+            title="Procesando crédito interno..."
+            subtitle="Por favor espera un momento."
+          />,
+          {
+            duration: Infinity,
+            position: "bottom-center",
+            icon: null,
+            style: { background: "transparent", boxShadow: "none", padding: 0 },
+          }
+        );
+
+        const confirmRes = await fetch("/api/pagos/credito/confirmar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pedidoId,
+            pagoId,
+            numeroPago,
+            cliente,
+            amount: totalFinal,
+            numeroPedido,
+            deliveryType,
+            sucursal,
+            direccion,
+            comuna,
+            cupoTotal: cliente.cupo_total
+          }),
+        });
+
+        const confirmData = await confirmRes.json();
+
+        toast.dismiss(loadingToastCredito);
+
+        if (!confirmRes.ok || !confirmData.success) {
+          toast.custom(
+            <ErrorToast
+              title="Error"
+              subtitle="No se pudo confirmar el pago con crédito interno."
+            />,
+            {
+              duration: 6000,
+              position: "bottom-center",
+              icon: null,
+              style: { background: "transparent", boxShadow: "none", padding: 0 },
+            }
+          );
+          return;
+        }
+
+        const loadingToastCreditoFinal = toast.custom(
+          <LoadingToast
+            title="Confirmando pedido..."
+            subtitle="Por favor espera un momento."
+          />,
+          {
+            duration: Infinity,
+            position: "bottom-center",
+            icon: null,
+            style: { background: "transparent", boxShadow: "none", padding: 0 },
+          }
+        );
+
+        setTimeout(() => {
+          toast.dismiss(loadingToastCreditoFinal);
+          window.location.href = `/pago/credito/success?pedido=${numeroPedido}&pedidoId=${confirmData.pedidoId}&pagoId=${confirmData.pagoId}&razonSocial=${cliente.factura?.razonSocial}&cupoRestante=${confirmData.cupoRestante}&cupoUsado=${confirmData.cupoUsado}&cupoTotal=${cliente.cupo_total}&fecha=${new Date().toLocaleDateString("es-CL")}`;
+        }, 2500);
+
+        return;
+      }
 
       // Pago solo con Giftcard (totalFinal = 0)
       if (totalFinal === 0 && giftcardApplied > 0) {

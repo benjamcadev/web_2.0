@@ -159,7 +159,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         return () => clearTimeout(timeout);
     }, [isForgotPassword, isOpen]);
 
-    // ⏱️ Contador regresivo 2FA
+    // Contador regresivo 2FA
     useEffect(() => {
         if (!is2FA) return;
 

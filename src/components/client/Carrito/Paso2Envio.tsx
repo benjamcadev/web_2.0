@@ -31,6 +31,7 @@ interface Props {
   direccion: string;
   setDireccion: (direccion: string) => void;
   resetDeliveryOptions: () => void;
+  direccionesCliente: any[];
 }
 
 export default function Paso2Envio({
@@ -44,10 +45,11 @@ export default function Paso2Envio({
   handleSelectComuna,
   direccion,
   setDireccion,
-  resetDeliveryOptions
+  resetDeliveryOptions,
+  direccionesCliente
 }: Props) {
 
-  
+
   return (
     <div className="bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo recibirás tu pedido?</h2>
@@ -107,11 +109,10 @@ export default function Paso2Envio({
               <button
                 key={sucursal.id}
                 onClick={() => handleSelectRetiro(sucursal)}
-                className={`p-4 rounded-xl border-2 transition-all text-left ${
-                  selectedSucursal?.id === sucursal.id
+                className={`p-4 rounded-xl border-2 transition-all text-left ${selectedSucursal?.id === sucursal.id
                     ? 'border-blue-600 bg-blue-50'
                     : 'border-gray-200 hover:border-blue-300'
-                }`}
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -122,7 +123,7 @@ export default function Paso2Envio({
                     {sucursal.direccion && (
                       <p className="text-sm text-gray-600 mb-2">{sucursal.direccion}</p>
                     )}
-                     <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500">
                       Dirección: {sucursal.direccion}
                     </p>
                     <p className="text-xs text-gray-500">
@@ -146,7 +147,7 @@ export default function Paso2Envio({
                   <p className="text-sm text-green-700 mt-1">
                     Retirarás tu pedido en <span className="font-bold">{selectedSucursal.nombre}</span>
                   </p>
-                   <p className="text-sm text-green-700 mt-1">
+                  <p className="text-sm text-green-700 mt-1">
                     Horarios:  <span className="font-bold">{selectedSucursal.horarios}</span>
                   </p>
                   <p className="text-lg font-bold text-green-900 mt-2">
@@ -172,6 +173,53 @@ export default function Paso2Envio({
             </button>
           </div>
 
+          {/* Mis direcciones registradas */}
+          {direccionesCliente && direccionesCliente.length > 0 && (
+            <div>
+
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+                <p className="text-sm text-gray-700">
+                  💡 <span className="font-semibold">Tip:</span> Puedes elegir una de tus direcciones guardadas o ingresar una nueva
+                  seleccionando tu comuna más abajo.
+                </p>
+              </div>
+
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mis direcciones registradas
+              </label>
+              <select
+                defaultValue=""
+                onChange={(e) => {
+                  const index = Number(e.target.value);
+                  if (isNaN(index)) return;
+
+                  const dir = direccionesCliente[index];
+
+                  // buscar match de comuna con comunas disponibles
+                  const comunaMatch = todasLasComunas.find(
+                    (c) => c.comuna.toLowerCase() === String(dir.comuna).toLowerCase()
+                  );
+
+                  if (comunaMatch) {
+                    // seleccionar comuna automáticamente
+                    handleSelectComuna(comunaMatch);
+
+                    // autocompletar dirección
+                    const direccionCompleta = `${dir.calle} ${dir.numero}${dir.complemento ? `, ${dir.complemento}` : ""}`;
+                    setDireccion(direccionCompleta);
+                  }
+                }}
+                className="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-600 focus:outline-none bg-white mb-4"
+              >
+                <option value="">-- Selecciona una dirección guardada --</option>
+                {direccionesCliente.map((dir, index) => (
+                  <option key={index} value={index}>
+                    {dir.calle} {dir.numero}, {dir.comuna}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           {/* Selección de comuna desde lista */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
