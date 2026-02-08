@@ -66,7 +66,6 @@ export default function Direcciones() {
             }
 
             // actualizar Zustand
-            console.log(data.cliente)
             updateCliente(data.cliente)
 
             // limpiar formulario

@@ -120,6 +120,9 @@ export function resetPasswordEmail({
                   Este enlace expira en 30 minutos.<br/>
                   Si no solicitaste este cambio, puedes ignorar este correo.<br/><br/>
                   © ${new Date().getFullYear()} Agroplastic · Soluciones para todo
+                   <p style="margin-top: 30px; font-size: 12px; color: #777;">
+                  Este es un comprobante generado automáticamente. No respondas a esta casilla.
+                  </p>
                 </td>
               </tr>
 

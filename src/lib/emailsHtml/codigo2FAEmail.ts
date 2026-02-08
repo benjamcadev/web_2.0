@@ -46,9 +46,9 @@ export function codigo2FAEmail({
               <tr>
                 <td align="center" style="padding-bottom:24px;">
                   ${logoBase64
-    ? `<img src="${logoBase64}" alt="Agroplastic" style="max-width:180px;height:auto;display:block;" />`
-    : `<strong style="font-size:22px;">Agroplastic</strong>`
-  }
+      ? `<img src="${logoBase64}" alt="Agroplastic" style="max-width:180px;height:auto;display:block;" />`
+      : `<strong style="font-size:22px;">Agroplastic</strong>`
+    }
                 </td>
               </tr>
 
@@ -115,6 +115,9 @@ export function codigo2FAEmail({
                   text-align:center;
                 ">
                   © ${new Date().getFullYear()} Agroplastic · Soluciones para todo
+                   <p style="margin-top: 30px; font-size: 12px; color: #777;">
+                  Este es un comprobante generado automáticamente. No respondas a esta casilla.
+                  </p>
                 </td>
               </tr>
 

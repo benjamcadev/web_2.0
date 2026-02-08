@@ -162,7 +162,8 @@ export async function POST(req: Request) {
 
         let pagoId: string | null = null;
 
-        if (!soloGiftcard) {
+        // === MODIFICACIÓN AQUÍ: Agregamos && metodoPago !== "credito_interno" ===
+        if (!soloGiftcard && metodoPago !== "credito") {
             const pagoRes = await fetch(`${process.env.STRAPI_URL}/api/pagos`, {
                 method: "POST",
                 headers: {
@@ -326,7 +327,8 @@ export async function POST(req: Request) {
             ok: true,
             pedidoId,
             pagoId,
-            numeroPago: soloGiftcard ? null : newValuePago,
+            // === MODIFICACIÓN AQUÍ: Si es crédito interno, no devolvemos numeroPago ===
+            numeroPago: (!soloGiftcard && metodoPago !== "credito") ? newValuePago : null,
             numeroPedido
         });
     } catch (e) {

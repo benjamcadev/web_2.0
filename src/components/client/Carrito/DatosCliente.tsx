@@ -6,7 +6,6 @@ import { comunasChile } from "@/lib/comunasChile";
 import type { GiroSii } from "@/lib/girosSII";
 import { Cliente } from '@/types/cliente'
 
-
 interface DatosClienteProps {
     tipoDTE: string;
     cliente: Cliente;
@@ -26,7 +25,8 @@ export default function DatosCliente({
     direccionSeleccionada,
     setDireccionSeleccionada,
 }: DatosClienteProps) {
-    // --- FACTURA ERRORS helper ---
+
+    // Validaciones de campos de factura
     const facturaErrors = tipoDTE === "factura" && cliente.factura
         ? {
             razonSocial: cliente.factura.razonSocial.trim().length === 0,
@@ -38,96 +38,117 @@ export default function DatosCliente({
         }
         : null;
 
+    // --- LÓGICA DE CRÉDITO / CONDICIÓN DE PAGO ---
+    const opcionesPago = [{ value: "contado", label: "Contado" }];
+
+    // PRIMERO: Verificamos si tiene el crédito habilitado globalmente
+    if (cliente.credito_habilitado) {
+        // LUEGO: Verificamos los plazos específicos
+        if (cliente.credito_7) {
+            opcionesPago.push({ value: "7", label: "Crédito 7 días" });
+        }
+        if (cliente.credito_15) {
+            opcionesPago.push({ value: "15", label: "Crédito 15 días" });
+        }
+        if (cliente.credito_30) {
+            opcionesPago.push({ value: "30", label: "Crédito 30 días" });
+        }
+        if (cliente.credito_60) {
+            opcionesPago.push({ value: "60", label: "Crédito 60 días" });
+        }
+        if (cliente.credito_90) {
+            opcionesPago.push({ value: "90", label: "Crédito 90 días" });
+        }
+    }
+
     return (
         <>
-
-            <div className="bg-gray-50 rounded-xl p-4 mb-6">
-                <h3 className="font-bold text-gray-900 mb-4">
-                    Datos del cliente
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {tipoDTE === "boleta" && (
+            <div className="space-y-6">
+                {/* --- SECCION DATOS DE CONTACTO --- */}
+                <div className="bg-indigo-100/50 p-6 rounded-2xl border border-indigo-200 ">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Datos de Contacto
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Nombre */}
                         <div>
+                            <label className="text-sm font-medium text-gray-700">Nombre <span className="text-red-600">*</span></label>
                             <input
                                 type="text"
-                                placeholder="Nombre y apellido"
                                 value={cliente.nombre}
                                 onChange={(e) => setCliente({ ...cliente, nombre: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-3 rounded-xl border focus:ring-2 transition-all bg-white "
                             />
                         </div>
-                    )}
 
-
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="RUT"
-                            value={cliente.rut}
-                            onChange={(e) => {
-                                const rawValue = e.target.value.replace(/[^0-9kK]/g, "");
-                                const formatted = formatRut(rawValue);
-
-                                setCliente({ ...cliente, rut: formatted })
-                            }}
-                            className={`w-full px-4 py-3 rounded-xl bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500
-                ${cliente.rut && !validateRut(cliente.rut) ? "border-red-500 text-red-600" : "border-gray-300"}`}
-                        />
-
-                        {cliente.rut && !validateRut(cliente.rut) && (
-                            <p className="text-red-600 text-sm mt-1">RUT inválido</p>
-                        )}
+                        {/* Email */}
+                        <div>
+                            <label className="text-sm font-medium text-gray-700">Email <span className="text-red-600">*</span></label>
+                            <input
+                                type="email"
+                                value={cliente.email}
+                                onChange={(e) => setCliente({ ...cliente, email: e.target.value })}
+                                className={`w-full px-4 py-3 rounded-xl border focus:ring-2 transition-all bg-white
+                                ${emailIsInvalid ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}`}
+                            />
+                            {emailIsInvalid && <p className="text-red-500 text-xs mt-1">Ingresa un correo válido</p>}
+                        </div>
+                        {/* Teléfono */}
+                        <div>
+                            <label className="text-sm font-medium text-gray-700">Teléfono<span className="text-red-600">*</span></label>
+                            <input
+                                type="tel"
+                                value={cliente.telefono || ""}
+                                onChange={(e) => setCliente({ ...cliente, telefono: e.target.value })}
+                                placeholder="+569..."
+                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 transition-all bg-white"
+                            />
+                        </div>
                     </div>
-
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Teléfono"
-                            value={cliente.telefono}
-                            onChange={(e) => setCliente({ ...cliente, telefono: e.target.value })}
-                            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <input
-                            type="email"
-                            placeholder="Correo electrónico"
-                            value={cliente.email}
-                            onChange={(e) => setCliente({ ...cliente, email: e.target.value })}
-                            className={`w-full px-4 py-3 rounded-xl bg-white border transition focus:ring-2
-                ${emailIsInvalid
-                                    ? "border-red-500 focus:ring-red-500"
-                                    : "border-gray-300 focus:ring-blue-500"
-                                }`}
-                        />
-
-
-                        {emailIsInvalid && (
-                            <p className="text-red-600 text-sm mt-1">
-                                Correo electrónico inválido
-                            </p>
-                        )}
-                    </div>
-
                 </div>
 
+                {/* --- SECCION DATOS DE FACTURACIÓN --- */}
                 {tipoDTE === "factura" && (
-                    <div className="mt-6 space-y-4">
-                        <h4 className="font-semibold text-gray-800">
-                            Datos para Factura <span className="text-red-600">*</span>
-                        </h4>
-                        <p className="text-sm text-gray-500">
-                            Los campos marcados con <span className="text-red-600">*</span> son obligatorios
-                        </p>
+                    <div className="bg-blue-100/50 p-6 rounded-2xl border border-blue-200 animate-fadeIn">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Datos de Facturación
+                        </h3>
 
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
+                            {/* RUT Empresa */}
+                            <div className="md:col-span-1">
+                                <label className="text-sm font-medium text-gray-700">
+                                    RUT Empresa <span className="text-red-600">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={cliente.rut}
+                                    onChange={(e) => {
+                                        const val = formatRut(e.target.value);
+                                        setCliente((prev) => ({
+                                            ...prev,
+                                            rut: val
+                                        }));
+                                    }}
+                                    maxLength={12}
+                                    placeholder="76.xxx.xxx-x"
+                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2 bg-white
+                                    ${cliente.rut && !validateRut(cliente.rut)
+                                            ? "border-red-500 focus:ring-red-500"
+                                            : "border-gray-300 focus:ring-blue-500"
+                                        }`}
+                                />
+                            </div>
 
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Razón Social */}
-                            <div>
+                            <div className="md:col-span-2">
                                 <label className="text-sm font-medium text-gray-700">
                                     Razón Social <span className="text-red-600">*</span>
                                 </label>
@@ -140,8 +161,8 @@ export default function DatosCliente({
                                             factura: { ...prev.factura!, razonSocial: e.target.value }
                                         }))
                                     }
-                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2
-                      ${facturaErrors?.razonSocial
+                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2 bg-white
+                                    ${facturaErrors?.razonSocial
                                             ? "border-red-500 focus:ring-red-500"
                                             : "border-gray-300 focus:ring-blue-500"
                                         }`}
@@ -151,16 +172,14 @@ export default function DatosCliente({
                                 )}
                             </div>
 
-                            {/* Giro (autocomplete + escritura libre) */}
-                            <div>
+                            {/* Giro - Ocupa 2 columnas */}
+                            <div className="md:col-span-2">
                                 <label className="text-sm font-medium text-gray-700">
-                                    Giro <span className="text-red-600">*</span>
+                                    Giro Comercial <span className="text-red-600">*</span>
                                 </label>
-
                                 <input
+                                    list="giros-sii"
                                     type="text"
-                                    list="giros-sii-list"
-                                    placeholder="Ej: Venta al por menor de envases plásticos"
                                     value={cliente.factura?.giro ?? ""}
                                     onChange={(e) =>
                                         setCliente((prev) => ({
@@ -168,196 +187,170 @@ export default function DatosCliente({
                                             factura: { ...prev.factura!, giro: e.target.value }
                                         }))
                                     }
-                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2
-                      ${facturaErrors?.giro
+                                    placeholder="Escribe para buscar..."
+                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2 bg-white
+                                    ${facturaErrors?.giro
                                             ? "border-red-500 focus:ring-red-500"
                                             : "border-gray-300 focus:ring-blue-500"
                                         }`}
                                 />
-
-                                <datalist id="giros-sii-list">
-                                    {girosSiiOrdenados.map((giro: GiroSii) => (
-                                        <option key={giro.codigo ?? giro.giro} value={giro.giro} />
+                                <datalist id="giros-sii">
+                                    {girosSiiOrdenados.map((g: GiroSii) => (
+                                        <option key={g.codigo} value={g.giro} />
                                     ))}
                                 </datalist>
-
                                 {facturaErrors?.giro && (
                                     <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
                                 )}
                             </div>
 
-                        </div>
-
-                        {direccionesCliente.length > 0 && (
-                            <div className='mt-10'>
+                           
+                            {/* --- CONDICIÓN DE PAGO --- */}
+                            <div className="md:col-span-1">
                                 <label className="text-sm font-medium text-gray-700">
-                                    Dirección registrada
+                                    Condición de Pago
                                 </label>
                                 <select
-                                    value={direccionSeleccionada?.id ?? ""}
-                                    onChange={(e) => {
-                                        const dir = direccionesCliente.find(
-                                            (d) => d.id === Number(e.target.value)
-                                        );
+                                    // Si no existe valor, por defecto es "contado"
+                                    value={cliente.factura?.condicionPago || "contado"}
 
-                                        setDireccionSeleccionada(dir);
-
-                                        if (!dir) return;
-
+                                    // AQUÍ ESTÁ LA CLAVE: Guardamos la selección en el estado global del cliente
+                                    onChange={(e) =>
                                         setCliente((prev) => ({
                                             ...prev,
                                             factura: {
-                                                ...prev.factura!,
-                                                calle: dir.calle ?? "",
-                                                numero: dir.numero ?? "",
-                                                comuna: dir.comuna ?? "",
-                                                ciudad: dir.ciudad ?? "",
-                                                complemento: dir.complemento ?? "",
-                                            },
-                                        }));
-                                    }}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500"
+                                                ...prev.factura!, // Mantenemos Rut, Razón Social, etc.
+                                                condicionPago: e.target.value
+                                            }
+                                        }))
+                                    }
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 bg-white"
                                 >
-                                    <option value="">Selecciona una dirección</option>
-                                    {direccionesCliente.map((dir) => (
-                                        <option key={dir.id} value={dir.id}>
-                                            {dir.calle} {dir.numero}, {dir.comuna}
+                                    {opcionesPago.map((opt) => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.label}
                                         </option>
                                     ))}
                                 </select>
                             </div>
-                        )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                            {/* Calle */}
-                            <div>
-                                <label className="text-sm font-medium text-gray-700">
-                                    Calle <span className="text-red-600">*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={cliente.factura?.calle ?? ""}
-                                    onChange={(e) =>
-                                        setCliente((prev) => ({
-                                            ...prev,
-                                            factura: { ...prev.factura!, calle: e.target.value }
-                                        }))
-                                    }
-                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2
-                      ${facturaErrors?.calle
-                                            ? "border-red-500 focus:ring-red-500"
-                                            : "border-gray-300 focus:ring-blue-500"
-                                        }`}
-                                />
-                                {facturaErrors?.calle && (
-                                    <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
-                                )}
-                            </div>
+                            {/* Dirección Tributaria */}
+                            <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-4 bg-white rounded-xl border border-blue-100">
+                                <p className="md:col-span-2 text-sm font-bold text-blue-800 border-b pb-2 mb-2">
+                                    Dirección Tributaria
+                                </p>
 
-                            {/* Número */}
-                            <div>
-                                <label className="text-sm font-medium text-gray-700">
-                                    Número <span className="text-red-600">*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={cliente.factura?.numero ?? ""}
-                                    onChange={(e) =>
-                                        setCliente((prev) => ({
-                                            ...prev,
-                                            factura: { ...prev.factura!, numero: e.target.value }
-                                        }))
-                                    }
-                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2
-                      ${facturaErrors?.numero
-                                            ? "border-red-500 focus:ring-red-500"
-                                            : "border-gray-300 focus:ring-blue-500"
-                                        }`}
-                                />
-                                {facturaErrors?.numero && (
-                                    <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
-                                )}
-                            </div>
-
-                            {/* Complemento (opcional) */}
-                            <input
-                                type="text"
-                                placeholder="Depto / Oficina / Casa (opcional)"
-                                value={cliente.factura?.complemento ?? ""}
-                                onChange={(e) =>
-                                    setCliente((prev) => ({
-                                        ...prev,
-                                        factura: {
-                                            ...prev.factura!,
-                                            complemento: e.target.value
+                                {/* Calle */}
+                                <div>
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Calle <span className="text-red-600">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={cliente.factura?.calle ?? ""}
+                                        onChange={(e) =>
+                                            setCliente((prev) => ({
+                                                ...prev,
+                                                factura: { ...prev.factura!, calle: e.target.value }
+                                            }))
                                         }
-                                    }))
-                                }
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 md:col-span-2"
-                            />
+                                        className={`w-full px-4 py-3 rounded-xl border focus:ring-2
+                                        ${facturaErrors?.calle
+                                                ? "border-red-500 focus:ring-red-500"
+                                                : "border-gray-300 focus:ring-blue-500"
+                                            }`}
+                                    />
+                                    {facturaErrors?.calle && (
+                                        <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
+                                    )}
+                                </div>
 
-                            {/* Comuna (con buscador) */}
-                            <div>
-                                <label className="text-sm font-medium text-gray-700">
-                                    Comuna <span className="text-red-600">*</span>
-                                </label>
-                                <input
-                                    list="comunas-list"
-                                    value={cliente.factura?.comuna ?? ""}
-                                    onChange={(e) =>
-                                        setCliente((prev) => ({
-                                            ...prev,
-                                            factura: { ...prev.factura!, comuna: e.target.value }
-                                        }))
-                                    }
-                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2
-                      ${facturaErrors?.comuna
-                                            ? "border-red-500 focus:ring-red-500"
-                                            : "border-gray-300 focus:ring-blue-500"
-                                        }`}
-                                />
-                                {facturaErrors?.comuna && (
-                                    <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
-                                )}
-                                <datalist id="comunas-list">
-                                    {[...comunasChile]
-                                        .sort((a, b) => a.localeCompare(b, "es"))
-                                        .map((comuna) => (
-                                            <option key={comuna} value={comuna} />
+                                {/* Número */}
+                                <div>
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Número <span className="text-red-600">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={cliente.factura?.numero ?? ""}
+                                        onChange={(e) =>
+                                            setCliente((prev) => ({
+                                                ...prev,
+                                                factura: { ...prev.factura!, numero: e.target.value }
+                                            }))
+                                        }
+                                        className={`w-full px-4 py-3 rounded-xl border focus:ring-2
+                                        ${facturaErrors?.numero
+                                                ? "border-red-500 focus:ring-red-500"
+                                                : "border-gray-300 focus:ring-blue-500"
+                                            }`}
+                                    />
+                                    {facturaErrors?.numero && (
+                                        <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
+                                    )}
+                                </div>
+
+                                {/* Comuna */}
+                                <div>
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Comuna <span className="text-red-600">*</span>
+                                    </label>
+                                    <input
+                                        list="comunas-chile"
+                                        type="text"
+                                        value={cliente.factura?.comuna ?? ""}
+                                        onChange={(e) =>
+                                            setCliente((prev) => ({
+                                                ...prev,
+                                                factura: { ...prev.factura!, comuna: e.target.value }
+                                            }))
+                                        }
+                                        className={`w-full px-4 py-3 rounded-xl border focus:ring-2
+                                        ${facturaErrors?.comuna
+                                                ? "border-red-500 focus:ring-red-500"
+                                                : "border-gray-300 focus:ring-blue-500"
+                                            }`}
+                                    />
+                                    <datalist id="comunas-chile">
+                                        {comunasChile.map((c) => (
+                                            <option key={c} value={c} />
                                         ))}
-                                </datalist>
-                            </div>
+                                    </datalist>
+                                    {facturaErrors?.comuna && (
+                                        <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
+                                    )}
+                                </div>
 
-                            {/* Ciudad */}
-                            <div>
-                                <label className="text-sm font-medium text-gray-700">
-                                    Ciudad / Localidad <span className="text-red-600">*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={cliente.factura?.ciudad ?? ""}
-                                    onChange={(e) =>
-                                        setCliente((prev) => ({
-                                            ...prev,
-                                            factura: { ...prev.factura!, ciudad: e.target.value }
-                                        }))
-                                    }
-                                    className={`w-full px-4 py-3 rounded-xl border focus:ring-2
-                      ${facturaErrors?.ciudad
-                                            ? "border-red-500 focus:ring-red-500"
-                                            : "border-gray-300 focus:ring-blue-500"
-                                        }`}
-                                />
-                                {facturaErrors?.ciudad && (
-                                    <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
-                                )}
+                                {/* Ciudad */}
+                                <div>
+                                    <label className="text-sm font-medium text-gray-700">
+                                        Ciudad / Localidad <span className="text-red-600">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={cliente.factura?.ciudad ?? ""}
+                                        onChange={(e) =>
+                                            setCliente((prev) => ({
+                                                ...prev,
+                                                factura: { ...prev.factura!, ciudad: e.target.value }
+                                            }))
+                                        }
+                                        className={`w-full px-4 py-3 rounded-xl border focus:ring-2
+                                        ${facturaErrors?.ciudad
+                                                ? "border-red-500 focus:ring-red-500"
+                                                : "border-gray-300 focus:ring-blue-500"
+                                            }`}
+                                    />
+                                    {facturaErrors?.ciudad && (
+                                        <p className="text-red-600 text-sm mt-1">Campo obligatorio</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
                 )}
             </div>
-
         </>
     )
 }

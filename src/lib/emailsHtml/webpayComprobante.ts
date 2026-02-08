@@ -54,9 +54,10 @@ export function generarHTMLComprobanteWebpay({
         Si tienes alguna duda o necesitas asistencia, puedes responder a este correo.
       </p>
 
-      <p style="margin-top: 30px; font-size: 12px; color: #777;">
-        Este es un comprobante generado automáticamente. No respondas a esta casilla.
-      </p>
+       © ${new Date().getFullYear()} Agroplastic · Soluciones para todo
+                   <p style="margin-top: 30px; font-size: 12px; color: #777;">
+                  Este es un comprobante generado automáticamente. No respondas a esta casilla.
+                  </p>
     </div>
   `;
 }

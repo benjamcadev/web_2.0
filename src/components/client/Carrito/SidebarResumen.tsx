@@ -167,6 +167,9 @@ useEffect(() => {
 }, [STRAPI_URL]);
 
   const handlePago = async () => {
+    //obtener sesion
+    const sessionId = getSessionId();
+
     // validar email
     const isEmailValid = cliente.email.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cliente.email);
 
@@ -176,15 +179,18 @@ useEffect(() => {
       !validateRut(cliente.rut) ||
       !cliente.telefono ||
       !isEmailValid ||
-      (tipoDTE === "boleta" && !cliente.nombre)
+      (tipoDTE === "boleta" && !cliente.nombre) ||
+      (tipoDTE === "factura" && !cliente.factura?.razonSocial) || (tipoDTE === "factura" && !cliente.factura?.giro) || 
+       (tipoDTE === "factura" && !cliente.factura?.calle) || (tipoDTE === "factura" && !cliente.factura?.numero) ||
+       (tipoDTE === "factura" && !cliente.factura?.comuna) || (tipoDTE === "factura" && !cliente.factura?.ciudad) 
     ) {
       toast.custom(
         <ErrorToast
           title="Error"
           subtitle={
             tipoDTE === "boleta"
-              ? "Debes ingresar nombre, rut, teléfono y correo válido antes de continuar con el pago."
-              : "Debes ingresar rut, teléfono y correo válido antes de continuar con el pago."
+              ? "Debes ingresar los campos requeridos con * antes de continuar con el pago."
+              : "Debes ingresar los campos requeridos con * antes de continuar con el pago."
           }
         />,
         {
@@ -317,6 +323,7 @@ useEffect(() => {
       const numeroPago = pedidoData.numeroPago;
       const numeroPedido = pedidoData.numeroPedido;
 
+
       // Pago con Crédito Interno
       if (metodoPago === "credito") {
         const loadingToastCredito = toast.custom(
@@ -346,7 +353,10 @@ useEffect(() => {
             sucursal,
             direccion,
             comuna,
-            cupoTotal: cliente.cupo_total
+            cupoTotal: cliente.cupo_total,
+            giftcardCode,
+            giftcardApplied,
+            sessionId
           }),
         });
 
@@ -355,10 +365,11 @@ useEffect(() => {
         toast.dismiss(loadingToastCredito);
 
         if (!confirmRes.ok || !confirmData.success) {
+          let message = confirmData.message ?? ''
           toast.custom(
             <ErrorToast
               title="Error"
-              subtitle="No se pudo confirmar el pago con crédito interno."
+              subtitle= {`No se pudo confirmar el pago con crédito interno. Detalle: ${message}`}
             />,
             {
               duration: 6000,
@@ -385,7 +396,7 @@ useEffect(() => {
 
         setTimeout(() => {
           toast.dismiss(loadingToastCreditoFinal);
-          window.location.href = `/pago/credito/success?pedido=${numeroPedido}&pedidoId=${confirmData.pedidoId}&pagoId=${confirmData.pagoId}&razonSocial=${cliente.factura?.razonSocial}&cupoRestante=${confirmData.cupoRestante}&cupoUsado=${confirmData.cupoUsado}&cupoTotal=${cliente.cupo_total}&fecha=${new Date().toLocaleDateString("es-CL")}`;
+          window.location.href = `/pago/credito/success?pedido=${numeroPedido}&pedidoId=${confirmData.pedidoId}&razonSocial=${cliente.factura?.razonSocial}&cupoRestante=${confirmData.cupoRestante}&cupoUsado=${confirmData.cupoUsado}&cupoTotal=${cliente.cupo_total}&fecha=${new Date().toLocaleDateString("es-CL")}`;
         }, 2500);
 
         return;
@@ -400,7 +411,8 @@ useEffect(() => {
             code: giftcardCode,
             amount: giftcardApplied,
             pagoId, // pago proveedor = giftcard
-            source: "giftcard_only"
+            source: "giftcard_only",
+            
           }),
         });
 
@@ -438,12 +450,12 @@ useEffect(() => {
         setTimeout(() => {
           toast.dismiss(loadingToastGifcard);
           // Redirigir pagina de exito giftcard
-          window.location.href = `/pago/giftcard/success?pedido=${pedidoId}`;
+          window.location.href = `/pago/giftcard/success?pedido=${numeroPedido}`;
         }, 2500);
         return;
       }
 
-      const sessionId = getSessionId();
+      
 
       //Metodo pago Khipu
       if (metodoPago === "khipu") {

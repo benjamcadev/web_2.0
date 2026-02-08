@@ -20,6 +20,11 @@ export interface Cliente {
   cupo_disponible?: number;
   cupo_total?: number;
   cupo_utilizado?: number;
+  credito_7?: boolean;
+  credito_15?: boolean;
+  credito_30?: boolean;
+  credito_60?: boolean;
+  credito_90?: boolean;
 
   // Datos SOLO si es factura
   factura?: DatosFactura;
@@ -31,6 +36,7 @@ export interface Cliente {
 export interface DatosFactura {
   razonSocial: string;
   giro: string;
+  condicionPago?: string;
 
   // Dirección tributaria
   calle: string;

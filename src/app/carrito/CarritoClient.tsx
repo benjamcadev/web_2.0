@@ -116,6 +116,11 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
         cupo_disponible: clienteSesion.cupo_disponible ?? 0,
         cupo_total: clienteSesion.cupo_total ?? 0,
         cupo_utilizado: clienteSesion.cupo_utilizado ?? 0,
+        credito_7: clienteSesion.credito_7 ?? false,
+        credito_15: clienteSesion.credito_15 ?? false,
+        credito_30: clienteSesion.credito_30 ?? false,
+        credito_60: clienteSesion.credito_60 ?? false,
+         credito_90: clienteSesion.credito_90 ?? false,
         factura: direccionPorDefecto
           ? {
             razonSocial: clienteSesion.razon_social ?? '',
@@ -125,6 +130,7 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
             comuna: direccionPorDefecto.comuna ?? '',
             ciudad: direccionPorDefecto.ciudad ?? '',
             complemento: direccionPorDefecto.complemento ?? '',
+            condicionPago: 'contado'
           }
           : undefined,
       });
@@ -198,16 +204,24 @@ export default function CarritoClient({ initialSucursales }: CarritoProps) {
     return (
       <>
         <Header />
-        <div className="min-h-screen flex flex-col items-center justify-center px-4">
-          <ShoppingBagIcon className="h-24 w-24 text-gray-300 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
-          <p className="text-gray-600 mb-6">¡Agrega productos para comenzar tu compra!</p>
-          <Link
-            href="/tienda"
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
-          >
-            Ir a la tienda
-          </Link>
+        <div className="min-h-screen flex flex-col items-center justify-center rounded-2xl bg-white/50 backdrop-blur-lg border border-white/30 ml-3 mr-3 px-4">
+          <div className="max-w-lg w-full bg-white/80 backdrop-blur-lg border border-white/40 rounded-2xl shadow-xl p-8 text-center">
+
+            <div className="flex justify-center mb-4">
+              <ShoppingBagIcon className="h-24 w-24 text-indigo-600 mb-4" />
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
+            <p className="text-gray-600 mb-6">¡Agrega productos para comenzar tu compra!</p>
+            <Link
+              href="/tienda"
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
+            >
+              Ir a la tienda
+            </Link>
+
+          </div>
+
         </div>
       </>
     );

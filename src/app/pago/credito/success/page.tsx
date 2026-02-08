@@ -11,7 +11,6 @@ export default function PagoCreditoSuccessPage() {
   const searchParams = useSearchParams();
   const pedidoNumero = searchParams.get("pedido");
   const pedidoId = searchParams.get("pedidoId");
-  const pagoId = searchParams.get("pagoId");
   const razonSocial = searchParams.get("razonSocial");
   const cupoRestante = searchParams.get("cupoRestante");
   const cupoUsado = searchParams.get("cupoUsado");
@@ -26,7 +25,7 @@ export default function PagoCreditoSuccessPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4">
+      <div className="min-h-screen flex items-center justify-center rounded-2xl bg-white/50 backdrop-blur-lg border border-white/30 ml-3 mr-3 px-4">
         <div className="max-w-lg w-full bg-white/80 backdrop-blur-lg border border-white/40 rounded-2xl shadow-xl p-8 text-center">
 
           {/* Icono */}
@@ -56,7 +55,7 @@ export default function PagoCreditoSuccessPage() {
               <p className="text-sm text-gray-700">
                 Número de pedido
               </p>
-              <p className="text-lg font-bold text-indigo-800 break-all">
+              <p className="text-2xl font-bold text-indigo-800 break-all">
                 {pedidoNumero}
               </p>
             </div>
@@ -76,13 +75,7 @@ export default function PagoCreditoSuccessPage() {
                 </p>
               )}
 
-                 {pagoId && (
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium">Codigo Pago:</span>{" "}
-                  {pagoId}
-                </p>
-              )}
-
+             
               {razonSocial && (
                 <p className="text-sm text-gray-700">
                   <span className="font-medium">Razón social:</span>{" "}
@@ -97,8 +90,11 @@ export default function PagoCreditoSuccessPage() {
                 </p>
               )}
 
+             
+
               {(cupoRestante && cupoTotal) && (() => {
                 const restante = Number(cupoRestante);
+                const cupo_usado = Number(cupoUsado);
                 const total = Number(cupoTotal);
                 const usado = total - restante;
                 const porcentajeUsado = Math.min(100, Math.round((usado / total) * 100));
@@ -110,6 +106,13 @@ export default function PagoCreditoSuccessPage() {
                       <span className="font-medium">Cupo restante:</span>{" "}
                       <span className="font-bold text-green-700">
                         ${restante.toLocaleString("es-CL")}
+                      </span>
+                    </p>
+
+                      <p className="text-sm text-gray-700">
+                      <span className="font-medium">Cupo usado en esta compra:</span>{" "}
+                      <span className="font-bold text-gray-700">
+                        ${cupo_usado.toLocaleString("es-CL")}
                       </span>
                     </p>
 

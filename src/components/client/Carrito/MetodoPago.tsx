@@ -137,7 +137,9 @@ export default function MetodoPago({
                 )}
             </button>
 
-            {tipoDTE === "factura" && cliente.credito_habilitado && (
+             {/* Credito */}
+
+            {tipoDTE === "factura" && cliente.credito_habilitado && cliente.factura?.condicionPago !== 'contado' && (
               <button
                 type="button"
                 onClick={() => setMetodoPago("credito")}

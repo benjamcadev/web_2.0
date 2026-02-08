@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "@/components/client/Header/Header";
+import { toast } from 'react-hot-toast';
 
 export default function WebpayErrorPage() {
     const params = useSearchParams();
@@ -11,6 +12,8 @@ export default function WebpayErrorPage() {
 
     const encodedData = params.get("data");
     const data = encodedData ? JSON.parse(decodeURIComponent(encodedData)) : null;
+
+    toast.dismiss();
 
     useEffect(() => {
         const tipo = params.get("tipo");
@@ -44,7 +47,7 @@ export default function WebpayErrorPage() {
                 setInfo({
                     title: "Error al confirmar el pago",
                     message:
-                        `Webpay devolvió respuesta, pero no fue posible confirmar la transacción. Para mas detalles entregar esta información buy_order: ${data.webpay.buy_order} , session_id: ${data.webpay.session_id}`,
+                        `Webpay devolvió respuesta, pero no fue posible confirmar la transacción. Para mas detalles entregar esta información buy_order: ${data.webpay?.buy_order} , session_id: ${data.webpay?.session_id}`,
                 });
                 break;
 

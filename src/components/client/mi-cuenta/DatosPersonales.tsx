@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Input from '@/components/UI/Input'
 import { useAuthStore } from "@/stores/useAuthStore";
-import { formatCLP } from '@/lib/formatCLP'
 import toast from "react-hot-toast";
 import ErrorToast from '@/components/UI/ErrorToast';
 import SuccessToast from "@/components/UI/SuccessToast";
@@ -19,18 +18,12 @@ export default function DatosPersonales() {
     const [giro, setGiro] = useState('')
     const [email, setEmail] = useState('')
     const [telefono, setTelefono] = useState('')
-    const [credito, setCredito] = useState(false)
-    const [cupoTotal, setCupoTotal] = useState(0)
-    const [cupoUtilizado, setCupoUtilizado] = useState(0)
-    const [cupoDisponible, setCupoDisponible] = useState(0)
+    
     const [isEditing, setIsEditing] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
     const [documentId, setDocumentId] = useState('')
 
-    const porcentajeUso = cupoTotal > 0
-        ? Math.min(100, Math.round((cupoUtilizado / cupoTotal) * 100))
-        : 0
-
+    
     useEffect(() => {
         if (!cliente) return
 
@@ -41,10 +34,6 @@ export default function DatosPersonales() {
         setGiro(cliente.giro ?? '')
         setEmail(cliente.email ?? '')
         setTelefono(cliente.telefono ?? '')
-        setCredito(cliente.credito_habilitado)
-        setCupoTotal(cliente.cupo_total)
-        setCupoUtilizado(cliente.cupo_utilizado)
-        setCupoDisponible(cliente.cupo_disponible)
         setDocumentId(cliente.documentId)
 
     }, [cliente])
@@ -230,73 +219,14 @@ export default function DatosPersonales() {
                 </div>
             )}
 
-            {/* Crédito */}
-            <div className="rounded-2xl bg-white/60 backdrop-blur-lg border border-white/40 p-5 space-y-4">
-
-                {credito ? (
-                    <>
-                        <div className="flex items-center justify-between">
-                            <h4 className="font-semibold">Crédito disponible</h4>
-                            <span className="text-xs text-gray-600">
-                                {porcentajeUso}% utilizado
-                            </span>
-                        </div>
-
-                        {/* Barra de progreso */}
-                        <div className="w-full h-3 bg-white/50 rounded-full overflow-hidden">
-                            <div
-                                className={`h-full rounded-full transition-all duration-500
-                                    ${porcentajeUso < 70
-                                        ? 'bg-green-500'
-                                        : porcentajeUso < 90
-                                            ? 'bg-yellow-500'
-                                            : 'bg-red-500'
-                                    }`}
-                                style={{ width: `${porcentajeUso}%` }}
-                            />
-                        </div>
-
-                        {/* Detalle montos */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm pt-2">
-                            <CreditBox label="Cupo total" value={formatCLP(cupoTotal)} />
-                            <CreditBox label="Utilizado" value={formatCLP(cupoUtilizado)} />
-                            <CreditBox label="Disponible" value={formatCLP(cupoDisponible)} highlight />
-                        </div>
-                    </>
-                ) : (
-                    <h3 className="font-semibold text-gray-600">
-                        No existe crédito disponible
-                    </h3>
-                )}
-            </div>
+            
 
         </div>
     )
 }
 
 
-function CreditBox({
-    label,
-    value,
-    highlight,
-}: {
-    label: string
-    value: string
-    highlight?: boolean
-}) {
-    return (
-        <div
-            className={`rounded-xl p-3 text-center
-                ${highlight
-                    ? 'bg-green-500/20 text-green-800'
-                    : 'bg-white/50'}
-            `}
-        >
-            <p className="text-xs">{label}</p>
-            <p className="text-lg font-semibold">{value}</p>
-        </div>
-    )
-}
+
 
 function Skeleton({ className }: { className?: string }) {
     return (
