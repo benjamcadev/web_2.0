@@ -139,8 +139,8 @@ export default function DatosPersonales() {
     }
 
     return (
-        <div className="space-y-8">
-            <div className="flex items-center justify-between">
+        <div className="space-y-8 bg-white/30 backdrop-blur-md border rounded-2xl p-6 shadow-sm transition-colors duration-300 border-white/40">
+            <div className="flex items-center justify-between ">
                 <h3 className="text-xl font-semibold">Datos personales</h3>
 
                 <label className="flex items-center gap-2 cursor-pointer select-none">

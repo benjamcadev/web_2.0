@@ -5,14 +5,13 @@ import PagoCredito from '@/components/client/mi-cuenta/PagoCredito'
 import { formatCLP } from '@/lib/formatCLP'
 import { useAuthStore } from "@/stores/useAuthStore";
 import {
-    CalendarIcon,
     DocumentTextIcon,
     BanknotesIcon,
     ClockIcon,
     ExclamationTriangleIcon,
     CreditCardIcon,
-    ChevronLeftIcon,   // Icono nuevo
-    ChevronRightIcon   // Icono nuevo
+    ChevronLeftIcon,   
+    ChevronRightIcon   
 } from "@heroicons/react/24/outline";
 
 interface CreditoData {

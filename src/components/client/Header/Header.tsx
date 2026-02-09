@@ -106,17 +106,44 @@ export default function Header() {
   return (
     <>
 
-      <header className="sticky top-0 z-50 m-3 bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl shadow-lg px-6 py-4">
+   <header 
+  className={`
+    sticky top-0 z-50 m-3 
+    
+    /* Agregamos transform para habilitar el escalado */
+    ${isAuthenticated 
+      ? 'bg-gradient-to-r from-blue-800/80 via-cyan-600/40 to-indigo-800/80 border-white/20 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] shadow-blue-500/10 scale-[1.01]' 
+      : 'bg-white/60 text-slate-800 border-white/30 shadow-lg scale-100'} 
+    
+    backdrop-blur-2xl rounded-2xl px-6 py-4 border
+    
+    /* Transición suave para el scale y el borde, el fondo será más rápido */
+    transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1)
+  `}
+>
         <div className="flex items-center justify-between gap-4">
           {/* Logo a la izquierda */}
           <div className="flex items-center space-x-2 flex-shrink-0">
-            <Image
-              src="/logo.webp"
-              alt="Logo Agroplastic"
-              width={250}
-              height={80}
-              className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] transition-all duration-300"
-            />
+            {isAuthenticated ? (
+              <Image
+                src="/logo-empresa.webp"
+                alt="Logo Agroplastic"
+                width={250}
+                height={80}
+                className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] transition-all duration-300"
+              />
+            ) :
+              (
+                <Image
+                  src="/logo.webp"
+                  alt="Logo Agroplastic"
+                  width={250}
+                  height={80}
+                  className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] transition-all duration-300"
+                />
+              )
+            }
+
           </div>
 
           {/* Buscador en el centro (solo desktop) */}
@@ -142,13 +169,13 @@ export default function Header() {
                 <Link key={link.nombre} href={link.href}>
                   <span
                     onClick={() => setActive(link.nombre)}
-                    className={`cursor-pointer text-black text-lg pb-1 transition-all ${active === link.nombre
+                    className={`cursor-pointer  ${isAuthenticated ? 'text-white  hover:border-gray-200' : 'text-black  hover:border-gray-400'}  text-lg pb-1 transition-all ${active === link.nombre
                       ? "font-bold border-b-2 border-black"
-                      : "font-normal hover:font-semibold hover:border-b hover:border-gray-400"
+                      : "font-normal  hover:border-b "
                       }`}
                   >
                     {link.nombre === "Inicio" ? (
-                      <HomeIcon className="h-6 w-6 text-black" />
+                      <HomeIcon className={`h-6 w-6  ${isAuthenticated ? 'text-white' : 'text-black'} cursor-pointer  transition-transform hover:scale-110 `} />
                     ) : (
                       link.nombre
                     )}
@@ -158,7 +185,7 @@ export default function Header() {
             </nav>
 
             {/* Separador */}
-            <div className="h-6 w-px bg-black"></div>
+            <div className={`h-6 w-px ${isAuthenticated ? 'bg-white' : 'bg-black'} `}></div>
 
 
             {/* Carrito - ACTUALIZADO */}
@@ -166,7 +193,7 @@ export default function Header() {
               className="relative cursor-pointer group"
               onClick={() => setIsCartOpen(true)}
             >
-              <ShoppingCartIcon className="h-7 w-7 text-black transition-transform group-hover:scale-110" />
+              <ShoppingCartIcon className={`h-7 w-7 ${isAuthenticated ? 'text-white' : 'text-black'} transition-transform group-hover:scale-110`} />
 
               {isHydrated && totalItems > 0 && (
                 <span className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold ${animar ? 'animate-pulse' : ''}`}>
@@ -176,7 +203,7 @@ export default function Header() {
             </div>
 
             {/* Separador */}
-            <div className="h-6 w-px bg-black"></div>
+            <div className={`h-6 w-px ${isAuthenticated ? 'bg-white' : 'bg-black'} `}></div>
 
             {/* Login / Usuario */}
             <div
@@ -191,18 +218,18 @@ export default function Header() {
               }}
             >
               <UserCircleIcon
-                className={`h-7 w-7 transition-transform group-hover:scale-110 ${isAuthenticated ? "text-blue-600" : "text-black"
+                className={`h-7 w-7 transition-transform group-hover:scale-110 ${isAuthenticated ? "text-white" : "text-black"
                   }`}
               />
 
               {isRehydrating ? (
                 <>
-                  <span className="text-[8px] text-gray-700 mt-1">Hola!</span>
+                  <span className={`text-[8px] text-white mt-1`}>Hola!</span>
                   <div className="h-3 w-20 bg-gray-300/60 rounded animate-pulse mt-1" />
                 </>
               ) : isAuthenticated ? (
                 <>
-                  <span className="text-[8px] text-gray-700 mt-1">Hola!</span>
+                  <span className="text-[8px] text-white mt-1">Hola!</span>
                   <span className="text-[12px]">
                     {cliente
                       ? (cliente.nombre || cliente.razon_social || "Cliente")

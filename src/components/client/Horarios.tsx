@@ -33,7 +33,7 @@ export default function Horarios({ sucursales }: { sucursales: Sucursal[] }) {
   const sucursal = sucursales[current];
 
   return (
-    <div className="flex flex-col  sm:flex-row items-center bg-blue-800 rounded-b-2xl text-amber-50 font-sans font-light text-xs w-full text-center p-2 transition-all duration-500">
+    <div className="flex flex-col  sm:flex-row items-center bg-gradient-to-r from-blue-800 via-blue-700/70 to-indigo-800 rounded-b-2xl text-amber-50 font-sans font-light text-xs w-full text-center p-2 transition-all duration-500">
       {/* Texto visible siempre */}
       <div
         className={`flex-1 transition-opacity duration-500 ${
