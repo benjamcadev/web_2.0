@@ -32,6 +32,7 @@ interface CartStore {
   removeItem: (id: number) => Promise<{ success: boolean; message?: string }>;
   updateQuantity: (id: number, cantidad: number) => Promise<{ success: boolean; message?: string }>;
   clearCart: () => Promise<void>;
+  updatePrice: (id: number | string, newPrice: number) => void;
 
   // Acciones de envío
   setShippingInfo: (info: ShippingInfo) => void;
@@ -179,6 +180,19 @@ export const useCartStore = create<CartStore>()(
 
         // Limpiar carrito y datos de envío
         set({ items: [], shippingInfo: null });
+      },
+
+      // ========================================
+      // ACRTUALIZAR PRECIO EN EL CARRITO CUANDO HAY UN CAMBIO EN STRAPI
+      // ========================================
+
+      updatePrice: (id, newPrice) => {
+        set((state) => ({
+          items: state.items.map((item) =>
+            // Comparamos IDs (asegúrate de que los tipos coincidan number/string)
+            item.id === id ? { ...item, price: newPrice } : item
+          ),
+        }));
       },
 
       // ========================================

@@ -260,8 +260,9 @@ export default function Header() {
                             );
                             return;
                           }
-                          logout();
                           toast.custom(<SuccessToast subtitle={''} title={'Sesión Cerrada'} />, { duration: 2400, position: "bottom-center", icon: null, style: { background: "transparent", boxShadow: "none", padding: 0 }, });
+                          logout();
+                          toast.dismiss();
                           setIsUserMenuOpen(false);
                           router.push("/");
 

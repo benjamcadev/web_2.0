@@ -28,6 +28,7 @@ export function useCart() {
     setShippingInfo,
     clearShippingInfo,
     getTotalWithShipping,
+    updatePrice: updatePriceInStore,
   } = useCartStore();
 
   // ========================================
@@ -76,6 +77,13 @@ export function useCart() {
     await clearCartInStore();
   };
 
+  // ========================================
+  // ACTUALIZAR PRECIO (sync - solo local)
+  // ========================================
+  const updatePrice = (id: number | string, newPrice: number) => {
+    updatePriceInStore(id, newPrice);
+  };
+
   return {
     // State
     items,
@@ -86,6 +94,7 @@ export function useCart() {
     removeItem,
     updateQuantity,
     clearCart,
+    updatePrice,
 
     // Acciones de envío (sync)
     setShippingInfo,

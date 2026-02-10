@@ -6,7 +6,7 @@ interface CarritoValidarProps {
     items: CartItem[]
 }
 
-export async function validarCarritoAntesDePagar({ items: carrito}: CarritoValidarProps) {
+export async function validarStockCarrito({ items: carrito}: CarritoValidarProps) {
 
     const sessionId = getSessionId();
 

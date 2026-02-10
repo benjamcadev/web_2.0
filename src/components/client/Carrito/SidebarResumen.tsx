@@ -3,15 +3,18 @@ import { formatCLP } from "@/lib/formatCLP";
 import { Sucursal } from "@/types/sucursales";
 import { CartItem } from "@/types/cart";
 import { Producto } from '@/types/producto';
-import { validarCarritoAntesDePagar } from "@/lib/validarCarrito";
+import { validarStockCarrito } from "@/lib/validarCarrito";
+import { validarPrecioCarrito } from "@/lib/validarPrecioCarrito";
 import toast from "react-hot-toast";
 import ErrorToast from '@/components/UI/ErrorToast'
 import SuccessToast from "@/components/UI/SuccessToast";
 import LoadingToast from '@/components/UI/LoadingToast';
+import PriceChangeToast from '@/components/UI/PriceChangeToast';
 import { getSessionId } from '@/lib/stockReservationService';
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Cliente } from '@/types/cliente';
 import { validateRut } from "@/lib/validateRut";
+import { useCart } from "@/hooks/useCart";
 
 type DeliveryType = "retiro" | "envio" | null;
 
@@ -70,8 +73,8 @@ export default function SidebarResumen({
 }: Props) {
 
   const [showGiftcard, setShowGiftcard] = useState(false);
-
-
+  // Obtenemos updatePrice del hook cel carrito para actualizar precio en caso de cambios
+  const { updatePrice } = useCart();
 
   const totalFinal = Math.max(totalConEnvio - giftcardApplied, 0);
 
@@ -134,37 +137,37 @@ export default function SidebarResumen({
 
   const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-const [legalPdfUrl, setLegalPdfUrl] = useState<string | null>(null);
-const [privacyPdfUrl, setPrivacyPdfUrl] = useState<string | null>(null);
+  const [legalPdfUrl, setLegalPdfUrl] = useState<string | null>(null);
+  const [privacyPdfUrl, setPrivacyPdfUrl] = useState<string | null>(null);
 
-useEffect(() => {
-  const loadLegalPdf = async () => {
-    try {
-      const res = await fetch(
-        `${STRAPI_URL}/api/configuracions?populate=*`,
-        { cache: "no-store" }
-      );
-      const json = await res.json();
+  useEffect(() => {
+    const loadLegalPdf = async () => {
+      try {
+        const res = await fetch(
+          `${STRAPI_URL}/api/configuracions?populate=*`,
+          { cache: "no-store" }
+        );
+        const json = await res.json();
 
-      const legalUrl =
-        Array.isArray(json?.data) && json.data.length > 0
-          ? json.data[0]?.terminos_condiciones_pdf?.url
-          : null;
+        const legalUrl =
+          Array.isArray(json?.data) && json.data.length > 0
+            ? json.data[0]?.terminos_condiciones_pdf?.url
+            : null;
 
-      const privacyUrl =
-        Array.isArray(json?.data) && json.data.length > 0
-          ? json.data[0]?.politica_privacidad_pdf?.url
-          : null;
+        const privacyUrl =
+          Array.isArray(json?.data) && json.data.length > 0
+            ? json.data[0]?.politica_privacidad_pdf?.url
+            : null;
 
-      setLegalPdfUrl(legalUrl ?? null);
-      setPrivacyPdfUrl(privacyUrl ?? null);
-    } catch (error) {
-      console.error("Error cargando PDF de términos y condiciones", error);
-    }
-  };
+        setLegalPdfUrl(legalUrl ?? null);
+        setPrivacyPdfUrl(privacyUrl ?? null);
+      } catch (error) {
+        console.error("Error cargando PDF de términos y condiciones", error);
+      }
+    };
 
-  loadLegalPdf();
-}, [STRAPI_URL]);
+    loadLegalPdf();
+  }, [STRAPI_URL]);
 
   const handlePago = async () => {
     //obtener sesion
@@ -180,9 +183,9 @@ useEffect(() => {
       !cliente.telefono ||
       !isEmailValid ||
       (tipoDTE === "boleta" && !cliente.nombre) ||
-      (tipoDTE === "factura" && !cliente.factura?.razonSocial) || (tipoDTE === "factura" && !cliente.factura?.giro) || 
-       (tipoDTE === "factura" && !cliente.factura?.calle) || (tipoDTE === "factura" && !cliente.factura?.numero) ||
-       (tipoDTE === "factura" && !cliente.factura?.comuna) || (tipoDTE === "factura" && !cliente.factura?.ciudad) 
+      (tipoDTE === "factura" && !cliente.factura?.razonSocial) || (tipoDTE === "factura" && !cliente.factura?.giro) ||
+      (tipoDTE === "factura" && !cliente.factura?.calle) || (tipoDTE === "factura" && !cliente.factura?.numero) ||
+      (tipoDTE === "factura" && !cliente.factura?.comuna) || (tipoDTE === "factura" && !cliente.factura?.ciudad)
     ) {
       toast.custom(
         <ErrorToast
@@ -248,7 +251,9 @@ useEffect(() => {
     );
 
     try {
-      const result = await validarCarritoAntesDePagar({ items });
+
+      // VALIDAR STOCK Y RESERVAS DE STOCK DE CADA PRODUCTO
+      const result = await validarStockCarrito({ items });
 
       toast.dismiss(loadingToastId);
 
@@ -275,6 +280,28 @@ useEffect(() => {
         );
 
 
+        return;
+      }
+
+      // 2. Validar Precios (NUEVO)
+      const precioRes = await validarPrecioCarrito({ items });
+
+      if (!precioRes.ok) {
+        toast.custom((t) => (
+          <PriceChangeToast
+            t={t}
+            discrepancias={precioRes.discrepancias}
+            onConfirm={() => {
+              // Actualizamos cada ítem con el precio nuevo
+              precioRes.discrepancias.forEach((d: any) => {
+                if (d.tipo === 'cambio_precio') {
+                  updatePrice(d.id, d.precio_real);
+                }
+              });
+              // Opcional: Recargar página o simplemente dejar que React actualice la UI
+            }}
+          />
+        ), { duration: Infinity }); // Importante: Infinity para obligar acción
         return;
       }
 
@@ -369,7 +396,7 @@ useEffect(() => {
           toast.custom(
             <ErrorToast
               title="Error"
-              subtitle= {`No se pudo confirmar el pago con crédito interno. Detalle: ${message}`}
+              subtitle={`No se pudo confirmar el pago con crédito interno. Detalle: ${message}`}
             />,
             {
               duration: 6000,
@@ -412,7 +439,7 @@ useEffect(() => {
             amount: giftcardApplied,
             pagoId, // pago proveedor = giftcard
             source: "giftcard_only",
-            
+
           }),
         });
 
@@ -455,7 +482,7 @@ useEffect(() => {
         return;
       }
 
-      
+
 
       //Metodo pago Khipu
       if (metodoPago === "khipu") {
@@ -768,11 +795,10 @@ useEffect(() => {
           download
           target="_blank"
           rel="noopener noreferrer"
-          className={`underline ${
-            legalPdfUrl
-              ? "text-blue-600 hover:text-blue-700"
-              : "text-gray-400 cursor-not-allowed"
-          }`}
+          className={`underline ${legalPdfUrl
+            ? "text-blue-600 hover:text-blue-700"
+            : "text-gray-400 cursor-not-allowed"
+            }`}
         >
           Términos y condiciones
         </a>{" "}
@@ -782,11 +808,10 @@ useEffect(() => {
           download
           target="_blank"
           rel="noopener noreferrer"
-          className={`underline ${
-            privacyPdfUrl
-              ? "text-blue-600 hover:text-blue-700"
-              : "text-gray-400 cursor-not-allowed"
-          }`}
+          className={`underline ${privacyPdfUrl
+            ? "text-blue-600 hover:text-blue-700"
+            : "text-gray-400 cursor-not-allowed"
+            }`}
         >
           Políticas de Privacidad
         </a>.

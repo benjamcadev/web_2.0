@@ -13,7 +13,7 @@ export default function WebpayErrorPage() {
     const encodedData = params.get("data");
     const data = encodedData ? JSON.parse(decodeURIComponent(encodedData)) : null;
 
-    toast.dismiss();
+   
 
     useEffect(() => {
         const tipo = params.get("tipo");
