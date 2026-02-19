@@ -24,6 +24,10 @@ export default function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isRehydrating, setIsRehydrating] = useState(true);
+  const [logos, setLogos] = useState({
+    principal: "/logo-empresa.webp",
+    cliente: "/logo.webp"
+  });
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const cliente = useAuthStore((s) => s.cliente);
@@ -40,6 +44,45 @@ export default function Header() {
   const totalItems = isHydrated ? getTotalItems() : 0;
 
   const router = useRouter();
+
+  
+
+  // Fetch para obtener los logos desde Strapi
+  useEffect(() => {
+    const fetchLogos = async () => {
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+        
+        const urlParams = "?populate[0]=logo_empresa_principal&populate[1]=logo_empresa_cliente";
+        const res = await fetch(`${baseUrl}/api/configuracions${urlParams}`);
+        
+        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+
+        const json = await res.json();
+        
+        // 1. Accedemos al primer elemento del arreglo 'data'
+        const data = json.data?.[0];
+
+        if (data) {
+          // 2. Extraemos las URLs respetando cómo viene cada campo
+          // 'principal' es un arreglo, así que tomamos la posición [0]
+          const urlPrincipal = data.logo_empresa_principal?.[0]?.url;
+          
+          // 'cliente' es un objeto directo
+          const urlCliente = data.logo_empresa_cliente?.url;
+
+          setLogos({
+            principal: urlPrincipal ? `${baseUrl}${urlPrincipal}` : "/logo-empresa.webp",
+            cliente: urlCliente ? `${baseUrl}${urlCliente}` : "/logo.webp",
+          });
+        }
+      } catch (error) {
+        console.error("Error al obtener los logos de Strapi:", error);
+      }
+    };
+
+    fetchLogos();
+  }, []);
 
   useEffect(() => {
     setAnimar(true);
@@ -122,28 +165,28 @@ export default function Header() {
   `}
 >
         <div className="flex items-center justify-between gap-4">
+    
           {/* Logo a la izquierda */}
           <div className="flex items-center space-x-2 flex-shrink-0">
             {isAuthenticated ? (
               <Image
-                src="/logo-empresa.webp"
-                alt="Logo Agroplastic"
+                src={logos.principal}
+                alt="Logo Agroplastic Principal"
                 width={250}
                 height={80}
+                priority // Agregamos priority porque el logo es crítico en la carga inicial (LCP)
                 className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] transition-all duration-300"
               />
-            ) :
-              (
-                <Image
-                  src="/logo.webp"
-                  alt="Logo Agroplastic"
-                  width={250}
-                  height={80}
-                  className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] transition-all duration-300"
-                />
-              )
-            }
-
+            ) : (
+              <Image
+                src={logos.cliente}
+                alt="Logo Agroplastic Cliente"
+                width={250}
+                height={80}
+                priority
+                className="drop-shadow-lg hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] transition-all duration-300"
+              />
+            )}
           </div>
 
           {/* Buscador en el centro (solo desktop) */}
