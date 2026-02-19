@@ -16,10 +16,10 @@ export default function PagoCreditoSuccessPage() {
   const cupoUsado = searchParams.get("cupoUsado");
   const cupoTotal = searchParams.get("cupoTotal");
   const fecha = searchParams.get("fecha");
-  const { clearCart } = useCart();
+  const { clearCartSuccess } = useCart();
 
   useEffect(() => {
-       clearCart();
+       clearCartSuccess();
     },[])
     
   return (

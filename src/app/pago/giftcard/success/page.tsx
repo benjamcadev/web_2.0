@@ -10,10 +10,10 @@ import { useEffect } from "react";
 export default function PagoGiftcardSuccessPage() {
     const searchParams = useSearchParams();
     const pedidoId = searchParams.get("pedido");
-    const { clearCart } = useCart();
+    const { clearCartSuccess } = useCart();
 
     useEffect(() => {
-       clearCart();
+       clearCartSuccess();
     },[])
 
     return (

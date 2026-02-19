@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     await transporter.sendMail({
       from: `"Tienda" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: "Comprobante de Pago - Webpay",
+      subject: `Comprobante de pago - Pedido #${data.pedido.numero_pedido}`,
       html,
     });
 

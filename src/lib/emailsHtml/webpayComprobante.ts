@@ -10,6 +10,7 @@ export function generarHTMLComprobanteWebpay({
   data,
 }: WebpayComprobanteParams) {
   const w = data.webpay;
+  const pedido = data.pedido;
 
   const paymentTypeMap: Record<string, string> = {
     VN: "Crédito - Venta Normal",
@@ -26,9 +27,9 @@ export function generarHTMLComprobanteWebpay({
 
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px;">
-      <h2 style="color: #0a7cff;">Comprobante de Pago Webpay</h2>
+      <h2 style="color: #0a7cff;">Comprobante de Pago - Pedido #${pedido.numero_pedido}</h2>
 
-      <p>Hola,</p>
+      <p>Hola, Gracias por tu compra</p>
       <p>Adjuntamos el comprobante de tu pago realizado a través de Webpay.</p>
 
       <hr style="margin: 20px 0;" />
@@ -47,11 +48,28 @@ export function generarHTMLComprobanteWebpay({
         <li><strong>Estado:</strong> ${w.status}</li>
       </ul>
 
+
+      <h3>📦 Detalle del pedido</h3>
+      <ul>
+        <li><strong>N° Pedido:</strong> ${pedido.numero_pedido}</li>
+        <li><strong>Estado:</strong> ${pedido.estado}</li>
+        <li><strong>Total:</strong> $${pedido.total.toLocaleString("es-CL")}</li>
+        <li><strong>Entrega:</strong> ${pedido.tipo_delivery === "retiro" ? "Retiro en tienda" : "Envío a domicilio"}</li>
+        <li><strong>Sucursal:</strong> ${pedido.sucursal}</li>
+        ${
+          pedido.tipo_delivery === "envio"
+            ? `
+          <li><strong>Comuna:</strong> ${pedido.comuna_envio}</li>
+          <li><strong>Dirección:</strong> ${pedido.direccion_envio}</li>
+        `
+            : ""
+        }
+      </ul>
+
       <hr style="margin: 20px 0;" />
 
       <p>
         Gracias por tu compra.<br />
-        Si tienes alguna duda o necesitas asistencia, puedes responder a este correo.
       </p>
 
        © ${new Date().getFullYear()} Agroplastic · Soluciones para todo

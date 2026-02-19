@@ -33,7 +33,7 @@ interface DetallePago {
 export default function KhipuSuccess() {
   const params = useSearchParams();
   const router = useRouter();
-  const { clearCart } = useCart();
+  const { clearCartSuccess } = useCart();
 
   const pagoId = params.get("np"); // numero_pago en strapi
   const [paymentId, setPaymentId] = useState<string | null>(null);
@@ -104,7 +104,7 @@ export default function KhipuSuccess() {
         if (data.ok && data.pagado === true) {
           setEstado("ok");
           setDetalle(data.detalle);
-           clearCart();
+           clearCartSuccess();
           return;
         }
 
@@ -351,7 +351,7 @@ export default function KhipuSuccess() {
                     <input
                       type="email"
                       placeholder="Ingresa tu correo electrónico"
-                      value={email || detalle?.payer_email || ""}
+                      value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-xl mb-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                     />

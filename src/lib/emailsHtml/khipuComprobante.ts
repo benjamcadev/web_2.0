@@ -11,13 +11,10 @@ export function generarHtmlKhipuComprobante({
   <div style="font-family: Arial, sans-serif; background:#f5f5f5; padding:24px">
     <div style="max-width:600px; margin:auto; background:white; border-radius:12px; padding:24px">
       
-      <h2 style="color:#16a34a; text-align:center;">
-        ✅ Pago recibido correctamente
-      </h2>
+      <h2 style="color: #0a7cff;">Comprobante de Pago - Pedido #${pedido.numero_pedido}</h2>
 
-      <p style="text-align:center;">
-        Gracias por tu compra en <strong>Agroplastic</strong>
-      </p>
+      <p>Hola, Gracias por tu compra</p>
+      <p>Adjuntamos el comprobante de tu pago realizado a través de Khipu.</p>
 
       <hr />
 
@@ -51,6 +48,10 @@ export function generarHtmlKhipuComprobante({
       </ul>
 
       <hr />
+
+       <p>
+        Gracias por tu compra.<br />
+      </p>
 
       © ${new Date().getFullYear()} Agroplastic · Soluciones para todo
                    <p style="margin-top: 30px; font-size: 12px; color: #777;">

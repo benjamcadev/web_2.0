@@ -439,6 +439,7 @@ export default function SidebarResumen({
             amount: giftcardApplied,
             pagoId, // pago proveedor = giftcard
             source: "giftcard_only",
+            sessionId,
 
           }),
         });

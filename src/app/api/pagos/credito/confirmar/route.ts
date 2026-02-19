@@ -59,7 +59,8 @@ export async function POST(req: NextRequest) {
       comuna,
       cupoTotal,
       giftcardCode,
-      giftcardApplied 
+      giftcardApplied,
+      sessionId
     } = body;
 
     _pedidoId = pedidoId;
@@ -233,6 +234,27 @@ export async function POST(req: NextRequest) {
     }
 
     const creditoData = await creditoRes.json();
+
+
+    // Llamar a tu endpoint para completar la reserva
+    const completeRes = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/reservas-stock/completada`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      }
+    );
+
+    const completeData = await completeRes.json();
+
+    if (!completeData.ok) {
+      return NextResponse.json({
+        ok: false,
+        error: "Pago OK, pero error al actualizar reservas",
+        detalles: completeData,
+      });
+    }
 
 
     // =============================================================================

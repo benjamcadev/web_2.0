@@ -32,6 +32,7 @@ interface CartStore {
   removeItem: (id: number) => Promise<{ success: boolean; message?: string }>;
   updateQuantity: (id: number, cantidad: number) => Promise<{ success: boolean; message?: string }>;
   clearCart: () => Promise<void>;
+  clearCartSuccess: () => Promise<void>;
   updatePrice: (id: number | string, newPrice: number) => void;
 
   // Acciones de envío
@@ -177,6 +178,17 @@ export const useCartStore = create<CartStore>()(
       clearCart: async () => {
         // Liberar todas las reservas de stock
         await limpiarTodasLasReservas();
+
+        // Limpiar carrito y datos de envío
+        set({ items: [], shippingInfo: null });
+      },
+
+      // ========================================
+      // VACIAR CARRITO CUANDO SE COMPLETA LA COMPRA Y LIBERAR TODAS LAS RESERVAS
+      // ========================================
+      clearCartSuccess: async () => {
+        // Liberar todas las reservas de stock
+        //await limpiarTodasLasReservas();
 
         // Limpiar carrito y datos de envío
         set({ items: [], shippingInfo: null });

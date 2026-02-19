@@ -11,7 +11,7 @@ export default function WebpayRetorno() {
   const router = useRouter();
   const params = useSearchParams();
 
-  const { clearCart } = useCart();
+  const { clearCartSuccess } = useCart();
 
   useEffect(() => {
 
@@ -85,7 +85,7 @@ export default function WebpayRetorno() {
       }
 
       toast.dismiss(loadingToastWebPay);
-      clearCart();
+       clearCartSuccess();
       const encoded = encodeURIComponent(JSON.stringify(data));
       router.push(`/pago/webpay/confirmacion?data=${encoded}`);
 

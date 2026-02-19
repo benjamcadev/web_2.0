@@ -29,6 +29,7 @@ export function useCart() {
     clearShippingInfo,
     getTotalWithShipping,
     updatePrice: updatePriceInStore,
+    clearCartSuccess: clearCartSuccessInStore,
   } = useCartStore();
 
   // ========================================
@@ -78,6 +79,15 @@ export function useCart() {
   };
 
   // ========================================
+  // VACIAR CARRITO CUANDO SE COMPLETA LA COMPRA (async con liberación de reservas)
+  // ========================================
+  const clearCartSuccess = async (): Promise<void> => {
+    await clearCartSuccessInStore();
+  };
+
+
+
+  // ========================================
   // ACTUALIZAR PRECIO (sync - solo local)
   // ========================================
   const updatePrice = (id: number | string, newPrice: number) => {
@@ -94,6 +104,7 @@ export function useCart() {
     removeItem,
     updateQuantity,
     clearCart,
+    clearCartSuccess,
     updatePrice,
 
     // Acciones de envío (sync)

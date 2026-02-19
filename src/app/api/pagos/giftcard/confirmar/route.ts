@@ -5,7 +5,7 @@ const STRAPI_TOKEN = process.env.STRAPI_TOKEN!;
 
 export async function POST(req: Request) {
   try {
-    const { code, amount, pagoId, source } = await req.json();
+    const { code, amount, pagoId, source, sessionId } = await req.json();
 
     if (!code || typeof amount !== "number" || amount <= 0) {
       return NextResponse.json(
@@ -102,6 +102,26 @@ export async function POST(req: Request) {
               : {}),
           },
         }),
+      });
+    }
+
+    // Llamar a tu endpoint para completar la reserva
+    const completeRes = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/reservas-stock/completada`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      }
+    );
+
+    const completeData = await completeRes.json();
+
+    if (!completeData.ok) {
+      return NextResponse.json({
+        ok: false,
+        error: "Pago OK, pero error al actualizar reservas",
+        detalles: completeData,
       });
     }
 

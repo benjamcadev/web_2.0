@@ -15,7 +15,6 @@ export default function WebpayConfirmacion() {
   const data = encodedData ? JSON.parse(decodeURIComponent(encodedData)) : null;
 
 
-
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
 
@@ -184,6 +183,60 @@ export default function WebpayConfirmacion() {
                 </p>
               </div>
             </div>
+
+
+
+            {/* === DETALLE DEL PEDIDO === */}
+              
+                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 text-left mb-6">
+                    <h2 className="text-lg font-semibold text-gray-800 mb-3">
+                      Detalle del pedido
+                    </h2>
+
+                    <div className="space-y-2 text-gray-700">
+                      <p>
+                        <span className="font-semibold">Número de pedido:</span>{" "}
+                        {data.pedido.numero_pedido}
+                      </p>
+
+                      <p>
+                        <span className="font-semibold">Estado:</span>{" "}
+                        {data.pedido.estado}
+                      </p>
+
+                      <p>
+                        <span className="font-semibold">Total:</span>{" "}
+                        ${data.pedido.total?.toLocaleString("es-CL")}
+                      </p>
+
+                      <p>
+                        <span className="font-semibold">Tipo de entrega:</span>{" "}
+                        {data.pedido.tipo_delivery === "retiro"
+                          ? "Retiro en tienda"
+                          : "Envío a domicilio"}
+                      </p>
+
+                      <p>
+                        <span className="font-semibold">Sucursal:</span>{" "}
+                        {data.pedido.sucursal}
+                      </p>
+
+                      {data.pedido.tipo_delivery === "envio" && (
+                        <>
+                          <p>
+                            <span className="font-semibold">Comuna:</span>{" "}
+                            {data.pedido.comuna_envio}
+                          </p>
+
+                          <p>
+                            <span className="font-semibold">Dirección:</span>{" "}
+                            {data.pedido.direccion_envio}
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                
 
             {/* ============================================================
                 📩 FORMULARIO PARA ENVIAR COMPROBANTE POR EMAIL

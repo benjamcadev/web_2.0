@@ -41,8 +41,6 @@ export async function POST(req: Request) {
 
     const completeData = await completeRes.json();
 
-
-
     if (!completeData.ok) {
       return NextResponse.json({
         ok: false,
@@ -149,6 +147,7 @@ export async function POST(req: Request) {
       status: "AUTHORIZED",
       webpay: result,
       reserva: completeData,
+      pedido: pago.pedido
     });
 
   } catch (error: any) {
